@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.antennahouse.pdf.review.oxygen">
+  <require plugin="com.antennahouse.pdf5.ml"/>
+  <feature extension="com.antennahouse.pdf5.ml.xsl" value="xsl/dita2fo_change_tracking_gen_annotation_shell.xsl" type="file"/>
+  <feature extension="com.antennahouse.pdf5.ml.convmerged.xsl" value="xsl/dita2fo_change_tracking_convmerged.xsl" type="file"/>
+  <feature extension="com.antennahouse.pdf5.ml.param" value="params.xml" type="file"/>
+  <feature extension="depend.com.antennahouse.pdf5.ml.convmerged.pre" value="transform.convmerged.pre.processing"/>
+  <feature extension="build.com.antennahouse.pdf5.ml.format.inclusion" value="build.xml" type="file"/>
+  <transtype name="pdf5.review" desc="PDF">
+    <param name="output.changes.and.comments" desc="Output Oxygen track changes and comments" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="output.changebars" desc="Show change bars based on Oxygen changes" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="change.tracking.user.fg.color" desc="Change tracking foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 
+      The default value is 'royalblue orange orchid teal violet'." type="string"/>
+    <param name="change.tracking.insert.decoration" desc="Text decoration for insert, specified as CSS notation. The default value is 'text-decoration:underline;'." type="string"/>
+    <param name="change.tracking.delete.decoration" desc="Text decoration for delete, specified as CSS notation. The default value is 'text-decoration:line-through no-underline;'." type="string"/>
+    <param name="change.tracking.comment.bg.color" desc="Comment background colors for Oxygen tracked changes, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF).
+      The default value is 'royalblue orange orchid teal violet' (The same as change.tracking.user.fg.color)." type="string"/>
+    <param name="change.tracking.comment.bg.color.opacity.base" desc="Comment background color opacity base value for Oxygen tracked changes, specified as real number less than 1.
+      The default value is '0.15'." type="string"/>
+    <param name="change.tracking.comment.bg.color.opacity.ratio" desc="Comment background color opacity ratio value for Oxygen tracked changes, specified as real number less than 1.
+      The default value is '0.15'." type="string"/>
+    <param name="change.tracking.annotation.type" desc="Change tracking annotation type. The default value is 'Text'." type="string"/>
+    <param name="change.tracking.annotation.open" desc="Set change tracking annotation open or not." type="enum">
+      <val desc="Yes">true</val>
+      <val desc="No" default="true">false</val>
+    </param>
+    <param name="change.tracking.insert.annotation.color" desc="Inser annotation color for Oxygen tracked changes insertion, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'dodgerblue'" 
+      type="string"/>
+    <param name="change.tracking.delete.annotation.color" desc="Delete annotation color for Oxygen tracked changes deletion, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'hotpink'" 
+      type="string"/>
+    <param name="change.tracking.comment.annotation.color" desc="Comment annotation color for Oxygen tracked changes comments, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'mediumaquamarine'" 
+      type="string"/>
+    <param name="change.tracking.attributes.annotation.color" desc="Comment annotation color for Oxygen tracked changes comments, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'mediumaquamarine'" 
+      type="string"/>
+    <param name="change.tracking.insert.annotation.icon" desc="Annotation icon type for Oxygen tracked changes insertion." type="enum">
+      <val desc="Comment">Comment</val>
+      <val desc="Help">Help</val>
+      <val desc="Insert">Insert</val>
+      <val desc="Key" default="true">Key</val>
+      <val desc="New Paragraph">NewParagraph</val>
+      <val desc="Note">Note</val>
+      <val desc="Paragraph">Paragraph</val>
+      <val desc="None">None</val>
+    </param>
+    <param name="change.tracking.delete.annotation.icon" desc="Annotation icon type for Oxygen tracked changes deletion" type="enum">
+      <val desc="Comment">Comment</val>
+      <val desc="Help">Help</val>
+      <val desc="Insert">Insert</val>
+      <val desc="Key" default="true">Key</val>
+      <val desc="New Paragraph">NewParagraph</val>
+      <val desc="Note">Note</val>
+      <val desc="Paragraph">Paragraph</val>
+      <val desc="None">None</val>
+    </param>
+    <param name="change.tracking.comment.annotation.icon" desc="Annotaion icon type for Oxygen tracked changes comments" type="enum">
+      <val desc="Comment" default="true">Comment</val>
+      <val desc="Help">Help</val>
+      <val desc="Insert">Insert</val>
+      <val desc="Key">Key</val>
+      <val desc="New Paragraph">NewParagraph</val>
+      <val desc="Note">Note</val>
+      <val desc="Paragraph">Paragraph</val>
+      <val desc="None">None</val>
+    </param>
+    <param name="change.tracking.attributes.annotation.icon" desc="Annotaion icon type for Oxygen tracked changes attributes" type="enum">
+      <val desc="Comment">Comment</val>
+      <val desc="Help">Help</val>
+      <val desc="Insert">Insert</val>
+      <val desc="Key">Key</val>
+      <val desc="New Paragraph">NewParagraph</val>
+      <val desc="Note" default="true">Note</val>
+      <val desc="Paragraph">Paragraph</val>
+      <val desc="None">None</val>
+    </param>
+    <param name="change.tracking.annotation.position.horizontal" desc="Annotaion icon horizontal position for Oxygen tracked changes, specified as length.
+      The default value is '0mm'" 
+      type="string"/>
+    <param name="change.tracking.annotation.position.vertical" desc="Annotation icon vertical position for Oxygen tracked changes, specified as length.
+      The default value is '-5.5mm'" 
+      type="string"/>
+    <param name="change.tracking.annotation.position.vertical.for.no.text.child.element" desc="Annotation icon vertical position for Oxygen tracked changes no child element, specified as length.
+      The default value is '0mm'" 
+      type="string"/>
+    <param name="change.tracking.annotation.width" desc="Annotation icon width for Oxygen tracked changes, specified as length.
+      The default value is '5mm'" 
+      type="string"/>
+    <param name="change.tracking.annotation.height" desc="Annotation icon height for Oxygen tracked changes, specified as length.
+      The default value is '5mm'" 
+      type="string"/>
+    <param name="change.tracking.insert.change.bar.color" desc="Change bar color for Oxygen tracked changes insertion, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'dodgerblue'" 
+      type="string"/>
+    <param name="change.tracking.delete.change.bar.color" desc="Change bar color for Oxygen tracked changes deletion, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). The default value is 'hotpink'" 
+      type="string"/>
+    <param name="change.tracking.insert.change.bar.style" desc="Change bar style for Oxygen tracked changes insertion" type="enum">
+      <val desc="Double">double</val>
+      <val desc="Solid" default="true">solid</val>
+      <val desc="Dashed">dashed</val>
+      <val desc="Dot-Dashed">dot-dash</val>
+      <val desc="Dot-Dot-Dashed">dot-dot-dash</val>
+      <val desc="Dotted">dotted</val>
+      <val desc="Ridge">ridge</val>
+      <val desc="Outset">outset</val>
+      <val desc="Groove">groove</val>
+      <val desc="Inset">inset</val>
+      <val desc="Wave">wave</val>
+    </param>
+    <param name="change.tracking.delete.change.bar.style" desc="Change bar style for Oxygen tracked changes deletion" type="enum">
+      <val desc="Double">double</val>
+      <val desc="Solid" default="true">solid</val>
+      <val desc="Dashed">dashed</val>
+      <val desc="Dot-Dashed">dot-dash</val>
+      <val desc="Dot-Dot-Dashed">dot-dot-dash</val>
+      <val desc="Dotted">dotted</val>
+      <val desc="Ridge">ridge</val>
+      <val desc="Outset">outset</val>
+      <val desc="Groove">groove</val>
+      <val desc="Inset">inset</val>
+      <val desc="Wave">wave</val>
+    </param>
+    <param name="change.tracking.insert.change.bar.width" desc="Change bar width for Oxygen tracked changes insertion, specified as lenghth.
+      The defeult value is '1pt'." 
+      type="string"/>
+    <param name="change.tracking.delete.change.bar.width" desc="Change bar width for Oxygen tracked changes deletion, specified as length.
+      The defeult value is '1pt'." 
+      type="string"/>
+    <param name="change.tracking.insert.change.bar.placement" desc="Change bar placement for Oxygen tracked changes insertion, specified as position." type="enum">
+      <val desc="Start" default="true">start</val>
+      <val desc="End">end</val>
+      <val desc="Left">left</val>
+      <val desc="Right">right</val>
+      <val desc="Inside">inside</val>
+      <val desc="Outside">outside</val>
+      <val desc="Alternate">alternate</val>
+    </param>
+    <param name="change.tracking.delete.change.bar.placement" desc="Change bar placement for Oxygen tracked changes deletion, specified as position." type="enum">
+      <val desc="Start" default="true">start</val>
+      <val desc="End">end</val>
+      <val desc="Left">left</val>
+      <val desc="Right">right</val>
+      <val desc="Inside">inside</val>
+      <val desc="Outside">outside</val>
+      <val desc="Alternate">alternate</val>
+    </param>
+    <param name="change.tracking.insert.change.bar.offset" desc="Change bar offset for Oxygen tracked changes insertion, specified as lenghth.
+      The default value is '5mm'." 
+      type="string"/>
+    <param name="change.tracking.delete.change.bar.offset" desc="Change bar offset for Oxygen tracked changes deletion, specified as length.
+      The default value is '3mm'."
+      type="string"/>
+    <param name="step1.debug" type="enum" desc="Output debug step 1 processing message.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step2.debug" type="enum" desc="Output debug step 2 processing message.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step2.debug" type="enum" desc="Output debug step 3 processing message.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+  </transtype>
+</plugin>

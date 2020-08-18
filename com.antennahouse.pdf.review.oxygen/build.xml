@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="com.antennahouse.pdf.review.oxygen" xmlns:if="ant:if">
+    
+    <target name="transform.convmerged.pre.processing">
+        <echo message="[com.antennahouse.pdf.review.oxygen] target: transform.convmerged.pre.processing has been invoked." if:true="${output.changes.and.comments}"/>
+        
+        <property name="tempMergedFile1" value="${build.temp.dir}${file.separator}${dita.map.filename.root}_MERGED_PRE_1.xml" if:true="${output.changes.and.comments}"/>
+        
+        <antcall target="transform.convmerged.pre.processing.impl" if:true="${output.changes.and.comments}">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${tempMergedFile1}"/>
+            <param name="prmStylesheetFile" value="${dita.plugin.com.antennahouse.pdf.review.oxygen.dir}/xsl/dita2fo_change_tracking_shell.xsl"/>
+        </antcall>
+        
+        <!--Let the pipeline continue...-->
+        <copy file="${prmInputFile}" tofile="${build.temp.dir}${file.separator}${dita.map.filename.root}_MERGED_ORG.xml" failonerror="yes" if:true="${output.changes.and.comments}"/>
+        <move file="${tempMergedFile1}" tofile="${prmInputFile}" if:true="${output.changes.and.comments}"/>
+        
+    </target>
+
+    <!-- Process oXygen Change Tracking -->
+    <target name="transform.convmerged.pre.processing.impl">
+        <xslt processor="trax"
+            in="${prmInputFile}"
+            out="${prmOutputFile}"
+            style="${prmStylesheetFile}"
+            force="true" failonerror="true">
+            <factory name="net.sf.saxon.TransformerFactoryImpl">
+                <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <!--attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/-->
+                <!--Assert-->
+                <!--attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/-->
+                <!-- Trace -->
+                <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
+            </factory>
+            <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments"/>
+            <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars"/>
+            <param name="PRM_STEP1_DEBUG" expression="${step1.debug}" if:set="step1.debug"/>
+            <param name="PRM_STEP2_DEBUG" expression="${step2.debug}" if:set="step2.debug"/>
+            <param name="PRM_STEP3_DEBUG" expression="${step3.debug}" if:set="step3.debug"/>
+            <xmlcatalog>
+                <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
+            </xmlcatalog>
+        </xslt>
+    </target>
+    
+</project>

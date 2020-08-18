@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+    <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments" xmlns:if="ant:if"/>
+    <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_USER_FG_COLOR" expression="${change.tracking.user.fg.color}" if:set="change.tracking.user.fg.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_DECORATION" expression="${change.tracking.insert.decoration}" if:set="change.tracking.insert.decoration" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_DECORATION" expression="${change.tracking.delete.decoration}" if:set="change.tracking.delete.decoration" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_COMMENT_BG_COLOR" expression="${change.tracking.comment.bg.color}" if:set="change.tracking.comment.bg.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_COMMENT_BG_COLOR_OPACITY_BASE" expression="${change.tracking.comment.bg.color.opacity.base}" if:set="change.tracking.comment.bg.color.opacity.base" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_COMMENT_BG_COLOR_OPACITY_RATIO" expression="${change.tracking.comment.bg.color.opacity.ratio}" if:set="change.tracking.comment.bg.color.opacity.ratio" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_TYPE" expression="${change.tracking.annotation.type}" if:set="change.tracking.annotation.type" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_OPEN" expression="${change.tracking.annotation.open}" if:set="change.tracking.annotation.open" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_ANNOTATION_COLOR" expression="${change.tracking.insert.annotation.color}" if:set="change.tracking.insert.annotation.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_ANNOTATION_COLOR" expression="${change.tracking.delete.annotation.color}" if:set="change.tracking.delete.annotation.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_COMMENT_ANNOTATION_COLOR" expression="${change.tracking.comment.annotation.color}" if:set="change.tracking.comment.annotation.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ATTRIBUTES_ANNOTATION_COLOR" expression="${change.tracking.attributes.annotation.color}" if:set="change.tracking.attributes.annotation.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_ANNOTATION_ICON" expression="${change.tracking.insert.annotation.icon}" if:set="change.tracking.insert.annotation.icon" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_ANNOTATION_ICON" expression="${change.tracking.delete.annotation.icon}" if:set="change.tracking.delete.annotation.icon" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_COMMENT_ANNOTATION_ICON" expression="${change.tracking.comment.annotation.icon}" if:set="change.tracking.comment.annotation.icon" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ATTRIBUTES_ANNOTATION_ICON" expression="${change.tracking.attributes.annotation.icon}" if:set="change.tracking.attributes.annotation.icon" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_POSITION_HORIZONTAL" expression="${change.tracking.annotation.position.horizontal}" if:set="change.tracking.annotation.position.horizontal" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_POSITION_VERTICAL" expression="${change.tracking.annotation.position.vertical}" if:set="change.tracking.annotation.position.vertical" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_POSITION_VERTICAL_FOR_NO_TEXT_CHILD_ELEMENT" expression="${change.tracking.annotation.position.vertical.for.no.text.child.element}" if:set="change.tracking.annotation.position.vertical.for.no.text.child.element" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_WIDTH" expression="${change.tracking.annotation.width}" if:set="change.tracking.annotation.width" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_ANNOTATION_HEIGHT" expression="${change.tracking.annotation.height}" if:set="change.tracking.annotation.height" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_COLOR" expression="${change.tracking.insert.change.bar.color}" if:set="change.tracking.insert.change.bar.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_COLOR" expression="${change.tracking.delete.change.bar.color}" if:set="change.tracking.delete.change.bar.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_STYLE" expression="${change.tracking.insert.change.bar.style}" if:set="change.tracking.insert.change.bar.style" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_STYLE" expression="${change.tracking.delete.change.bar.style}" if:set="change.tracking.delete.change.bar.style" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_WIDTH" expression="${change.tracking.insert.change.bar.width}" if:set="change.tracking.insert.change.bar.width" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_WIDTH" expression="${change.tracking.delete.change.bar.width}" if:set="change.tracking.delete.change.bar.width" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_PLACEMENT" expression="${change.tracking.insert.change.bar.placement}" if:set="change.tracking.insert.change.bar.placement" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_PLACEMENT" expression="${change.tracking.delete.change.bar.placement}" if:set="change.tracking.delete.change.bar.placement" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_OFFSET" expression="${change.tracking.insert.change.bar.offset}" if:set="change.tracking.insert.change.bar.offset" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_OFFSET" expression="${change.tracking.delete.change.bar.offset}" if:set="change.tracking.delete.change.bar.offset" xmlns:if="ant:if"/>
+    <param name="PRM_STEP1_DEBUG" expression="${step1.debug}" if:set="step1.debug" xmlns:if="ant:if"/>
+    <param name="PRM_STEP2_DEBUG" expression="${step2.debug}" if:set="step2.debug" xmlns:if="ant:if"/>
+    <param name="PRM_STEP2_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>
+</extension>
+
