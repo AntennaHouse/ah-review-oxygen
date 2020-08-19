@@ -156,9 +156,11 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:result-document href="{ahf:getHistoryStr($topic) || '-3.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
-            <xsl:copy-of select="$thirdStepResult"/>
-        </xsl:result-document>
+        <xsl:if test="$gpStep3Debug">
+            <xsl:result-document href="{ahf:getHistoryStr($topic) || '-3.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
+                <xsl:copy-of select="$thirdStepResult"/>
+            </xsl:result-document>
+        </xsl:if>
         <xsl:sequence select="$thirdStepResult"/>
     </xsl:template>
     
