@@ -459,7 +459,7 @@
                 <xsl:variable name="foProp" as="attribute()?" select="()"/>
                 <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
             </xsl:variable>
-            <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertPi)"/>
+            <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertPi) => string()"/>
             <ph class="- topic/ph ">
                 <xsl:copy-of select="$insertFoProp"/>
                 <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
