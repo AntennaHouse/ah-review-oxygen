@@ -28,18 +28,27 @@
      -->
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]
                           [string(@disposition) = ($cDraftCommentDispositionInsert,
-                                                   $cDraftCommentDispositionInsertSplit,
-                                                   $cDraftCommentDispositionInsertEnd,
-                                                   $cDraftCommentDispositionDelete,
-                                                   $cDraftCommentDispositionDeleteEnd,
-                                                   $cDraftCommentDispositionComment, 
-                                                   $cDraftCommentDispositionCommentEnd, 
-                                                   $cDraftCommentDispositionAttributes)]
-                          [$gpOutputChangesAndComments]">
+                                                    $cDraftCommentDispositionInsertSplit,
+                                                    $cDraftCommentDispositionInsertEnd,
+                                                    $cDraftCommentDispositionDelete,
+                                                    $cDraftCommentDispositionDeleteEnd,
+                                                    $cDraftCommentDispositionAttributes)]
+                          [$gpOutputOxyChanges]">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
+
+    <xsl:template match="*[contains(@class,' topic/draft-comment ')]
+                          [string(@disposition) = ($cDraftCommentDispositionComment, 
+                                                    $cDraftCommentDispositionCommentEnd)]
+                            [$gpOutputOxyComments]">
+                            <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
     
+
 </xsl:stylesheet>

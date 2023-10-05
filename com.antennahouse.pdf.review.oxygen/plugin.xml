@@ -7,7 +7,15 @@
   <feature extension="depend.com.antennahouse.pdf5.ml.convmerged.pre" value="transform.convmerged.pre.processing"/>
   <feature extension="build.com.antennahouse.pdf5.ml.format.inclusion" value="build.xml" type="file"/>
   <transtype name="pdf5.review" desc="PDF">
-    <param name="output.changes.and.comments" desc="Output Oxygen track changes and comments" type="enum">
+    <param name="output.oxy.changes" desc="Output Oxygen track changes" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="output.oxy.comments" desc="Output Oxygen comments" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="output.oxy.highlights" desc="Output Oxygen highlights" type="enum">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
@@ -15,7 +23,9 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
-    <param name="change.tracking.user.fg.color" desc="Change tracking foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 
+    <param name="change.tracking.user.insert.fg.color" desc="Change tracking insert foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 
+      The default value is 'royalblue orange orchid teal violet'." type="string"/>
+    <param name="change.tracking.user.delete.fg.color" desc="Change tracking delete foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 
       The default value is 'royalblue orange orchid teal violet'." type="string"/>
     <param name="change.tracking.insert.decoration" desc="Text decoration for insert, specified as CSS notation. The default value is 'text-decoration:underline;'." type="string"/>
     <param name="change.tracking.delete.decoration" desc="Text decoration for delete, specified as CSS notation. The default value is 'text-decoration:line-through no-underline;'." type="string"/>
