@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension>
     <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments" xmlns:if="ant:if"/>
+    <param name="PRM_OUTPUT_OXY_CHANGES" expression="${output.oxy.changes}" if:set="output.oxy.changes" xmlns:if="ant:if"/>
+    <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments}" if:set="output.oxy.comments" xmlns:if="ant:if"/>
+    <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights}" if:set="output.oxy.highlights" xmlns:if="ant:if"/>
     <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars" xmlns:if="ant:if"/>
-    <param name="PRM_CHANGE_TRACKING_USER_FG_COLOR" expression="${change.tracking.user.fg.color}" if:set="change.tracking.user.fg.color" xmlns:if="ant:if"/>
+    <param name="PRM_OUTPUT_CHANGE_ICONS" expression="${output.change.icons}" if:set="output.change.icons" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR" expression="${change.tracking.user.insert.fg.color}" if:set="change.tracking.user.insert.fg.color" xmlns:if="ant:if"/>
+    <param name="PRM_CHANGE_TRACKING_USER_DELETE_FG_COLOR" expression="${change.tracking.user.delete.fg.color}" if:set="change.tracking.user.delete.fg.color" xmlns:if="ant:if"/>
     <param name="PRM_CHANGE_TRACKING_INSERT_DECORATION" expression="${change.tracking.insert.decoration}" if:set="change.tracking.insert.decoration" xmlns:if="ant:if"/>
     <param name="PRM_CHANGE_TRACKING_DELETE_DECORATION" expression="${change.tracking.delete.decoration}" if:set="change.tracking.delete.decoration" xmlns:if="ant:if"/>
     <param name="PRM_CHANGE_TRACKING_COMMENT_BG_COLOR" expression="${change.tracking.comment.bg.color}" if:set="change.tracking.comment.bg.color" xmlns:if="ant:if"/>

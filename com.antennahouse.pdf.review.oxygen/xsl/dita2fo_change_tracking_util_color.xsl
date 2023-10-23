@@ -23,12 +23,19 @@
      return:    fo:prop
      note:      Add 'color:$prmColor;' to last part of fo:prop.
      -->
-    <xsl:function name="ahf:addColorToFoProp" as="attribute()">
+    <xsl:function name="ahf:addColorToFoProp" as="attribute()?">
         <xsl:param name="prmFoProp" as="attribute()?"/>
         <xsl:param name="prmColor" as="xs:string"/>
         <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
         <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
-        <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || 'color:' || $prmColor || ';'"/>
+        <xsl:choose>
+            <xsl:when test="string($prmColor)">
+                <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || 'color:' || $prmColor || ';'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$prmFoProp"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
     
     <xsl:function name="ahf:addBgColorToFoProp" as="attribute()?">
@@ -62,20 +69,20 @@
     </xsl:function>
 
     <!-- 
-     function:  Get insert/delete foreground color by referencing user
-     param:     prmPi (Insert/Delete)
+     function:  Get insert foreground color by referencing user
+     param:     prmPi (Insert)
      return:    xs:string
      note:      
      -->
-    <xsl:function name="ahf:getFgColorSpecFromPi" as="xs:string">
+    <xsl:function name="ahf:getInsertFgColorSpecFromPi" as="xs:string">
         <xsl:param name="prmPi" as="processing-instruction()"/>
         <xsl:variable name="author" as="xs:string" select="$prmPi => ahf:getAuthorFromPi()"/>
         <xsl:choose>
             <xsl:when test="$author ne ''">
                 <xsl:variable name="authorIndex" as="xs:integer?" select="($gUsers => index-of($author))[1]"/>
-                <xsl:assert test="$authorIndex => exists()" select="'[ahf:getFgSpecFromPi] Missing author=' || $author"/>
-                <xsl:variable name="colorIndex" as="xs:integer" select="if ($authorIndex le $gpChangeTrackingUserFgColorCount) then $authorIndex else $authorIndex mod $gpChangeTrackingUserFgColorCount + 1"/>
-                <xsl:variable name="fgColor" as="xs:string" select="$gpChangeTrackingUserFgColor[$colorIndex]"/>
+                <xsl:assert test="$authorIndex => exists()" select="'[ahf:getInsertFgSpecFromPi] Missing author=' || $author"/>
+                <xsl:variable name="colorIndex" as="xs:integer" select="if ($authorIndex le $gpChangeTrackingUserInsertFgColorCount) then $authorIndex else $authorIndex mod $gpChangeTrackingUserInsertFgColorCount + 1"/>
+                <xsl:variable name="fgColor" as="xs:string" select="$gpChangeTrackingUserInsertFgColor[$colorIndex]"/>
                 <xsl:sequence select="$fgColor"/>
             </xsl:when>
             <xsl:otherwise>
@@ -84,6 +91,29 @@
         </xsl:choose>
     </xsl:function>
 
+    <!-- 
+     function:  Get delete foreground color by referencing user
+     param:     prmPi (Delete)
+     return:    xs:string
+     note:      
+     -->
+    <xsl:function name="ahf:getDeleteFgColorSpecFromPi" as="xs:string">
+        <xsl:param name="prmPi" as="processing-instruction()"/>
+        <xsl:variable name="author" as="xs:string" select="$prmPi => ahf:getAuthorFromPi()"/>
+        <xsl:choose>
+            <xsl:when test="$author ne ''">
+                <xsl:variable name="authorIndex" as="xs:integer?" select="($gUsers => index-of($author))[1]"/>
+                <xsl:assert test="$authorIndex => exists()" select="'[ahf:getDeleteFgSpecFromPi] Missing author=' || $author"/>
+                <xsl:variable name="colorIndex" as="xs:integer" select="if ($authorIndex le $gpChangeTrackingUserDeleteFgColorCount) then $authorIndex else $authorIndex mod $gpChangeTrackingUserDeleteFgColorCount + 1"/>
+                <xsl:variable name="fgColor" as="xs:string" select="$gpChangeTrackingUserDeleteFgColor[$colorIndex]"/>
+                <xsl:sequence select="$fgColor"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="''"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <!-- 
      function:  Get comment background color by referencing user
      param:     prmCommentPi

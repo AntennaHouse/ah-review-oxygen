@@ -89,7 +89,7 @@
         <xsl:variable name="firstStepResult" as="element()">
             <xsl:variable name="root" as="element()" select="$topic"/>
             <xsl:choose>
-                <xsl:when test=". => ahf:hasInsertPi() or . => ahf:hasDeletePi() or . => ahf:hasAttributeChangePi()">
+                <xsl:when test="(. => ahf:hasInsertPi() or . => ahf:hasDeletePi() or . => ahf:hasAttributeChangePi()) and $gpOutputOxyChanges">
                     <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
                         <xsl:call-template name="generateInsertRangeInlineMap">
                             <xsl:with-param name="prmRoot" select="$root"/>
@@ -116,7 +116,7 @@
         <xsl:variable name="secondStepResult" as="element()">
             <xsl:variable name="root" as="element()" select="$firstStepResult"/>
             <xsl:choose>
-                <xsl:when test="$root => ahf:hasCommentPi()">
+                <xsl:when test="($root => ahf:hasCommentPi()) and $gpOutputOxyComments">
                     <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
                         <xsl:call-template name="generateCommentRangeInlineMap">
                             <xsl:with-param name="prmRoot" select="$root"/>
@@ -140,7 +140,7 @@
         <xsl:variable name="thirdStepResult" as="element()">
             <xsl:variable name="root" as="element()" select="$secondStepResult"/>
             <xsl:choose>
-                <xsl:when test="$root => ahf:hasHighlightPi()">
+                <xsl:when test="($root => ahf:hasHighlightPi()) and $gpOutputOxyHilights">
                     <xsl:variable name="highlightRangeInlineMap" as="map(xs:string, node()*)">
                         <xsl:call-template name="generateHighlightRangeInlineMap">
                             <xsl:with-param name="prmRoot" select="$root"/>
@@ -197,7 +197,7 @@
                 <xsl:choose>
                     <xsl:when test="$isDeletePi">
                         <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
-                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
+                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
                         <xsl:choose>
                             <xsl:when test="parent::*[@class => contains-token('topic/body')]">
                                 <bodydiv class="- topic/bodydiv ">
@@ -370,7 +370,7 @@
                         <xsl:if test="$gpStep1Debug">
                             <xsl:message select="'$deletePi=',$deletePi"/>
                         </xsl:if>
-                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
+                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
                         <ph class="- topic/ph ">
                             <xsl:copy-of select="$deleteFoProp"/>
                             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDelete, 
@@ -457,7 +457,7 @@
             </xsl:if>
             <xsl:variable name="insertFoProp" as="attribute()?">
                 <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
+                <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
             </xsl:variable>
             <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertPi) => string()"/>
             <ph class="- topic/ph ">
@@ -558,7 +558,7 @@
                     <xsl:variable name="foProp" as="attribute()?" select="()"/>
                     <xsl:choose>
                         <xsl:when test="$isInserted">
-                            <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
+                            <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:copy-of select="$foProp"/>
