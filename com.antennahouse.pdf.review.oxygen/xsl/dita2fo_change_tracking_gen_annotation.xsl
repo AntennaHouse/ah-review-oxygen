@@ -47,21 +47,25 @@
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
                     </xsl:if>
-                    <fo:inline>
-                        <xsl:copy-of select="$atsAnnotationInsert"/>
-                        <xsl:attribute name="axf:annotation-author" select="$author"/>
-                        <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted: ' || $comment else $time || ' Inserted'"/>
-                    </fo:inline>
+                    <xsl:if test="$gpOutputChangeIcons">
+                        <fo:inline>
+                            <xsl:copy-of select="$atsAnnotationInsert"/>
+                            <xsl:attribute name="axf:annotation-author" select="$author"/>
+                            <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted: ' || $comment else $time || ' Inserted'"/>
+                        </fo:inline>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSplit">
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
                     </xsl:if>
-                    <fo:inline>
-                        <xsl:copy-of select="$atsAnnotationInsert"/>
-                        <xsl:attribute name="axf:annotation-author" select="$author"/>
-                        <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted (Split): ' || $comment else $time || ' Inserted (Split)'"/>
-                    </fo:inline>
+                    <xsl:if test="$gpOutputChangeIcons">
+                        <fo:inline>
+                            <xsl:copy-of select="$atsAnnotationInsert"/>
+                            <xsl:attribute name="axf:annotation-author" select="$author"/>
+                            <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted (Split): ' || $comment else $time || ' Inserted (Split)'"/>
+                        </fo:inline>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertEnd">
                     <xsl:if test="$gpOutputChangeBars">
@@ -72,11 +76,13 @@
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barDeleteBegin,$id)"/>
                     </xsl:if>
-                    <fo:inline>
-                        <xsl:copy-of select="$atsAnnotationDelete"/>
-                        <xsl:attribute name="axf:annotation-author" select="$author"/>
-                        <xsl:attribute name="axf:annotation-contents" select="$time || (if (string($comment)) then ' Deleted: ' else ' Deleted') || $comment"/>
-                    </fo:inline>
+                    <xsl:if test="$gpOutputChangeIcons">
+                        <fo:inline>
+                            <xsl:copy-of select="$atsAnnotationDelete"/>
+                            <xsl:attribute name="axf:annotation-author" select="$author"/>
+                            <xsl:attribute name="axf:annotation-contents" select="$time || (if (string($comment)) then ' Deleted: ' else ' Deleted') || $comment"/>
+                        </fo:inline>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionDeleteEnd">
                     <xsl:if test="$gpOutputChangeBars">

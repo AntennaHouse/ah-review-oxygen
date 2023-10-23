@@ -50,6 +50,7 @@
             <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments}" if:set="output.oxy.comments" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights}" if:set="output.oxy.highlights" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_CHANGE_ICONS" expression="${output.change.icons}" if:set="output.change.icons" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR" expression="${change.tracking.user.insert.fg.color}" if:set="change.tracking.user.insert.fg.color" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_USER_DELETE_FG_COLOR" expression="${change.tracking.user.delete.fg.color}" if:set="change.tracking.user.delete.fg.color" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_INSERT_DECORATION" expression="${change.tracking.insert.decoration}" if:set="change.tracking.insert.decoration" xmlns:if="ant:if"/>

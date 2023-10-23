@@ -27,6 +27,10 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
+    <param name="output.change.icons" desc="Show insert/delete icons along with insert/delete text decorations" type="enum">
+      <val desc="No">no</val>
+      <val desc="Yes" default="true">yes</val>
+    </param>
     <param name="change.tracking.user.insert.fg.color" desc="Change tracking insert foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 
       The default value is 'royalblue orange orchid teal violet'." type="string"/>
     <param name="change.tracking.user.delete.fg.color" desc="Change tracking delete foreground colors for Oxygen users, specified as a plain color (i.e. red, yellow, blue), or with a hexadecimal equivalent (i.e. #FFFFFF). 

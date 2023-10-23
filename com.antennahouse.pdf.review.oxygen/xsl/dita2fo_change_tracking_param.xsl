@@ -31,7 +31,11 @@
     <!-- Output Change Bars -->
     <xsl:param name="PRM_OUTPUT_CHANGEBARS" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpOutputChangeBars" as="xs:boolean" select="($PRM_OUTPUT_CHANGEBARS eq $cYes) and $gpOutputOxyChanges"/>
-
+    
+    <!-- Output Change Icons -->
+    <xsl:param name="PRM_OUTPUT_CHANGE_ICONS" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpOutputChangeIcons" as="xs:boolean" select="$PRM_OUTPUT_CHANGE_ICONS eq $cYes"/>
+    
     <!-- Insert Foreground Color : Applied for each author -->
     <xsl:param name="PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR" as="xs:string" required="no" select="'royalblue orange orchid teal violet'"/>
     <xsl:variable name="gpChangeTrackingUserInsertFgColor" as="xs:string+" select="$PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR => tokenize('[\s]+')"/>
