@@ -10,6 +10,7 @@
                 <istrue value="${output.oxy.changes}"/>
                 <istrue value="${output.oxy.comments}"/>
                 <istrue value="${output.oxy.highlights}"/>
+                <istrue value="${output.changes.and.comments}"/>
             </or>
         </condition>
         <echo message="[com.antennahouse.pdf.review.oxygen] target: transform.convmerged.pre.processing has been invoked." if:true="${output.changes.or.commnets.or.highlights}"/>
@@ -44,6 +45,7 @@
                 <!-- Trace -->
                 <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
             </factory>
+            <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_CHANGES" expression="${output.oxy.changes}" if:set="output.oxy.changes" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments}" if:set="output.oxy.comments" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights}" if:set="output.oxy.highlights" xmlns:if="ant:if"/>

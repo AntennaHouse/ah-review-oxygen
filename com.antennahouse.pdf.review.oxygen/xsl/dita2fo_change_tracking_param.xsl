@@ -14,16 +14,19 @@
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     exclude-result-prefixes="xs math"
     version="3.0">
+    <!-- Short cut: Output changes, commnets and highlights -->
+    <xsl:param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpOutputChangesAndComments" as="xs:boolean" select="$PRM_OUTPUT_CHANGES_AND_COMMENTS eq $cYes"/>
     
     <!-- Do processing change tracking -->
     <xsl:param name="PRM_OUTPUT_OXY_CHANGES" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyChanges" as="xs:boolean" select="$PRM_OUTPUT_OXY_CHANGES eq $cYes"/>
+    <xsl:variable name="gpOutputOxyChanges" as="xs:boolean" select="($PRM_OUTPUT_OXY_CHANGES eq $cYes) or $gpOutputChangesAndComments"/>
 
     <xsl:param name="PRM_OUTPUT_OXY_COMMENTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyComments" as="xs:boolean" select="$PRM_OUTPUT_OXY_COMMENTS eq $cYes"/>
+    <xsl:variable name="gpOutputOxyComments" as="xs:boolean" select="($PRM_OUTPUT_OXY_COMMENTS eq $cYes) or $gpOutputChangesAndComments"/>
 
     <xsl:param name="PRM_OUTPUT_OXY_HIGHLIGHTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
+    <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="($PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes) or $gpOutputChangesAndComments"/>
     
     <!-- Output Change Bars -->
     <xsl:param name="PRM_OUTPUT_CHANGEBARS" as="xs:string" required="no" select="$cNo"/>

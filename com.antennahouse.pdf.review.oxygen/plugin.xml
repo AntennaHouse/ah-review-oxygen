@@ -7,6 +7,10 @@
   <feature extension="depend.com.antennahouse.pdf5.ml.convmerged.pre" value="transform.convmerged.pre.processing"/>
   <feature extension="build.com.antennahouse.pdf5.ml.format.inclusion" value="build.xml" type="file"/>
   <transtype name="pdf5.review" desc="PDF">
+    <param name="output.changes.and.comments" desc="Output Oxygen track changes (short-cut)" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
     <param name="output.oxy.changes" desc="Output Oxygen track changes" type="enum">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>

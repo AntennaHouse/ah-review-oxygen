@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension>
+    <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments" xmlns:if="ant:if"/>
     <param name="PRM_OUTPUT_OXY_CHANGES" expression="${output.oxy.changes}" if:set="output.oxy.changes" xmlns:if="ant:if"/>
     <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments}" if:set="output.oxy.comments" xmlns:if="ant:if"/>
     <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights}" if:set="output.oxy.highlights" xmlns:if="ant:if"/>
