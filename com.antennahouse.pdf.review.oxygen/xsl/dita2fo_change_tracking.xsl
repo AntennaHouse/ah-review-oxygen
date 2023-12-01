@@ -470,10 +470,13 @@
             </ph>
         </xsl:if>
     </xsl:template>
-
+    
+    <!-- Remove parent condition: [./parent::* => ahf:isMixedContentElement()]
+         to generate fo:change-bar-end normally. 
+         2023-11-30 t.makita 
+     -->
     <xsl:template match="processing-instruction()[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
                                                  [. => ahf:isInsertEndPi()]
-                                                 [./parent::* => ahf:isMixedContentElement()]
                                                  [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
                   mode="MODE_FIRST">
         <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
