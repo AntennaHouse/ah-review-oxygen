@@ -36,11 +36,25 @@
                     <xsl:variable name="insertEndPi" as="processing-instruction()?">
                         <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isInsertEndPi()][. => ahf:isAfterNode($insertStartPi)])[1]"/> 
                     </xsl:variable>
+                    <xsl:variable name="rangeBetweenPis" as="node()*">
+                        <xsl:choose>
+                            <xsl:when test="$insertEndPi => empty()">
+                                <xsl:sequence select="()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="$prmRoot/descendant::node()[. => ahf:isAfterNode($insertStartPi)][. => ahf:isBeforeNode($insertEndPi)]"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="hasBlockImage" as="xs:boolean" select="$rangeBetweenPis[self::*[@class => contains-token('topic/image')][@placement => string() eq 'break']] => exists()"/>
                     <xsl:variable name="rangeInline" as="node()*">
                         <xsl:variable name="parent" as="element()?" select="$insertStartPi/parent::*[ahf:isMixedContentElement(.)][1]"/>
                         <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()[self::text()[parent::*[ahf:isMixedContentElement(.)]][. => ahf:isAfterOrSelfNode($insertStartPi)][. => ahf:isBeforeOrSelfNode($insertEndPi)]]"/>
                         <xsl:variable name="rangeRevised" as="node()*">
                             <xsl:choose>
+                                <xsl:when test="$hasBlockImage">
+                                    <xsl:sequence select="($insertStartPi,$insertEndPi)"/>
+                                </xsl:when>
                                 <xsl:when test="$range => empty()">
                                     <xsl:sequence select="($insertStartPi,$insertEndPi)"/>
                                 </xsl:when>

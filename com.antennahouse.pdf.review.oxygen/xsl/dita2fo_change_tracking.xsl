@@ -433,7 +433,7 @@
      -->
     <xsl:template match="processing-instruction()[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
                                                  [. => ahf:isInsertStartPi()]
-                                                 [./parent::* => ahf:isMixedContentElement()]
+                                                 (: [./parent::* => ahf:isMixedContentElement()] :)
                                                  [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
                   mode="MODE_FIRST">
         <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
@@ -460,14 +460,25 @@
                 <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
             </xsl:variable>
             <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertPi) => string()"/>
-            <ph class="- topic/ph ">
-                <xsl:copy-of select="$insertFoProp"/>
-                <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
-                                                         $insertPi => ahf:getAuthorFromPi(), 
-                                                         $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
-                                                         $insertPi => ahf:getCommentFromPi(),
-                                                         ahf:getHistoryStrWithPiText($insertPi))"/>
-            </ph>
+            <xsl:choose>
+                <xsl:when test="$insertPi/parent::*[ahf:isMixedContentElement(.)]">
+                    <ph class="- topic/ph ">
+                        <xsl:copy-of select="$insertFoProp"/>
+                        <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
+                            $insertPi => ahf:getAuthorFromPi(), 
+                            $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
+                            $insertPi => ahf:getCommentFromPi(),
+                            ahf:getHistoryStrWithPiText($insertPi))"/>
+                    </ph>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
+                        $insertPi => ahf:getAuthorFromPi(), 
+                        $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
+                        $insertPi => ahf:getCommentFromPi(),
+                        ahf:getHistoryStrWithPiText($insertPi))"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
     </xsl:template>
     
