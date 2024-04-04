@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="22.1">
+<project>
     <meta>
         <filters directoryPatterns="" filePatterns="\Qpdf-review.xpr\E" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="22.1" xml:space="preserve">
+            <serialized xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>catalogs.v5</String>
@@ -416,6 +416,9 @@
                                             <field name="validationSchema">
                                                 <null/>
                                             </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
+                                            </field>
                                         </validationUnit>
                                         <validationUnit>
                                             <field name="validationType">
@@ -459,6 +462,9 @@
                                                         <String>${frameworks}/xslt/sch/xsltDocCheck.sch</String>
                                                     </field>
                                                 </validationUnitSchema>
+                                            </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
                                             </field>
                                         </validationUnit>
                                         <validationUnit>
@@ -504,6 +510,9 @@
                                                     </field>
                                                 </validationUnitSchema>
                                             </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
+                                            </field>
                                         </validationUnit>
                                         <validationUnit>
                                             <field name="validationType">
@@ -548,6 +557,9 @@
                                                     </field>
                                                 </validationUnitSchema>
                                             </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
+                                            </field>
                                         </validationUnit>
                                     </list>
                                 </field>
@@ -591,6 +603,9 @@
                                             <field name="validationSchema">
                                                 <null/>
                                             </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
+                                            </field>
                                         </validationUnit>
                                     </list>
                                 </field>
@@ -609,7 +624,6 @@
     </meta>
     <projectTree name="pdf-review.xpr">
         <folder path="."/>
-        <folder path="../../../../My_Documents/GitHub/pdf5-ml/"/>
         <file name="build.xml"/>
     </projectTree>
 </project>
