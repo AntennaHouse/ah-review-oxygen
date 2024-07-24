@@ -467,7 +467,7 @@
         <xsl:apply-templates mode="#current"/>
     </xsl:template>
     
-    <xsl:template match="attribute" mode="MODE_ATTRIBUTES_PI" as="xs:string">
+    <xsl:template match="attribute" mode="MODE_ATTRIBUTES_PI" as="xs:string*">
         <xsl:param name="prmTargetElem" as="element()?" tunnel="yes" required="yes"/>
         <xsl:variable name="name" select="@name => string()"/>
         <xsl:variable name="change" as="element()?" select="child::change[1]"/>
@@ -477,12 +477,32 @@
         <xsl:variable name="newValue" as="xs:string" select="$prmTargetElem/@*[name() eq $name] => string()"/>
         <xsl:variable name="author" as="xs:string" select="$change/@author => string()"/>
         <xsl:variable name="timeStamp" as="xs:string" select="$change/@timestamp => string() => ahf:convertToDateTime() => ahf:formatDateTimeGeneral()"/>
+        <xsl:variable name="comment" as="xs:string" select="$change/@comment => string()"/>
         <xsl:choose>
-            <xsl:when test="$type eq 'change'">
-                <xsl:sequence select="$timeStamp || ' ' || $author || ' changed ' || $targetName || '/@' || $name || ' from ' || '''' || $oldValue || ''' to ''' || $newValue || '''.' || (if (following-sibling::attribute) then '&#x0A;' else '')"/>
+            <xsl:when test="$type eq 'modified'">
+                <xsl:sequence select="$timeStamp"/>
+                <xsl:sequence select="' ' || $author"/>
+                <xsl:sequence select="' modified ' || $targetName || '/@' || $name"/>
+                <xsl:sequence select="' from ' || '''' || $oldValue || ''''"/>
+                <xsl:sequence select="' to ''' || $newValue || '''.'"/>
+                <xsl:if test="string($comment)">
+                    <xsl:sequence select="' &quot;' || $comment || '&quot;'"/>
+                </xsl:if>
+                <xsl:if test="following-sibling::attribute">
+                    <xsl:sequence select="' &#x0A;'"/>
+                </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="$timeStamp || ' ' || $author || ' inserted ' || $targetName || '/@' || $name || ' as ' || '''' || $newValue || '''.' || (if (following-sibling::attribute) then '&#x0A;' else '')"/>
+                <xsl:sequence select="$timeStamp"/>
+                <xsl:sequence select="' ' || $author"/>
+                <xsl:sequence select="' inserted ' || $targetName || '/@' || $name"/>
+                <xsl:sequence select="' as ''' || $newValue || '''.'"/>
+                <xsl:if test="string($comment)">
+                    <xsl:sequence select="' &quot;' || $comment || '&quot;'"/>
+                </xsl:if>
+                <xsl:if test="following-sibling::attribute">
+                    <xsl:sequence select="' &#x0A;'"/>
+                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
