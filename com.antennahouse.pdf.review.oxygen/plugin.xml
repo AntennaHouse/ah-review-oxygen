@@ -179,7 +179,7 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
-    <param name="step2.debug" type="enum" desc="Output debug step 3 processing message.">
+    <param name="step3.debug" type="enum" desc="Output debug step 3 processing message.">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
