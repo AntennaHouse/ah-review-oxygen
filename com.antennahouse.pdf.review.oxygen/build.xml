@@ -85,7 +85,8 @@
             <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_OFFSET" expression="${change.tracking.delete.change.bar.offset}" if:set="change.tracking.delete.change.bar.offset" xmlns:if="ant:if"/>
             <param name="PRM_STEP1_DEBUG" expression="${step1.debug}" if:set="step1.debug" xmlns:if="ant:if"/>
             <param name="PRM_STEP2_DEBUG" expression="${step2.debug}" if:set="step2.debug" xmlns:if="ant:if"/>
-            <param name="PRM_STEP2_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>
+            <param name="PRM_STEP3_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>
+            <param name="PRM_STEP4_DEBUG" expression="${step4.debug}" if:set="step4.debug" xmlns:if="ant:if"/>
             <xmlcatalog>
                 <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
             </xmlcatalog>

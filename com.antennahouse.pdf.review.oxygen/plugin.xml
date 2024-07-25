@@ -183,5 +183,9 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
+    <param name="step4.debug" type="enum" desc="Output debug step 4 processing message.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
   </transtype>
 </plugin>
