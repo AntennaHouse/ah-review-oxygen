@@ -82,11 +82,12 @@
      function:  Topic Template
      param:     None
      return:    Topic itself and add draft-comment for oxy_xxx processing instruction
-     note:      Topic has three steps:
-                - First for insert, delete, attribute-change processing-instruction
-                - Second for comment processing instruction
-                - Third for highlight processing instruction
-                In the first step pass map{insert end node, insert start id} as tunnel parameter to close fo:change-bar.
+     note:      Topic has four steps:
+                - Step1: Insert surround processing instruction
+                - Step2: Insert, delete, attribute-change processing-instruction
+                - Step3: Comment processing instruction
+                - Step4: Highlight processing instruction
+                In the step 2, pass map{insert end node, insert start id} as tunnel parameter to close fo:change-bar.
      -->
     <xsl:template match="*[@class => contains-token('topic/topic')][ancestor::*[@class => contains-token('topic/topic')] => empty()]" as="element()">
         <xsl:variable name="topic" as="element()" select="."/>
