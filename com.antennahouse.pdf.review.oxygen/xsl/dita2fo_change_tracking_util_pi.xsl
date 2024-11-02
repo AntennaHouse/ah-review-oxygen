@@ -492,6 +492,18 @@
                     <xsl:sequence select="' &#x0A;'"/>
                 </xsl:if>
             </xsl:when>
+            <xsl:when test="$type eq 'removed'">
+                <xsl:sequence select="$timeStamp"/>
+                <xsl:sequence select="' ' || $author"/>
+                <xsl:sequence select="' removed ' || $targetName || '/@' || $name"/>
+                <xsl:sequence select="' value: ' || '''' || $oldValue || '''.'"/>
+                <xsl:if test="string($comment)">
+                    <xsl:sequence select="' &quot;' || $comment || '&quot;'"/>
+                </xsl:if>
+                <xsl:if test="following-sibling::attribute">
+                    <xsl:sequence select="' &#x0A;'"/>
+                </xsl:if>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$timeStamp"/>
                 <xsl:sequence select="' ' || $author"/>
