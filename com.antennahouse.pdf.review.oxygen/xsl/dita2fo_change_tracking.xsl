@@ -357,7 +357,14 @@
                                                      $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 
                                                      $prmDeletePi => ahf:getCommentFromPi(), 
                                                      ahf:getHistoryStrWithPiText($prmDeletePi))"/>
-            <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
+            <xsl:choose>
+                <xsl:when test="$gpChangeTrackingIncludeTagInDeleteContent">
+                    <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar() => ahf:parseXmlFragmentEx() => string()"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDeleteEnd, 
                                                      $prmDeletePi => ahf:getAuthorFromPi(), 
                                                      $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 

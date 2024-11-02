@@ -28,5 +28,22 @@
         <xsl:param name="prmStr" as="xs:string"/>
         <xsl:sequence select="ahf:replace($prmStr,('&amp;amp;','&amp;lt;','&amp;gt;','&amp;quot;','&amp;apos;'),('&amp;','&lt;','&gt;','&quot;',&quot;&apos;&quot;))"/>
     </xsl:function>
+
+    <!-- 
+     function:  Parse XML fragment by adding root element 
+     param:     prmStr
+     return:    xs:string
+     note:      Return document-node().
+     -->
+    <xsl:function name="ahf:parseXmlFragmentEx" as="document-node()?">
+        <xsl:param name="prmStr" as="xs:string"/>
+        <xsl:variable name="parseStr" as="xs:string" select="'&lt;root&gt;' || $prmStr || '&lt;/root&gt;'"/>
+        <xsl:try select="parse-xml-fragment($parseStr)">
+            <xsl:catch errors="*">
+                <xsl:sequence select="()"/>
+            </xsl:catch>
+        </xsl:try>
+    </xsl:function>
     
+
 </xsl:stylesheet>

@@ -161,6 +161,10 @@
     <!-- Delete Change Bar Offset -->
     <xsl:param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_OFFSET" as="xs:string" required="no" select="'3mm'"/>
     <xsl:variable name="gpChangeTrackingDeleteChangeBarOffset" as="xs:string" select="$PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_OFFSET"/>
+
+    <!-- Include XML tags in delete content -->
+    <xsl:param name="PRM_CHANGE_TRACKING_INCLUDE_TAG_IN_DELETE_CONTENT" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpChangeTrackingIncludeTagInDeleteContent" as="xs:boolean" select="$PRM_CHANGE_TRACKING_INCLUDE_TAG_IN_DELETE_CONTENT eq $cYes"/>
     
     <!-- FO property name now defined as parameter!
      -->

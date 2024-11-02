@@ -171,6 +171,10 @@
     <param name="change.tracking.delete.change.bar.offset" desc="Change bar offset for Oxygen tracked changes deletion, specified as length.
       The default value is '3mm'."
       type="string"/>
+    <param name="change.tracking.include.tag.in.delete.content" desc="Include XML tag in deleted content." type="enum">
+      <val desc="Yes" default="true">yes</val>
+      <val desc="No">no</val>
+    </param>
     <param name="step1.debug" type="enum" desc="Output debug step 1 processing message.">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
