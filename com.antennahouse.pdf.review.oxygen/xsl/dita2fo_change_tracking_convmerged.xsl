@@ -32,8 +32,8 @@
                                                     $cDraftCommentDispositionInsertEnd,
                                                     $cDraftCommentDispositionDelete,
                                                     $cDraftCommentDispositionDeleteEnd,
-                                                    $cDraftCommentDispositionAttributes)]
-                          [$gpOutputOxyChanges]">
+                                                    $cDraftCommentDispositionAttributes)]"
+                  priority="5">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
@@ -42,9 +42,9 @@
 
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]
                           [string(@disposition) = ($cDraftCommentDispositionComment, 
-                                                    $cDraftCommentDispositionCommentEnd)]
-                            [$gpOutputOxyComments]">
-                            <xsl:copy>
+                                                    $cDraftCommentDispositionCommentEnd)]" 
+                  priority="5">
+        <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </xsl:copy>

@@ -175,6 +175,14 @@
       <val desc="Yes" default="true">yes</val>
       <val desc="No">no</val>
     </param>
+    <param name="change.tracking.output.insert.annotation" desc="Output insert annotation." type="enum">
+      <val desc="Yes" default="true">yes</val>
+      <val desc="No">no</val>
+    </param>
+    <param name="change.tracking.output.delete.annotation" desc="Output delete annotation." type="enum">
+      <val desc="Yes" default="true">yes</val>
+      <val desc="No">no</val>
+    </param>
     <param name="step1.debug" type="enum" desc="Output debug step 1 processing message.">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>

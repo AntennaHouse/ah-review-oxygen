@@ -84,6 +84,8 @@
             <param name="PRM_CHANGE_TRACKING_INSERT_CHANGE_BAR_OFFSET" expression="${change.tracking.insert.change.bar.offset}" if:set="change.tracking.insert.change.bar.offset" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_DELETE_CHANGE_BAR_OFFSET" expression="${change.tracking.delete.change.bar.offset}" if:set="change.tracking.delete.change.bar.offset" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_INCLUDE_TAG_IN_DELETE_CONTENT" expression="${change.tracking.include.tag.in.delete.content}" if:set="change.tracking.include.tag.in.delete.content" xmlns:if="ant:if"/>
+            <param name="PRM_CHANGE_TRACKING_OUTPUT_INSERT_ANNOTATION" expression="${change.tracking.output.insert.annotation}" if:set="change.tracking.output.insert.annotation" xmlns:if="ant:if"/>
+            <param name="PRM_CHANGE_TRACKING_OUTPUT_DELETE_ANNOTATION" expression="${change.tracking.output.delete.annotation}" if:set="change.tracking.output.delete.annotation" xmlns:if="ant:if"/>
             <param name="PRM_STEP1_DEBUG" expression="${step1.debug}" if:set="step1.debug" xmlns:if="ant:if"/>
             <param name="PRM_STEP2_DEBUG" expression="${step2.debug}" if:set="step2.debug" xmlns:if="ant:if"/>
             <param name="PRM_STEP3_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>

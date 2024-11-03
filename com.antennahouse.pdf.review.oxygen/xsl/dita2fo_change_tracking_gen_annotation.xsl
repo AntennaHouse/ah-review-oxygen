@@ -47,7 +47,7 @@
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
                     </xsl:if>
-                    <xsl:if test="$gpOutputChangeIcons">
+                    <xsl:if test="$gpOutputChangeIcons and $gpChangeTrackingOutputInsertAnnotation">
                         <fo:inline>
                             <xsl:copy-of select="$atsAnnotationInsert"/>
                             <xsl:attribute name="axf:annotation-author" select="$author"/>
@@ -59,7 +59,7 @@
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
                     </xsl:if>
-                    <xsl:if test="$gpOutputChangeIcons">
+                    <xsl:if test="$gpOutputChangeIcons and $gpChangeTrackingOutputInsertAnnotation">
                         <fo:inline>
                             <xsl:copy-of select="$atsAnnotationInsert"/>
                             <xsl:attribute name="axf:annotation-author" select="$author"/>
@@ -76,7 +76,7 @@
                     <xsl:if test="$gpOutputChangeBars">
                         <xsl:copy-of select="ahf:addChangeBar($barDeleteBegin,$id)"/>
                     </xsl:if>
-                    <xsl:if test="$gpOutputChangeIcons">
+                    <xsl:if test="$gpOutputChangeIcons and $gpChangeTrackingOutputDeleteAnnotation">
                         <fo:inline>
                             <xsl:copy-of select="$atsAnnotationDelete"/>
                             <xsl:attribute name="axf:annotation-author" select="$author"/>
@@ -90,16 +90,18 @@
                     </xsl:if>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionComment">
-                    <fo:inline>
-                        <xsl:copy-of select="$atsAnnotationComment"/>
-                        <xsl:attribute name="axf:annotation-author" select="$author"/>
-                        <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
-                        <xsl:if test="string($outputclass)">
-                            <xsl:variable name="offset" as="xs:string" select="replace($outputclass,'^(' || $cDraftCommentOffset || ')(\d+)$','$2')"/>
-                            <xsl:attribute name="axf:annotation-position-horizontal" select="$gpChangeTrackingAnnotationPositionHorizontal || ' + ' || $offset || 'mm'"/>
-                            <xsl:attribute name="axf:annotation-position-vertical" select="$gpChangeTrackingAnnotationPositionVertical || ' - ' || $offset || 'mm'"/>
-                        </xsl:if>
-                    </fo:inline>
+                    <xsl:if test="$gpOutputOxyComments">
+                        <fo:inline>
+                            <xsl:copy-of select="$atsAnnotationComment"/>
+                            <xsl:attribute name="axf:annotation-author" select="$author"/>
+                            <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
+                            <xsl:if test="string($outputclass)">
+                                <xsl:variable name="offset" as="xs:string" select="replace($outputclass,'^(' || $cDraftCommentOffset || ')(\d+)$','$2')"/>
+                                <xsl:attribute name="axf:annotation-position-horizontal" select="$gpChangeTrackingAnnotationPositionHorizontal || ' + ' || $offset || 'mm'"/>
+                                <xsl:attribute name="axf:annotation-position-vertical" select="$gpChangeTrackingAnnotationPositionVertical || ' - ' || $offset || 'mm'"/>
+                            </xsl:if>
+                        </fo:inline>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionCommentEnd">
                 </xsl:when>

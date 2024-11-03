@@ -165,6 +165,14 @@
     <!-- Include XML tags in delete content -->
     <xsl:param name="PRM_CHANGE_TRACKING_INCLUDE_TAG_IN_DELETE_CONTENT" as="xs:string" required="no" select="$cYes"/>
     <xsl:variable name="gpChangeTrackingIncludeTagInDeleteContent" as="xs:boolean" select="$PRM_CHANGE_TRACKING_INCLUDE_TAG_IN_DELETE_CONTENT eq $cYes"/>
+
+    <!-- Output insert annotation  -->
+    <xsl:param name="PRM_CHANGE_TRACKING_OUTPUT_INSERT_ANNOTATION" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpChangeTrackingOutputInsertAnnotation" as="xs:boolean" select="$PRM_CHANGE_TRACKING_OUTPUT_INSERT_ANNOTATION eq $cYes"/>
+
+    <!-- Output delete annotation  -->
+    <xsl:param name="PRM_CHANGE_TRACKING_OUTPUT_DELETE_ANNOTATION" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpChangeTrackingOutputDeleteAnnotation" as="xs:boolean" select="$PRM_CHANGE_TRACKING_OUTPUT_DELETE_ANNOTATION eq $cYes"/>
     
     <!-- FO property name now defined as parameter!
      -->
