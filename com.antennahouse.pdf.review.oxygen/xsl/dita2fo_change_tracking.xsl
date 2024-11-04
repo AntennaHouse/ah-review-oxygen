@@ -329,7 +329,7 @@
                         <xsl:apply-templates select="$firstElementAfterAttributesPi" mode="#current">
                             <xsl:with-param name="prmAttributesAnnotationProps" as="attribute()*">
                                 <xsl:copy-of select="$atsAnnotationAttributesForNoTextChildElement"/>
-                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi)"/>
+                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)"/>
                             </xsl:with-param>
                         </xsl:apply-templates>
                     </xsl:when>
@@ -487,7 +487,7 @@
                         <xsl:apply-templates select="$firstElementAfterAttributesPi" mode="#current">
                             <xsl:with-param name="prmAttributesAnnotationProps" as="attribute()*">
                                 <xsl:copy-of select="$atsAnnotationAttributes"/>
-                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi)"/>
+                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)"/>
                             </xsl:with-param>
                         </xsl:apply-templates>
                     </xsl:when>

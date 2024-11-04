@@ -448,12 +448,13 @@
      -->
     <xsl:function name="ahf:genCommentsFromAttributesPi" as="xs:string">
         <xsl:param name="prmAttributesPi" as="processing-instruction()"/>
+        <xsl:param name="prmTargetElem" as="element()"/>
         <xsl:variable name="attributesContentsReConstructed" as="xs:string" select="replace($prmAttributesPi => string(), '\s*(.*?)=&quot;(.*?)&quot;', '&amp;lt;attribute name=&quot;$1&quot;&amp;gt;$2&amp;lt;/attribute&amp;gt;')"/>
         <xsl:variable name="parseTarget" as="xs:string" select="'&lt;root&gt;' || $attributesContentsReConstructed => ahf:unEscapeXmlChar() || '&lt;/root&gt;'"/>
         <xsl:variable name="parsedDoc" as="document-node()?" select="parse-xml($parseTarget)"/>
         <xsl:variable name="parsedResult" as="xs:string*">
             <xsl:apply-templates select="$parsedDoc/*" mode="MODE_ATTRIBUTES_PI">
-                <xsl:with-param name="prmTargetElem" as="element()?" tunnel="yes" select="$prmAttributesPi/following-sibling::*[1]"/>
+                <xsl:with-param name="prmTargetElem" as="element()" tunnel="yes" select="$prmTargetElem"/>
             </xsl:apply-templates>
         </xsl:variable>
         <xsl:sequence select="string-join($parsedResult,'')"/>
@@ -471,7 +472,7 @@
         <xsl:param name="prmTargetElem" as="element()?" tunnel="yes" required="yes"/>
         <xsl:variable name="name" select="@name => string()"/>
         <xsl:variable name="change" as="element()?" select="child::change[1]"/>
-        <xsl:variable name="targetName" as="xs:string" select="if ($prmTargetElem => exists()) then $prmTargetElem => name() else 'unknown??'"/>
+        <xsl:variable name="targetName" as="xs:string" select="$prmTargetElem => name()"/>
         <xsl:variable name="type" as="xs:string" select="$change/@type => string()"/>
         <xsl:variable name="oldValue" as="xs:string" select="$change/@oldValue => string()"/>
         <xsl:variable name="newValue" as="xs:string" select="$prmTargetElem/@*[name() eq $name] => string()"/>
