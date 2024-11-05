@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="com.antennahouse.pdf.review.oxygen">
   <require plugin="com.antennahouse.pdf5.ml"/>
+
+  <extension-point id="com.antennahouse.pdf.review.oxygen.gen.annotation.xsl" name="Generate annotation stylesheet inclusion"/>
+  <extension-point id="com.antennahouse.pdf.review.oxygen.change.tracking.xsl" name="Change tracking stylesheet inclusion"/>
+  <extension-point id="com.antennahouse.pdf.review.oxygen.convmerged.xsl" name="Convert merged middle file stylesheet inclusion"/>
+  
   <feature extension="com.antennahouse.pdf5.ml.xsl" value="xsl/dita2fo_change_tracking_gen_annotation_shell.xsl" type="file"/>
-  <feature extension="com.antennahouse.pdf5.ml.convmerged.xsl" value="xsl/dita2fo_change_tracking_convmerged.xsl" type="file"/>
+  <feature extension="com.antennahouse.pdf5.ml.convmerged.xsl" value="xsl/dita2fo_change_tracking_convmerged_shell.xsl" type="file"/>
   <feature extension="com.antennahouse.pdf5.ml.param" value="params.xml" type="file"/>
   <feature extension="depend.com.antennahouse.pdf5.ml.convmerged.pre" value="transform.convmerged.pre.processing"/>
   <feature extension="build.com.antennahouse.pdf5.ml.format.inclusion" value="build.xml" type="file"/>
+  
   <transtype name="pdf5.review" desc="PDF">
     <param name="output.changes.and.comments" desc="Output Oxygen track changes (short-cut)" type="enum">
       <val desc="No" default="true">no</val>
@@ -200,4 +206,9 @@
       <val desc="Yes">yes</val>
     </param>
   </transtype>
+
+  <template file="xsl/dita2fo_change_tracking_gen_annotation_shell_template.xsl"/>
+  <template file="xsl/dita2fo_change_tracking_shell_template.xsl"/>
+  <template file="xsl/dita2fo_change_tracking_convmerged_shell_template.xsl"/>
+
 </plugin>

@@ -18,5 +18,6 @@
     version="3.0">
 
     <xsl:import  href="dita2fo_change_tracking_gen_annotation_import.xsl"/>
+    <dita:extension id="com.antennahouse.pdf.review.oxygen.gen.annotation.xsl" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     
 </xsl:stylesheet>

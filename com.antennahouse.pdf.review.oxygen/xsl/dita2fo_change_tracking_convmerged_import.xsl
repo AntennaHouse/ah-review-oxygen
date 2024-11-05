@@ -2,7 +2,7 @@
 <!--
   ****************************************************************
   DITA to XSL-FO Stylesheet 
-  Module: Process oXygen Tracking Change Stylesheet.
+  Module: Process oXygen Tracking Change Merged-Middle File Stylesheet.
   Copyright © 2009-2020 Antenna House, Inc. All rights reserved.
   Antenna House is a trademark of Antenna House, Inc.
   URL    : http://www.antennahouse.com/
@@ -16,7 +16,9 @@
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs math"
     version="3.0">
-
-    <xsl:import  href="dita2fo_change_tracking_gen_annotation_import.xsl"/>
     
+    <xsl:import href="dita2fo_change_tracking_param.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_const.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_convmerged.xsl"/>
+
 </xsl:stylesheet>

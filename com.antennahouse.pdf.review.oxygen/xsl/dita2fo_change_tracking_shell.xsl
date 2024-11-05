@@ -17,21 +17,6 @@
     exclude-result-prefixes="xs math ahf"
     version="3.0">
     
-    <xsl:include href="plugin:com.antennahouse.pdf5.ml:xsl/dita2fo_constants.xsl"/>
-    <xsl:include href="plugin:com.antennahouse.pdf5.ml:xsl/dita2fo_error_util.xsl"/>
-    
-    <xsl:include href="dita2fo_global.xsl"/>
-    <xsl:include href="dita2fo_dita_class.xsl"/>
-    <xsl:include href="dita2fo_util_string.xsl"/>
-    <xsl:include href="dita2fo_change_tracking.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_const.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_param.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_util_pi.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_util_color.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_util_string.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_util_map.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_util_node.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_gen_annotation_style.xsl"/>
-    <xsl:include href="dita2fo_generate_history_id.xsl"/>
+    <xsl:import href="dita2fo_change_tracking_import.xsl"/>
     
 </xsl:stylesheet>
