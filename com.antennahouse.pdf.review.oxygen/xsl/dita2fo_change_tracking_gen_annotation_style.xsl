@@ -16,7 +16,7 @@
     xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs math"
-    version="2.0">
+    version="3.0">
 
     <!-- Insert annotation -->
     <xsl:variable name="atsAnnotationInsert" as="attribute()+">

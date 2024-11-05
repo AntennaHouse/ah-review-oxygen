@@ -15,7 +15,7 @@
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs math"
-    version="2.0">
+    version="3.0">
     
     <xsl:import href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
