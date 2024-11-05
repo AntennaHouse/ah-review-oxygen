@@ -409,6 +409,12 @@
                 2. $prmNode is enclosed by <?oxy_custom_start type="oxy_content_highlight"?>～<?oxy_custom_end?>.
                 3. $prmNode is <?oxy_delete?> itself.
                 4. $prmNode is the first element of after <?oxy_attributes?> PI.
+                Revised comment based on implementation. 2024-11-05 t.makita
+                Return: String
+                  First char:  "1" $prmNode is delete PI itself
+                               "0" $prmNode is not delete PI
+                  Second char: "1" $prmNode is first element after attribute change PI
+                               "0" $prmNode is not first element after attribute change PI
      -->
     <xsl:variable name="commentCountPic" as="xs:string" select="'000'"/>
 
