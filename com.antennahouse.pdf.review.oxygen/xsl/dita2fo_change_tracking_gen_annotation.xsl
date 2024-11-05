@@ -26,13 +26,13 @@
      -->
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]
                           [string(@disposition) = ($cDraftCommentDispositionInsert, 
-                                                   $cDraftCommentDispositionInsertSplit, 
-                                                   $cDraftCommentDispositionInsertEnd, 
-                                                   $cDraftCommentDispositionDelete, 
-                                                   $cDraftCommentDispositionDeleteEnd, 
-                                                   $cDraftCommentDispositionComment,
-                                                   $cDraftCommentDispositionAttributes)]" 
-                  priority="5">
+                           $cDraftCommentDispositionInsertSplit, 
+                           $cDraftCommentDispositionInsertEnd, 
+                           $cDraftCommentDispositionDelete, 
+                           $cDraftCommentDispositionDeleteEnd, 
+                           $cDraftCommentDispositionComment,
+                           $cDraftCommentDispositionAttributes)]" 
+        priority="5">
         <xsl:param name="prmGetContent" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
         <xsl:if test="$prmGetContent eq false()">
             <xsl:variable name="draftComment" as="element()" select="."/>
@@ -44,146 +44,81 @@
             <xsl:variable name="outputclass" as="xs:string" select="string(@outputclass)"/>
             <xsl:choose>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsert">
-                    <xsl:if test="$gpOutputChangeBars">
-                        <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
-                    </xsl:if>
-                    <xsl:choose>
-                        <xsl:when test="$gpOutputChangeIcons and $gpChangeTrackingOutputInsertAnnotation">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationInsert"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted: ' || $comment else $time || ' Inserted'"/>
-                            </fo:inline>
-                        </xsl:when>
-                        <xsl:when test="$gpOutputOxyComments and string($comment)">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationComment"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
-                            </fo:inline>
-                        </xsl:when>
-                    </xsl:choose>
+                    <xsl:call-template name="draftCommentInsert">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSplit">
-                    <xsl:if test="$gpOutputChangeBars">
-                        <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$id)"/>
-                    </xsl:if>
-                    <xsl:choose>
-                        <xsl:when test="$gpOutputChangeIcons and $gpChangeTrackingOutputInsertAnnotation">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationInsert"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="if (string($comment)) then $time || ' Inserted (Split): ' || $comment else $time || ' Inserted (Split)'"/>
-                            </fo:inline>
-                        </xsl:when>
-                        <xsl:when test="$gpOutputOxyComments and string($comment)">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationComment"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
-                            </fo:inline>
-                        </xsl:when>
-                    </xsl:choose>
+                    <xsl:call-template name="draftCommentInsertSplit">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertEnd">
-                    <xsl:if test="$gpOutputChangeBars">
-                        <xsl:copy-of select="ahf:addChangeBar($barInsertEnd,$id)"/>
-                    </xsl:if>
+                    <xsl:call-template name="draftCommentInsertEnd">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionDelete">
-                    <xsl:if test="$gpOutputChangeBars">
-                        <xsl:copy-of select="ahf:addChangeBar($barDeleteBegin,$id)"/>
-                    </xsl:if>
-                    <xsl:choose>
-                        <xsl:when test="$gpOutputChangeIcons and $gpChangeTrackingOutputDeleteAnnotation">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationDelete"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="$time || (if (string($comment)) then ' Deleted: ' else ' Deleted') || $comment"/>
-                            </fo:inline>
-                        </xsl:when>
-                        <xsl:when test="$gpOutputOxyComments and string($comment)">
-                            <fo:inline>
-                                <xsl:copy-of select="$atsAnnotationComment"/>
-                                <xsl:attribute name="axf:annotation-author" select="$author"/>
-                                <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
-                            </fo:inline>
-                        </xsl:when>
-                    </xsl:choose>
+                    <xsl:call-template name="draftCommentDelete">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionDeleteEnd">
-                    <xsl:if test="$gpOutputChangeBars">
-                        <xsl:copy-of select="ahf:addChangeBar($barDeleteEnd,$id)"/>
-                    </xsl:if>
+                    <xsl:call-template name="draftCommentDeleteEnd">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionComment">
-                    <xsl:if test="$gpOutputOxyComments">
-                        <fo:inline>
-                            <xsl:copy-of select="$atsAnnotationComment"/>
-                            <xsl:attribute name="axf:annotation-author" select="$author"/>
-                            <xsl:attribute name="axf:annotation-contents" select="$comment => ahf:unEscapeXmlChar()"/>
-                            <xsl:if test="string($outputclass)">
-                                <xsl:variable name="offset" as="xs:string" select="replace($outputclass,'^(' || $cDraftCommentOffset || ')(\d+)$','$2')"/>
-                                <xsl:attribute name="axf:annotation-position-horizontal" select="$gpChangeTrackingAnnotationPositionHorizontal || ' + ' || $offset || 'mm'"/>
-                                <xsl:attribute name="axf:annotation-position-vertical" select="$gpChangeTrackingAnnotationPositionVertical || ' - ' || $offset || 'mm'"/>
-                            </xsl:if>
-                        </fo:inline>
-                    </xsl:if>
+                    <xsl:call-template name="draftCommentComment">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionCommentEnd">
+                    <xsl:call-template name="draftCommentCommentEnd">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionAttributes">
-                    <fo:inline>
-                        <xsl:copy-of select="$atsAnnotationComment"/>
-                        <xsl:attribute name="axf:annotation-contents" select="$comment"/>
-                    </fo:inline>
+                    <xsl:call-template name="draftCommentAttribute">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
                 </xsl:otherwise>            
             </xsl:choose>
         </xsl:if>
     </xsl:template>
-    
-    <!-- 
-     function:  Genrate Change Bar
-     param:     prmType
-     return:	fo:change-bar-begin, fo:change-bar-end
-     note:		
-     -->
-    <xsl:variable name="barInsertBegin" as="xs:string" static="yes" select="'barInsertBegin'"/>
-    <xsl:variable name="barInsertEnd"   as="xs:string" static="yes" select="'barInsertEnd'"/>
-    <xsl:variable name="barDeleteBegin" as="xs:string" static="yes" select="'barDeleteBegin'"/>
-    <xsl:variable name="barDeleteEnd"   as="xs:string" static="yes" select="'barDeleteEnd'"/>
-    
-    <xsl:function name="ahf:addChangeBar" as="element()">
-        <xsl:param name="prmType" as="xs:string"/>
-        <xsl:param name="prmId"   as="xs:string"/>
-        
-        <xsl:variable name="changeBarClass" as="xs:string" select="'CHGBAR_' || $prmId"/>
-        <xsl:choose>
-            <xsl:when test="$prmType eq $barInsertBegin">
-                <fo:change-bar-begin>
-                    <xsl:copy-of select="$atsChangeBarInsert"/>
-                    <xsl:attribute name="change-bar-class" select="$changeBarClass"/>
-                </fo:change-bar-begin>
-            </xsl:when>
-            <xsl:when test="$prmType eq $barInsertEnd">
-                <fo:change-bar-end>
-                    <xsl:attribute name="change-bar-class" select="$changeBarClass"/>
-                </fo:change-bar-end>
-            </xsl:when>
-            <xsl:when test="$prmType eq $barDeleteBegin">
-                <fo:change-bar-begin>
-                    <xsl:copy-of select="$atsChangeBarDelete"/>
-                    <xsl:attribute name="change-bar-class" select="$changeBarClass"/>
-                </fo:change-bar-begin>
-            </xsl:when>
-            <xsl:when test="$prmType eq $barDeleteEnd">
-                <fo:change-bar-end>
-                    <xsl:attribute name="change-bar-class" select="$changeBarClass"/>
-                </fo:change-bar-end>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:function>
     
 </xsl:stylesheet>
