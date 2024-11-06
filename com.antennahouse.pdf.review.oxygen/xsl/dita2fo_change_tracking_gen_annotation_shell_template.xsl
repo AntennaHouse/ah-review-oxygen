@@ -17,6 +17,12 @@
     exclude-result-prefixes="xs math"
     version="3.0">
 
+    <!-- dita2fo_change_tracking_gen_annotation_import.xsl uses following common modules that may be also implemented by import-side.
+         dita2fo_constants.xsl
+         dita2fo_dita_util_outputclass.xsl
+         dita2fo_util_string.xsl
+         Keep in mind!
+     -->
     <xsl:import  href="dita2fo_change_tracking_gen_annotation_import.xsl"/>
     <dita:extension id="com.antennahouse.pdf.review.oxygen.gen.annotation.xsl" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     

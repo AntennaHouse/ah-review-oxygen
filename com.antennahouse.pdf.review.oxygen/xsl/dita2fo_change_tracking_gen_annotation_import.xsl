@@ -17,13 +17,17 @@
     exclude-result-prefixes="xs math"
     version="3.0">
 
-    <xsl:import  href="dita2fo_change_tracking_param.xsl"/>
+    <xsl:import  href="dita2fo_constants.xsl"/>
+
+    <xsl:include  href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation_impl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation_style.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_li_processing.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_string.xsl"/>
-    <xsl:include href="dita2fo_fo_property.xsl"/>
+
+    <xsl:include href="dita2fo_dita_util_outputclass.xsl"/>
+    <xsl:include href="dita2fo_util_string.xsl"/>
     
 </xsl:stylesheet>

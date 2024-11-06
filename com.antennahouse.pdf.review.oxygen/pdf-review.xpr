@@ -20,6 +20,26 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
+                                    <String>xsl/dita2fo_change_tracking_gen_annotation_shell.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2fo_change_tracking_gen_annotation_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioStorageLocations">
+                                    <list>
+                                        <Byte>2</Byte>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
                                     <String>xsl/dita2fo_change_tracking_param.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -185,26 +205,6 @@
                                 <field name="scenarioIds">
                                     <list>
                                         <String>XSLT - dita2fo_change_tracking_shell.xsl</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioStorageLocations">
-                                    <list>
-                                        <Byte>2</Byte>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2fo_change_tracking_gen_annotation_shell.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2fo_change_tracking_gen_annotation_shell</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -582,12 +582,12 @@
                                                 </validationUnitType>
                                             </field>
                                             <field name="url">
-                                                <String>../../com.antennahouse.pdf5.ml/xsl/dita2fo_shell.xsl</String>
+                                                <String>${pdu}/xsl/dita2fo_change_tracking_gen_annotation_shell.xsl</String>
                                             </field>
                                             <field name="validationEngine">
                                                 <validationEngine>
                                                     <field name="engineType">
-                                                        <String>&lt;Default engine></String>
+                                                        <String>Saxon-HE</String>
                                                     </field>
                                                     <field name="allowsAutomaticValidation">
                                                         <Boolean>true</Boolean>

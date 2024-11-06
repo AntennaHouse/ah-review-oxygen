@@ -17,7 +17,8 @@
     exclude-result-prefixes="xs math"
     version="3.0">
     
-    <xsl:import href="dita2fo_change_tracking_param.xsl"/>
+    <xsl:include href="dita2fo_constants.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_convmerged.xsl"/>
 
