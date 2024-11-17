@@ -282,7 +282,7 @@
                     <xsl:message select="'[MODE_STEP2] $groupKey=',$groupKey,' $nodeGrouped=',$nodeGrouped" />
                 </xsl:if>
                 <xsl:choose>
-                    <xsl:when test="$isDeletePi">
+                    <xsl:when test="$isDeletePi and $gpOutputOxyDeletes">
                         <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
                         <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
                         <xsl:choose>
@@ -322,7 +322,7 @@
                             </xsl:when>
                         </xsl:choose>
                     </xsl:when>
-                    <xsl:when test="$isFirstElementAfterAttributesPi">
+                    <xsl:when test="$isFirstElementAfterAttributesPi and $gpOutputOxyAttributes">
                         <xsl:variable name="firstElementAfterAttributesPi" as="element()" select="$nodeGrouped[1]"/>
                         <xsl:variable name="attributesPi" as="processing-instruction()" select="$firstElementAfterAttributesPi/preceding-sibling::processing-instruction()[. => ahf:isAttributeChangePi()][1]"/>
                         <!-- Here, add directly annotation property -->
@@ -465,7 +465,7 @@
                 <xsl:variable name="isDeletePi" as="xs:boolean" select="$groupKey => ahf:isPatternDeletePi()"/>
                 <xsl:variable name="isFirstElementAfterAttributesPi" as="xs:boolean" select="$groupKey => ahf:isPatternFirstElementAfterAttributesPi()"/>
                 <xsl:choose>
-                    <xsl:when test="$isDeletePi">
+                    <xsl:when test="$isDeletePi and $gpOutputOxyDeletes">
                         <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
                         <xsl:if test="$gpStep2Debug">
                             <xsl:message select="'$deletePi=',$deletePi"/>
@@ -486,7 +486,7 @@
                                                                      ahf:getHistoryStrWithPiText($deletePi))"/>
                         </ph>
                     </xsl:when>
-                    <xsl:when test="$isFirstElementAfterAttributesPi">
+                    <xsl:when test="$isFirstElementAfterAttributesPi and $gpOutputOxyAttributes">
                         <xsl:variable name="firstElementAfterAttributesPi" as="element()" select="$nodeGrouped[1]"/>
                         <xsl:variable name="attributesPi" as="processing-instruction()" select="$firstElementAfterAttributesPi/preceding-sibling::processing-instruction()[. => ahf:isAttributeChangePi()][1]"/>
                         <!-- Here, add directly annotation property -->
@@ -533,6 +533,7 @@
      -->
     <xsl:template match="processing-instruction()[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
                                                  [. => ahf:isInsertStartPi()]
+                                                 [$gpOutputOxyInserts]
                                                  (: [./parent::* => ahf:isMixedContentElement()] :)
                                                  [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
                   mode="MODE_STEP2">
@@ -588,6 +589,7 @@
      -->
     <xsl:template match="processing-instruction()[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
                                                  [. => ahf:isInsertEndPi()]
+                                                 [$gpOutputOxyInserts]
                                                  [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
                   mode="MODE_STEP2">
         <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
@@ -656,7 +658,7 @@
         
         <xsl:variable name="currentText" as="text()" select="."/>
         <xsl:variable name="insertPi" as="processing-instruction()?" select="accumulator-before('glInsertPi') => head()"/>
-        <xsl:variable name="isInserted" as="xs:boolean" select="$insertPi => exists()"/>
+        <xsl:variable name="isInserted" as="xs:boolean" select="$insertPi => exists() and $gpOutputOxyInserts"/>
         <xsl:variable name="insertInlineStartAndEnd" as="node()*" select="if ($isInserted) then map:get($prmInsertRangeMap,$insertPi => ahf:getHistoryXpathStr()) else ()"/>
         
         <xsl:if test="$gpStep2Debug">

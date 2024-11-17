@@ -19,7 +19,7 @@
 
     <xsl:import  href="dita2fo_constants.xsl"/>
 
-    <xsl:include  href="dita2fo_change_tracking_param.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation_impl.xsl"/>
