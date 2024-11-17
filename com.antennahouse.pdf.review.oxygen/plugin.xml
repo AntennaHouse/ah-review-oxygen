@@ -29,6 +29,18 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
+    <param name="output.oxy.inserts" desc="Output Oxygen inserts" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="output.oxy.deletes" desc="Output Oxygen deletes" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="output.oxy.attributes" desc="Output Oxygen attribute changes" type="enum">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
     <param name="output.changebars" desc="Show change bars based on Oxygen changes" type="enum">
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>

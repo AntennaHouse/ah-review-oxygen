@@ -14,23 +14,25 @@
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     exclude-result-prefixes="xs math"
     version="3.0">
-    <!-- Short cut: Output changes, commnets and highlights -->
-    <xsl:param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputChangesAndComments" as="xs:boolean" select="$PRM_OUTPUT_CHANGES_AND_COMMENTS eq $cYes"/>
+    <xsl:param name="PRM_OUTPUT_OXY_INSERTS" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpOutputOxyInserts" as="xs:boolean" select="$PRM_OUTPUT_OXY_INSERTS eq $cYes"/>
     
-    <!-- Do processing change tracking -->
-    <xsl:param name="PRM_OUTPUT_OXY_CHANGES" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyChanges" as="xs:boolean" select="($PRM_OUTPUT_OXY_CHANGES eq $cYes) or $gpOutputChangesAndComments"/>
+    <xsl:param name="PRM_OUTPUT_OXY_DELETES" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpOutputOxyDeletes" as="xs:boolean" select="$PRM_OUTPUT_OXY_DELETES eq $cYes"/>
+    
+    <!-- Output Attributes changes (Insert, delete, change) -->
+    <xsl:param name="PRM_OUTPUT_OXY_ATTRIBUTES" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpOutputOxyAttributes" as="xs:boolean" select="$PRM_OUTPUT_OXY_ATTRIBUTES eq $cYes"/>
 
     <xsl:param name="PRM_OUTPUT_OXY_COMMENTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyComments" as="xs:boolean" select="($PRM_OUTPUT_OXY_COMMENTS eq $cYes) or $gpOutputChangesAndComments"/>
+    <xsl:variable name="gpOutputOxyComments" as="xs:boolean" select="$PRM_OUTPUT_OXY_COMMENTS eq $cYes"/>
 
     <xsl:param name="PRM_OUTPUT_OXY_HIGHLIGHTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="($PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes) or $gpOutputChangesAndComments"/>
+    <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
     
     <!-- Output Change Bars -->
-    <xsl:param name="PRM_OUTPUT_CHANGEBARS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputChangeBars" as="xs:boolean" select="($PRM_OUTPUT_CHANGEBARS eq $cYes) and $gpOutputOxyChanges"/>
+    <xsl:param name="PRM_OUTPUT_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpOutputChangeBars" as="xs:boolean" select="$PRM_OUTPUT_CHANGEBARS eq $cYes"/>
     
     <!-- Output Change Icons -->
     <xsl:param name="PRM_OUTPUT_CHANGE_ICONS" as="xs:string" required="no" select="$cYes"/>

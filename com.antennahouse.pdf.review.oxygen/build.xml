@@ -2,18 +2,126 @@
 <project basedir="." name="com.antennahouse.pdf.review.oxygen" xmlns:if="ant:if">
     
     <target name="transform.convmerged.pre.processing">
-        <property name="output.oxy.changes" value="no"/>
-        <property name="output.oxy.comments" value="no"/>
-        <property name="output.oxy.highlights" value="no"/>
-        <condition property="output.changes.or.commnets.or.highlights" value="yes" else="no">
+
+        <condition property="output.changes.and.comments" value="no">
+            <not>
+                <isset property="output.changes.and.comments"/>
+            </not>
+        </condition>
+
+        <condition property="output.changes" value="no">
+            <not>
+                <isset property="output.changes"/>
+            </not>
+        </condition>
+        
+        <condition property="output.oxy.inserts.check.output.changes" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.inserts"/>
+                </not>
+                <istrue value="${output.changes}"/>
+            </and>
+        </condition>
+
+        <condition property="output.oxy.inserts.check.output.changes.comments" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.inserts"/>
+                </not>
+                <istrue value="${output.changes.and.comments}"/>
+            </and>
+        </condition>
+
+        <condition property="output.oxy.inserts.check" value="yes" else="no">
             <or>
-                <istrue value="${output.oxy.changes}"/>
+                <istrue value="${output.oxy.inserts}"/>
+                <istrue value="${output.oxy.inserts.check.output.changes}"/>
+                <istrue value="${output.oxy.inserts.check.output.changes.comments}"/>
+            </or>
+        </condition>
+        
+        <condition property="output.oxy.deletes.check.output.changes" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.deletes"/>
+                </not>
+                <istrue value="${output.changes}"/>
+            </and>
+        </condition>
+
+        <condition property="output.oxy.deletes.check.output.changes.comments" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.deletes"/>
+                </not>
+                <istrue value="${output.changes.and.comments}"/>
+            </and>
+        </condition>
+            
+        <condition property="output.oxy.deletes.check" value="yes" else="no">
+            <or>
+                <istrue value="${output.oxy.deletes}"/>
+                <istrue value="${output.oxy.deletes.check.output.changes}"/>
+                <istrue value="${output.oxy.deletes.check.output.changes.comments}"/>
+            </or>
+        </condition>
+        
+        <condition property="output.oxy.attributes.check.output.changes" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.attributes"/>
+                </not>
+                <istrue value="${output.changes}"/>
+            </and>
+        </condition>
+        
+        <condition property="output.oxy.attributes.check.output.changes.comments" value="yes" else="no">
+            <and>
+                <not>
+                    <isset property="output.oxy.attributes"/>
+                </not>
+                <istrue value="${output.changes.and.comments}"/>
+            </and>
+        </condition>
+
+        <condition property="output.oxy.attributes.check" value="yes" else="no">
+            <or>
+                <istrue value="${output.oxy.attributes}"/>
+                <istrue value="${output.oxy.attributes.check.output.changes}"/>
+                <istrue value="${output.oxy.attributes.check.output.changes.comments}"/>
+            </or>
+        </condition>
+        
+        <condition property="output.oxy.comments.check" value="yes" else="no">
+            <or>
                 <istrue value="${output.oxy.comments}"/>
+                <istrue value="${output.changes.and.comments}"/>
+            </or>
+        </condition>
+
+        <condition property="output.oxy.highlights.check" value="yes" else="no">
+            <or>
                 <istrue value="${output.oxy.highlights}"/>
                 <istrue value="${output.changes.and.comments}"/>
             </or>
         </condition>
+
+        <condition property="output.changes.or.commnets.or.highlights" value="yes" else="no">
+            <or>
+                <istrue value="${output.oxy.inserts.check}"/>
+                <istrue value="${output.oxy.deletes.check}"/>
+                <istrue value="${output.oxy.attributes.check}"/>
+                <istrue value="${output.oxy.comments.check}"/>
+                <istrue value="${output.oxy.highlights.check}"/>
+            </or>
+        </condition>
         <echo message="[com.antennahouse.pdf.review.oxygen] target: transform.convmerged.pre.processing has been invoked." if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.inserts.check=${output.oxy.inserts.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.delete.check=${output.oxy.deletes.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.attributes.check=${output.oxy.attributes.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.comment.check=${output.oxy.comments.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.hightlights.check=${output.oxy.highlights.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
         
         <property name="tempMergedFile1" value="${build.temp.dir}${file.separator}${dita.map.filename.root}_MERGED_PRE_1.xml" if:true="${output.changes.or.commnets.or.highlights}"/>
         
@@ -45,10 +153,11 @@
                 <!-- Trace -->
                 <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
             </factory>
-            <param name="PRM_OUTPUT_CHANGES_AND_COMMENTS" expression="${output.changes.and.comments}" if:set="output.changes.and.comments" xmlns:if="ant:if"/>
-            <param name="PRM_OUTPUT_OXY_CHANGES" expression="${output.oxy.changes}" if:set="output.oxy.changes" xmlns:if="ant:if"/>
-            <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments}" if:set="output.oxy.comments" xmlns:if="ant:if"/>
-            <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights}" if:set="output.oxy.highlights" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_OXY_INSERTS" expression="${output.oxy.inserts.check}" if:set="output.oxy.inserts.check" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_OXY_DELETES" expression="${output.oxy.deletes.check}" if:set="output.oxy.deletes.check" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_OXY_ATTRIBUTES" expression="${output.oxy.attributes.check}" if:set="output.oxy.attributes.check" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments.check}" if:set="output.oxy.comments.check" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights.check}" if:set="output.oxy.highlights.check" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_CHANGE_ICONS" expression="${output.change.icons}" if:set="output.change.icons" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR" expression="${change.tracking.user.insert.fg.color}" if:set="change.tracking.user.insert.fg.color" xmlns:if="ant:if"/>

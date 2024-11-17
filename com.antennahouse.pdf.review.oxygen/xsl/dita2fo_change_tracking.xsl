@@ -134,7 +134,7 @@
         <xsl:variable name="step2Result" as="element()">
             <xsl:variable name="root" as="element()" select="$step1Result"/>
             <xsl:choose>
-                <xsl:when test="($root => ahf:hasInsertPi() or $root => ahf:hasDeletePi() or $root => ahf:hasAttributeChangePi()) and $gpOutputOxyChanges">
+                <xsl:when test="($root => ahf:hasInsertPi() and $gpOutputOxyInserts) or ($root => ahf:hasDeletePi() and $gpOutputOxyDeletes) or ($root => ahf:hasAttributeChangePi() and $gpOutputOxyAttributes)">
                     <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
                         <xsl:call-template name="generateInsertRangeInlineMap">
                             <xsl:with-param name="prmRoot" select="$root"/>
