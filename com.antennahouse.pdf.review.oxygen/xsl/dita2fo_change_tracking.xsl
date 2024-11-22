@@ -91,6 +91,7 @@
      -->
     <xsl:template match="*[@class => contains-token('topic/topic')][ancestor::*[@class => contains-token('topic/topic')] => empty()]" as="element()">
         <xsl:variable name="topic" as="element()" select="."/>
+        <xsl:variable name="topicAndUpperHistoryStr" as="xs:string" select="ahf:getHistoryStr($topic)"/>
         <xsl:variable name="step1Result" as="element()">
             <xsl:variable name="root" as="element()" select="$topic"/>
             <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant-or-self::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
@@ -143,6 +144,7 @@
                     <xsl:apply-templates select="$root" mode="MODE_STEP2">
                         <xsl:with-param name="prmInsertRangeMap" as="map(xs:string, node()*)"  tunnel="yes" select="$insertRangeInlineMap"/>
                         <xsl:with-param name="prmTopic"          as="element()"                tunnel="yes" select="$root"/>
+                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$topicAndUpperHistoryStr"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
@@ -167,6 +169,7 @@
                     <xsl:apply-templates select="$root" mode="MODE_STEP3">
                         <xsl:with-param name="prmCommentRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$commentRangeInlineMap"/>
                         <xsl:with-param name="prmTopic"           as="element()"              tunnel="yes" select="$root"/>
+                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"      tunnel="yes" select="$topicAndUpperHistoryStr"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
@@ -191,6 +194,7 @@
                     <xsl:apply-templates select="$root" mode="MODE_STEP4">
                         <xsl:with-param name="prmHighlightRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$highlightRangeInlineMap"/>
                         <xsl:with-param name="prmTopic" as="element()" tunnel="yes" select="$root"/>
+                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"        tunnel="yes" select="$topicAndUpperHistoryStr"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
@@ -350,13 +354,15 @@
     <xsl:template name="genDeletePiContents" as="element()">
         <xsl:param name="prmDeletePi" as="processing-instruction()"/>
         <xsl:param name="prmDeleteFoProp" as="attribute()"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
+        
         <ph class="- topic/ph ">
             <xsl:copy-of select="$prmDeleteFoProp"/>
             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDelete, 
                                                      $prmDeletePi => ahf:getAuthorFromPi(), 
                                                      $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 
                                                      $prmDeletePi => ahf:getCommentFromPi(), 
-                                                     ahf:getHistoryStrWithPiText($prmDeletePi))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($prmDeletePi, $prmTopicAndUpperHistoryStr))"/>
             <xsl:choose>
                 <xsl:when test="$gpChangeTrackingIncludeTagInDeleteContent">
                     <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
@@ -369,7 +375,7 @@
                                                      $prmDeletePi => ahf:getAuthorFromPi(), 
                                                      $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 
                                                      '', 
-                                                     ahf:getHistoryStrWithPiText($prmDeletePi))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($prmDeletePi, $prmTopicAndUpperHistoryStr))"/>
         </ph>
     </xsl:template>
 
@@ -451,6 +457,7 @@
         <xsl:param name="prmTopic"                     as="element()"                  tunnel="yes" required="yes"/>
         <xsl:param name="prmInsertRangeMap"            as="map(xs:string, node()*)"  tunnel="yes" required="yes"/>
         <xsl:param name="prmAttributesAnnotationProps" as="attribute()*" required="no" select="()"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="currentElem" as="element()" select="."/>
         <xsl:if test="$gpStep2Debug">
@@ -477,13 +484,13 @@
                                                                      $deletePi => ahf:getAuthorFromPi(), 
                                                                      $deletePi => ahf:getFormattedTimeStampStrFromPi(), 
                                                                      $deletePi => ahf:getCommentFromPi(), 
-                                                                     ahf:getHistoryStrWithPiText($deletePi))"/>
+                                                                     ahf:getHistoryStrWithPiTextFixed($deletePi,$prmTopicAndUpperHistoryStr))"/>
                             <xsl:value-of select="$deletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
                             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDeleteEnd, 
                                                                      $deletePi => ahf:getAuthorFromPi(), 
                                                                      $deletePi => ahf:getFormattedTimeStampStrFromPi(), 
                                                                      '', 
-                                                                     ahf:getHistoryStrWithPiText($deletePi))"/>
+                                                                     ahf:getHistoryStrWithPiTextFixed($deletePi,$prmTopicAndUpperHistoryStr))"/>
                         </ph>
                     </xsl:when>
                     <xsl:when test="$isFirstElementAfterAttributesPi and $gpOutputOxyAttributes">
@@ -539,6 +546,7 @@
                   mode="MODE_STEP2">
         <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
         <xsl:param name="prmInsertRangeMap" as="map(xs:string,node()*)" tunnel="yes" required="yes"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="insertPi" as="processing-instruction()" select="."/>
         <xsl:variable name="insertPiXpath" as="xs:string" select="$insertPi => ahf:getHistoryXpathStr()"/>
@@ -569,7 +577,7 @@
                             $insertPi => ahf:getAuthorFromPi(), 
                             $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
                             $insertPi => ahf:getCommentFromPi(),
-                            ahf:getHistoryStrWithPiText($insertPi))"/>
+                            ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
                     </ph>
                 </xsl:when>
                 <xsl:otherwise>
@@ -577,7 +585,7 @@
                         $insertPi => ahf:getAuthorFromPi(), 
                         $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
                         $insertPi => ahf:getCommentFromPi(),
-                        ahf:getHistoryStrWithPiText($insertPi))"/>
+                        ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
@@ -594,7 +602,8 @@
                   mode="MODE_STEP2">
         <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
         <xsl:param name="prmInsertRangeMap" as="map(xs:string,node()*)" tunnel="yes" required="yes"/>
-
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
+        
         <xsl:variable name="insertEndPi" as="processing-instruction()" select="."/>
         <xsl:variable name="insertPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:isBeforeOrSelfNode($insertEndPi)][last()]"/>
         <xsl:variable name="insertPiXpath" as="xs:string" select="$insertPi => ahf:getHistoryXpathStr()"/>
@@ -609,7 +618,7 @@
                                                      '', 
                                                      '', 
                                                      '',
-                                                     ahf:getHistoryStrWithPiText($insertPi))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
         </xsl:if>
     </xsl:template>
 
@@ -655,6 +664,7 @@
                 mode="MODE_STEP2"
         >
         <xsl:param name="prmInsertRangeMap" as="map(xs:string, node()*)"  tunnel="yes" required="yes"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="currentText" as="text()" select="."/>
         <xsl:variable name="insertPi" as="processing-instruction()?" select="accumulator-before('glInsertPi') => head()"/>
@@ -688,7 +698,7 @@
                                                                  $insertPi => ahf:getAuthorFromPi(), 
                                                                  $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
                                                                  $insertPi => ahf:getCommentFromPi(),
-                                                                 ahf:getHistoryStrWithPiText($insertPi))"/>
+                                                                 ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
                     </xsl:if>
                     <xsl:copy select="$currentText"/>
                 </ph>
@@ -702,7 +712,7 @@
                                                      '', 
                                                      '', 
                                                      '', 
-                                                     ahf:getHistoryStrWithPiText($insertPi))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
         </xsl:if>
     </xsl:template>
 

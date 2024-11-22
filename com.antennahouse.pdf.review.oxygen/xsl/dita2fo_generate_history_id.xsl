@@ -63,7 +63,21 @@
         </xsl:variable>
         <xsl:sequence select="string-join($historyStr,'')"/>
     </xsl:function>
-    
+
+    <!-- 
+     function:    Generate element history (hierarchy) string considering topic & topicmerge
+     param:       prmNode, prmTopicAndUpperHistoryStr
+     return:      xs:string
+     note:        prmNode is in temporary tree
+                  prmTopicAndUpperHistoryStr is topic or upper history string
+     -->
+    <xsl:function name="ahf:getHistoryStrWithPiTextFixed" as="xs:string">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string"/>
+        <xsl:variable name="topicAndLowerHistoryStr" as="xs:string" select="ahf:getHistoryStrWithPiText($prmNode)"/>
+        <xsl:sequence select="$prmTopicAndUpperHistoryStr || '.' || substring-after($topicAndLowerHistoryStr,'.')"/>
+    </xsl:function>
+
     <!-- 
      function:    Generate XPath string for input $prmNode
      param:       prmNode

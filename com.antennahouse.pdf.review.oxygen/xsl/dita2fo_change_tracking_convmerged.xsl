@@ -23,24 +23,24 @@
      return:      Copy if it is for tracking-change annotation
      note:        
      -->
-    <xsl:template match="*[contains(@class,' topic/draft-comment ')]
+    <xsl:template match="*[contains-token(@class,'topic/draft-comment')]
                           [string(@disposition) = ($cDraftCommentDispositionInsert,
                                                     $cDraftCommentDispositionInsertSplit,
                                                     $cDraftCommentDispositionInsertEnd,
                                                     $cDraftCommentDispositionDelete,
                                                     $cDraftCommentDispositionDeleteEnd,
                                                     $cDraftCommentDispositionAttributes)]"
-                  priority="5">
+                  priority="40">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/draft-comment ')]
+    <xsl:template match="*[contains-token(@class,'topic/draft-comment')]
                           [string(@disposition) = ($cDraftCommentDispositionComment, 
                                                     $cDraftCommentDispositionCommentEnd)]" 
-                  priority="5">
+                  priority="40">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
