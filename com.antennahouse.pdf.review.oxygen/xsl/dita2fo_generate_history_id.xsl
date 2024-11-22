@@ -58,7 +58,21 @@
                 <xsl:variable name="name" as="xs:string" select="if ($node/self::element()) then local-name() else if ($node/self::processing-instruction()) then name() else 'text'"/>
                 <xsl:sequence select="if (position() gt 1) then '.' else ''"/>
                 <xsl:sequence select="$name"/>
-                <xsl:sequence select="if (exists($node/parent::*) or exists($node/preceding-sibling::*|$node/following-sibling::*)) then string(count($node/preceding-sibling::*[name() eq $name]) + 1) else ''"/>
+                <xsl:choose>
+                    <xsl:when test="empty($node/parent::*)">
+                        <xsl:sequence select="''"/>
+                    </xsl:when>
+                    <xsl:when test="$prmNode/self::element()">
+                        <xsl:sequence select="string(count($node/preceding-sibling::*[local-name() eq $name]) + 1)"/>
+                    </xsl:when>
+                    <xsl:when test="$prmNode/self::processing-instruction()">
+                        <xsl:sequence select="string(count($node/preceding-sibling::processing-instruction()[name() eq $name]) + 1)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="string(count($node/preceding-sibling::text()) + 1)"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!--xsl:sequence select="if (exists($node/parent::*) or exists($node/preceding-sibling::*|$node/following-sibling::*)) then string(count($node/preceding-sibling::*[name() eq $name]) + 1) else ''"/-->
             </xsl:for-each>
         </xsl:variable>
         <xsl:sequence select="string-join($historyStr,'')"/>
