@@ -89,125 +89,133 @@
                 - Step4: Highlight processing instruction
                 In the step 2, pass map{insert end node, insert start id} as tunnel parameter to close fo:change-bar.
      -->
-    <xsl:template match="*[@class => contains-token('topic/topic')][ancestor::*[@class => contains-token('topic/topic')] => empty()]" as="element()">
+    <xsl:template match="*[@class => contains-token('topic/topic')][ancestor::*[@class => contains-token('topic/topic')] => empty()]">
         <xsl:variable name="topic" as="element()" select="."/>
         <xsl:variable name="topicAndUpperHistoryStr" as="xs:string" select="ahf:getHistoryStr($topic)"/>
-        <xsl:variable name="step1Result" as="element()">
-            <xsl:variable name="root" as="element()" select="$topic"/>
-            <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant-or-self::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
-            <xsl:choose>
-                <xsl:when test="$insertSurroundPi => exists()">
-                    <xsl:variable name="insertElement" as="element()*">
-                        <xsl:for-each select="$insertSurroundPi">
-                            <xsl:variable name="pi" as="processing-instruction()" select="."/>
-                            <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
-                            <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
-                            <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
-                                <xsl:sequence select="$targetElement"/>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </xsl:variable>
-                    <xsl:variable name="insertEndPi" as="processing-instruction()*">
-                        <xsl:for-each select="$insertSurroundPi">
-                            <xsl:variable name="pi" as="processing-instruction()" select="."/>
-                            <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
-                            <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
-                            <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
-                                <xsl:sequence select="$insertEndPi"/>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </xsl:variable>
-                    <xsl:apply-templates select="$root" mode="MODE_STEP1">
-                        <xsl:with-param name="prmInsertElement" as="element()*"  tunnel="yes" select="$insertElement"/>
-                        <xsl:with-param name="prmInsertEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertEndPi"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$root"/>
-                </xsl:otherwise>
-            </xsl:choose>            
+        <xsl:variable name="step1Result" as="document-node()">
+            <xsl:document>
+                <xsl:variable name="root" as="element()" select="$topic"/>
+                <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant-or-self::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
+                <xsl:choose>
+                    <xsl:when test="$insertSurroundPi => exists()">
+                        <xsl:variable name="insertElement" as="element()*">
+                            <xsl:for-each select="$insertSurroundPi">
+                                <xsl:variable name="pi" as="processing-instruction()" select="."/>
+                                <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
+                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                                <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
+                                    <xsl:sequence select="$targetElement"/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:variable>
+                        <xsl:variable name="insertEndPi" as="processing-instruction()*">
+                            <xsl:for-each select="$insertSurroundPi">
+                                <xsl:variable name="pi" as="processing-instruction()" select="."/>
+                                <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
+                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                                <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
+                                    <xsl:sequence select="$insertEndPi"/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:variable>
+                        <xsl:apply-templates select="$root" mode="MODE_STEP1">
+                            <xsl:with-param name="prmInsertElement" as="element()*"  tunnel="yes" select="$insertElement"/>
+                            <xsl:with-param name="prmInsertEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertEndPi"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="$root"/>
+                    </xsl:otherwise>
+                </xsl:choose>            
+            </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep1Debug or $gpStep2Debug">
             <xsl:result-document href="{ahf:getHistoryStr($topic) || '-1.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
                 <xsl:copy-of select="$step1Result"/>
             </xsl:result-document>
         </xsl:if>
-        <xsl:variable name="step2Result" as="element()">
-            <xsl:variable name="root" as="element()" select="$step1Result"/>
-            <xsl:choose>
-                <xsl:when test="($root => ahf:hasInsertPi() and $gpOutputOxyInserts) or ($root => ahf:hasDeletePi() and $gpOutputOxyDeletes) or ($root => ahf:hasAttributeChangePi() and $gpOutputOxyAttributes)">
-                    <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
-                        <xsl:call-template name="generateInsertRangeInlineMap">
-                            <xsl:with-param name="prmRoot" select="$root"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:apply-templates select="$root" mode="MODE_STEP2">
-                        <xsl:with-param name="prmInsertRangeMap" as="map(xs:string, node()*)"  tunnel="yes" select="$insertRangeInlineMap"/>
-                        <xsl:with-param name="prmTopic"          as="element()"                tunnel="yes" select="$root"/>
-                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$topicAndUpperHistoryStr"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$root"/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <xsl:variable name="step2Result" as="document-node()">
+            <xsl:document>
+                <xsl:variable name="root" as="element()" select="$step1Result/*[1]"/>
+                <xsl:choose>
+                    <xsl:when test="($root => ahf:hasInsertPi() and $gpOutputOxyInserts) or ($root => ahf:hasDeletePi() and $gpOutputOxyDeletes) or ($root => ahf:hasAttributeChangePi() and $gpOutputOxyAttributes)">
+                        <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
+                            <xsl:call-template name="generateInsertRangeInlineMap">
+                                <xsl:with-param name="prmRoot" select="$root"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:apply-templates select="$root" mode="MODE_STEP2">
+                            <xsl:with-param name="prmInsertRangeMap" as="map(xs:string, node()*)"  tunnel="yes" select="$insertRangeInlineMap"/>
+                            <xsl:with-param name="prmTopic"          as="element()"                tunnel="yes" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$topicAndUpperHistoryStr"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="$root"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep2Debug or $gpStep3Debug">
             <xsl:result-document href="{ahf:getHistoryStr($topic) || '-2.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
                 <xsl:copy-of select="$step2Result"/>
             </xsl:result-document>
         </xsl:if>
-        <xsl:variable name="step3Result" as="element()">
-            <xsl:variable name="root" as="element()" select="$step2Result"/>
-            <xsl:choose>
-                <xsl:when test="($root => ahf:hasCommentPi()) and $gpOutputOxyComments">
-                    <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
-                        <xsl:call-template name="generateCommentRangeInlineMap">
-                            <xsl:with-param name="prmRoot" select="$root"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:apply-templates select="$root" mode="MODE_STEP3">
-                        <xsl:with-param name="prmCommentRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$commentRangeInlineMap"/>
-                        <xsl:with-param name="prmTopic"           as="element()"              tunnel="yes" select="$root"/>
-                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"      tunnel="yes" select="$topicAndUpperHistoryStr"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$root"/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <xsl:variable name="step3Result" as="document-node()">
+            <xsl:document>
+                <xsl:variable name="root" as="element()" select="$step2Result/*[1]"/>
+                <xsl:choose>
+                    <xsl:when test="($root => ahf:hasCommentPi()) and $gpOutputOxyComments">
+                        <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
+                            <xsl:call-template name="generateCommentRangeInlineMap">
+                                <xsl:with-param name="prmRoot" select="$root"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:apply-templates select="$root" mode="MODE_STEP3">
+                            <xsl:with-param name="prmCommentRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$commentRangeInlineMap"/>
+                            <xsl:with-param name="prmTopic"           as="element()"              tunnel="yes" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"      tunnel="yes" select="$topicAndUpperHistoryStr"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="$root"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep3Debug or $gpStep4Debug">
             <xsl:result-document href="{ahf:getHistoryStr($topic) || '-3.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
                 <xsl:copy-of select="$step3Result"/>
             </xsl:result-document>
         </xsl:if>
-        <xsl:variable name="step4Result" as="element()">
-            <xsl:variable name="root" as="element()" select="$step3Result"/>
-            <xsl:choose>
-                <xsl:when test="($root => ahf:hasHighlightPi()) and $gpOutputOxyHilights">
-                    <xsl:variable name="highlightRangeInlineMap" as="map(xs:string, node()*)">
-                        <xsl:call-template name="generateHighlightRangeInlineMap">
-                            <xsl:with-param name="prmRoot" select="$root"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:apply-templates select="$root" mode="MODE_STEP4">
-                        <xsl:with-param name="prmHighlightRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$highlightRangeInlineMap"/>
-                        <xsl:with-param name="prmTopic" as="element()" tunnel="yes" select="$root"/>
-                        <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"        tunnel="yes" select="$topicAndUpperHistoryStr"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$root"/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <xsl:variable name="step4Result" as="document-node()">
+            <xsl:document>
+                <xsl:variable name="root" as="element()" select="$step3Result/*[1]"/>
+                <xsl:choose>
+                    <xsl:when test="($root => ahf:hasHighlightPi()) and $gpOutputOxyHilights">
+                        <xsl:variable name="highlightRangeInlineMap" as="map(xs:string, node()*)">
+                            <xsl:call-template name="generateHighlightRangeInlineMap">
+                                <xsl:with-param name="prmRoot" select="$root"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:apply-templates select="$root" mode="MODE_STEP4">
+                            <xsl:with-param name="prmHighlightRangeMap" as="map(xs:string,node()*)" tunnel="yes" select="$highlightRangeInlineMap"/>
+                            <xsl:with-param name="prmTopic" as="element()" tunnel="yes" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"        tunnel="yes" select="$topicAndUpperHistoryStr"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="$root"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep4Debug">
             <xsl:result-document href="{ahf:getHistoryStr($topic) || '-4.xml'}" exclude-result-prefixes="#all" byte-order-mark="no" encoding="UTF-8" method="xml" indent="no">
                 <xsl:copy-of select="$step4Result"/>
             </xsl:result-document>
         </xsl:if>
-        <xsl:sequence select="$step4Result"/>
+        <xsl:copy-of select="$step4Result"/>
     </xsl:template>
 
     <!-- 
