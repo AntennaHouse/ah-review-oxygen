@@ -95,14 +95,14 @@
         <xsl:variable name="step1Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$topic"/>
-                <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant-or-self::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
+                <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
                 <xsl:choose>
                     <xsl:when test="$insertSurroundPi => exists()">
                         <xsl:variable name="insertElement" as="element()*">
                             <xsl:for-each select="$insertSurroundPi">
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
                                 <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
-                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
                                 <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
                                     <xsl:sequence select="$targetElement"/>
                                 </xsl:if>
@@ -112,7 +112,7 @@
                             <xsl:for-each select="$insertSurroundPi">
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
                                 <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
-                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$pi/following::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
                                 <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
                                     <xsl:sequence select="$insertEndPi"/>
                                 </xsl:if>
@@ -615,6 +615,7 @@
         <xsl:variable name="insertEndPi" as="processing-instruction()" select="."/>
         <xsl:variable name="insertPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:isBeforeOrSelfNode($insertEndPi)][last()]"/>
         <xsl:variable name="insertPiXpath" as="xs:string" select="$insertPi => ahf:getHistoryXpathStr()"/>
+        <!--xsl:message select="'[DEBUG] $insertPiXpath='||$insertPiXpath || ' preceding-sibling=' || name(preceding-sibling::*[1])"></xsl:message-->
         <xsl:if test="$gpStep2Debug">
             <xsl:message select="'[processing-instruction] pi=' || ahf:getHistoryXpathStr(.)"/>
         </xsl:if>
