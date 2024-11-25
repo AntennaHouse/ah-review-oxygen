@@ -29,7 +29,7 @@
         <xsl:accumulator-rule match="processing-instruction()[ahf:isInsertStartPi(.)]" select="(., $value)"/>
         <xsl:accumulator-rule match="processing-instruction()[ahf:isInsertEndPi(.)]" select="remove($value,1)"/>
     </xsl:accumulator>
-    
+
     <xsl:accumulator name="glCommentPi" as="processing-instruction()*" initial-value="()">
         <xsl:accumulator-rule match="processing-instruction()[ahf:isCommentStartPi(.)]" select="(., $value)"/>
         <xsl:accumulator-rule match="processing-instruction()[ahf:isCommentEndPi(.)]" select="ahf:removeStartPiFromAccumulator($value, .)"/>
@@ -69,7 +69,7 @@
 
     <xsl:template match="node()" mode="#all">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates select="@*" mode="#current"/>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
     </xsl:template>
@@ -95,7 +95,7 @@
         <xsl:variable name="step1Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$topic"/>
-                <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getTypeFromPi() => string() eq 'surround']"/>
+                <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSurroundPi(.)]"/>
                 <xsl:choose>
                     <xsl:when test="$insertSurroundPi => exists()">
                         <xsl:variable name="insertElement" as="element()*">
@@ -103,24 +103,35 @@
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
                                 <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
                                 <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
-                                <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
-                                    <xsl:sequence select="$targetElement"/>
-                                </xsl:if>
+                                <xsl:choose>
+                                    <xsl:when test="$targetElement => exists() and $insertEndPi => exists()">
+                                        <xsl:sequence select="$targetElement"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:assert test="false()" select="'[Insert surround PI] Target element or end processing-instruction() not found. Invalid dosument'"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:for-each>
                         </xsl:variable>
                         <xsl:variable name="insertEndPi" as="processing-instruction()*">
                             <xsl:for-each select="$insertSurroundPi">
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
                                 <xsl:variable name="targetElement" as="element()?" select="$pi/following-sibling::*[1]"/>
-                                <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
-                                <xsl:if test="$targetElement => exists() and $insertEndPi => exists()">
-                                    <xsl:sequence select="$insertEndPi"/>
-                                </xsl:if>
+                                <xsl:variable name="insertEndPi" as="processing-instruction()" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                                <xsl:choose>
+                                    <xsl:when test="$targetElement => exists() and $insertEndPi => exists()">
+                                        <xsl:sequence select="$insertEndPi"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:assert test="false()" select="'[Insert surround PI] Target element or end processing-instruction() not found. Invalid dosument'"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:for-each>
                         </xsl:variable>
                         <xsl:apply-templates select="$root" mode="MODE_STEP1">
                             <xsl:with-param name="prmInsertElement" as="element()*"  tunnel="yes" select="$insertElement"/>
                             <xsl:with-param name="prmInsertEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertEndPi"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$topicAndUpperHistoryStr"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
@@ -226,18 +237,51 @@
      -->
     <xsl:template match="*" mode="MODE_STEP1" priority="5">
         <xsl:param name="prmInsertElement" as="element()*"  tunnel="yes" required="yes"/>
+        <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         <xsl:variable name="elem" as="element()" select="."/>
         <xsl:choose>
             <xsl:when test="$prmInsertElement[. is $elem] => exists()">
+                <xsl:variable name="insertStartSurroundPi" as="processing-instruction()" select="$elem/preceding-sibling::processing-instruction()[ahf:isInsertStartSurroundPi(.)][1]"/>
+                <xsl:variable name="insertFoProp" as="attribute()?">
+                    <xsl:variable name="foProp" as="attribute()?" select="$elem/@*[name(.) eq $gpFoPropName]"/>
+                    <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartSurroundPi)) => ahf:addInsertDecorationToFoProp()"/>
+                </xsl:variable>
                 <xsl:copy>
-                    <xsl:apply-templates select="@*"/>
+                    <xsl:apply-templates select="@*" mode="#current"/>
+                    <xsl:copy-of select="$insertFoProp"/>
+                    <xsl:choose>
+                        <xsl:when test="$elem[ahf:isMixedContentElement(.)]">
+                            <ph class="- topic/ph ">
+                                <xsl:copy-of select="$insertFoProp"/>
+                                <xsl:copy-of select="ahf:addDraftComment(
+                                    $cDraftCommentDispositionInsert, 
+                                    $insertStartSurroundPi => ahf:getAuthorFromPi(), 
+                                    $insertStartSurroundPi => ahf:getFormattedTimeStampStrFromPi(), 
+                                    $insertStartSurroundPi => ahf:getCommentFromPi(),
+                                    ahf:getHistoryStrWithPiTextFixed($insertStartSurroundPi,$prmTopicAndUpperHistoryStr))"/>
+                            </ph>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="ahf:addDraftComment(
+                                $cDraftCommentDispositionInsert, 
+                                $insertStartSurroundPi => ahf:getAuthorFromPi(), 
+                                $insertStartSurroundPi => ahf:getFormattedTimeStampStrFromPi(), 
+                                $insertStartSurroundPi => ahf:getCommentFromPi(),
+                                ahf:getHistoryStrWithPiTextFixed($insertStartSurroundPi,$prmTopicAndUpperHistoryStr))"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:apply-templates mode="#current"/>
+                    <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertEnd,
+                                        '', 
+                                        '', 
+                                        '',
+                        ahf:getHistoryStrWithPiTextFixed($insertStartSurroundPi,$prmTopicAndUpperHistoryStr))"/>
                 </xsl:copy>
-                <xsl:processing-instruction name="{$cInsertEndPiName}"/>
+                <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
-                    <xsl:apply-templates select="@*"/>
+                    <xsl:apply-templates select="@*" mode="#current"/>
                     <xsl:apply-templates mode="#current"/>
                 </xsl:copy>
             </xsl:otherwise>
@@ -245,17 +289,30 @@
     </xsl:template>
 
     <!-- 
-     function:  Templates for processing-instructions <?oxy_insert_end?> 
+     function:  Templates for processing-instructions <?oxy_insert_start?> 
      param:     
-     return:    None or itself
+     return:    Dummy PI
      note:      
      -->
-    <xsl:template match="processing-instruction()[. => ahf:isInsertEndPi()]" mode="MODE_STEP1" priority="5">
+    <xsl:template match="processing-instruction()[ahf:isInsertStartSurroundPi(.)]" mode="MODE_STEP1" priority="5">
+        <xsl:variable name="pi" as="processing-instruction()" select="."/>
+        <xsl:processing-instruction name="{$cInsertStartPiSurroundName}">
+            <xsl:value-of select="string($pi)"/>
+        </xsl:processing-instruction>
+    </xsl:template>
+    
+    <!-- 
+     function:  Templates for processing-instructions <?oxy_insert_end?> 
+     param:     
+     return:    Dummy PI or itself
+     note:      
+     -->
+    <xsl:template match="processing-instruction()[ahf:isInsertEndPi(.)]" mode="MODE_STEP1" priority="5">
         <xsl:param name="prmInsertEndPi" as="processing-instruction()*"  tunnel="yes" required="yes"/>
         <xsl:variable name="pi" as="processing-instruction()" select="."/>
         <xsl:choose>
             <xsl:when test="$prmInsertEndPi[. is $pi] => exists()">
-                <xsl:sequence select="()"/>
+                <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy/>
@@ -556,44 +613,44 @@
         <xsl:param name="prmInsertRangeMap" as="map(xs:string,node()*)" tunnel="yes" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
-        <xsl:variable name="insertPi" as="processing-instruction()" select="."/>
-        <xsl:variable name="insertPiXpath" as="xs:string" select="$insertPi => ahf:getHistoryXpathStr()"/>
+        <xsl:variable name="insertStartPi" as="processing-instruction()" select="."/>
+        <xsl:variable name="insertStartPiXpath" as="xs:string" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
         <xsl:if test="$gpStep2Debug">
             <xsl:message select="'[processing-instruction] pi=' || ahf:getHistoryXpathStr(.)"/>
         </xsl:if>
         <xsl:copy/>
-        <xsl:variable name="startPiXpath" as="xs:string?" select="accumulator-after('glInsertPi') => head() => ahf:getHistoryXpathStr()"/>
+        <!--xsl:variable name="startPiXpath" as="xs:string?" select="accumulator-after('glInsertPi') => head() => ahf:getHistoryXpathStr()"/-->
         <xsl:if test="$gpStep2Debug">
-            <xsl:message select="'$insertPiXpath='||$insertPiXpath"/>
-            <xsl:message select="'$startPiXpath='||$startPiXpath"/>
+            <xsl:message select="'$insertPiXpath='||$insertStartPiXpath"/>
+            <!--xsl:message select="'$startPiXpath='||$startPiXpath"/-->
         </xsl:if>
-        <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="if ($startPiXpath eq $insertPiXpath) then map:get($prmInsertRangeMap,$startPiXpath) else ()"/>
-        <xsl:if test="$insertPiStartOrEndNode => exists() and ($insertPiStartOrEndNode[1] is $insertPi)">
+        <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="map:get($prmInsertRangeMap,$insertStartPiXpath)"/>
+        <xsl:if test="$insertPiStartOrEndNode => exists()">
             <xsl:if test="$gpStep2Debug">
-                <xsl:message select="'[processing-instruction] pi=',accumulator-after('glInsertPi')"/>
+                <!--xsl:message select="'[processing-instruction] pi=',accumulator-after('glInsertPi')"/-->
             </xsl:if>
             <xsl:variable name="insertFoProp" as="attribute()?">
                 <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
+                <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp()"/>
             </xsl:variable>
-            <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertPi) => string()"/>
+            <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertStartPi) => string()"/>
             <xsl:choose>
-                <xsl:when test="$insertPi/parent::*[ahf:isMixedContentElement(.)]">
+                <xsl:when test="$insertStartPi/parent::*[ahf:isMixedContentElement(.)]">
                     <ph class="- topic/ph ">
                         <xsl:copy-of select="$insertFoProp"/>
                         <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
-                            $insertPi => ahf:getAuthorFromPi(), 
-                            $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
-                            $insertPi => ahf:getCommentFromPi(),
-                            ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
+                            $insertStartPi => ahf:getAuthorFromPi(), 
+                            $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
+                            $insertStartPi => ahf:getCommentFromPi(),
+                            ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
                     </ph>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:copy-of select="ahf:addDraftComment(if ($type eq 'split') then $cDraftCommentDispositionInsertSplit else $cDraftCommentDispositionInsert, 
-                        $insertPi => ahf:getAuthorFromPi(), 
-                        $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
-                        $insertPi => ahf:getCommentFromPi(),
-                        ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
+                        $insertStartPi => ahf:getAuthorFromPi(), 
+                        $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
+                        $insertStartPi => ahf:getCommentFromPi(),
+                        ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
@@ -613,21 +670,22 @@
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="insertEndPi" as="processing-instruction()" select="."/>
-        <xsl:variable name="insertPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:isBeforeOrSelfNode($insertEndPi)][last()]"/>
-        <xsl:variable name="insertPiXpath" as="xs:string" select="$insertPi => ahf:getHistoryXpathStr()"/>
+        <!--xsl:variable name="insertStartPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getInsertValanceCount($insertEndPi,$prmTopic) eq 0]"/-->
+        <xsl:variable name="insertStartPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:isBeforeOrSelfNode($insertEndPi)][last()]"/>
+        <xsl:variable name="insertPiXpath" as="xs:string" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
         <!--xsl:message select="'[DEBUG] $insertPiXpath='||$insertPiXpath || ' preceding-sibling=' || name(preceding-sibling::*[1])"></xsl:message-->
         <xsl:if test="$gpStep2Debug">
             <xsl:message select="'[processing-instruction] pi=' || ahf:getHistoryXpathStr(.)"/>
         </xsl:if>
         <xsl:copy/>
-        <xsl:variable name="startPiXpath" as="xs:string?" select="$insertPi => ahf:getHistoryXpathStr()"/>
-        <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="if ($startPiXpath eq $insertPiXpath) then map:get($prmInsertRangeMap,$startPiXpath) else ()"/>
-        <xsl:if test="$insertPiStartOrEndNode => exists() and ($insertPiStartOrEndNode[2] is $insertEndPi)">
+        <xsl:variable name="insertStartPiXpath" as="xs:string?" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
+        <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="map:get($prmInsertRangeMap,$insertStartPiXpath)"/>
+        <xsl:if test="$insertPiStartOrEndNode => exists()">
             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertEnd,
                                                      '', 
                                                      '', 
                                                      '',
-                                                     ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
         </xsl:if>
     </xsl:template>
 
@@ -672,13 +730,15 @@
                                [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
                 mode="MODE_STEP2"
         >
+        <xsl:param name="prmTopic"          as="element()"              tunnel="yes" required="yes"/>
         <xsl:param name="prmInsertRangeMap" as="map(xs:string, node()*)"  tunnel="yes" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="currentText" as="text()" select="."/>
-        <xsl:variable name="insertPi" as="processing-instruction()?" select="accumulator-before('glInsertPi') => head()"/>
-        <xsl:variable name="isInserted" as="xs:boolean" select="$insertPi => exists() and $gpOutputOxyInserts"/>
-        <xsl:variable name="insertInlineStartAndEnd" as="node()*" select="if ($isInserted) then map:get($prmInsertRangeMap,$insertPi => ahf:getHistoryXpathStr()) else ()"/>
+        <!--xsl:variable name="insertStartPi" as="processing-instruction()?" select="$currentText => ahf:getInsertStartPiFromText($prmTopic)"/-->
+        <xsl:variable name="insertStartPi" as="processing-instruction()?" select="accumulator-before('glInsertPi') => head()"/>
+        <xsl:variable name="isInserted" as="xs:boolean" select="$insertStartPi => exists() and $gpOutputOxyInserts"/>
+        <xsl:variable name="insertInlineStartAndEnd" as="node()*" select="if ($isInserted) then map:get($prmInsertRangeMap,$insertStartPi => ahf:getHistoryXpathStr()) else ()"/>
         
         <xsl:if test="$gpStep2Debug">
             <xsl:message select="'[text(MODE_STEP2)] ' || ahf:getHistoryXpathStr(.)"/>
@@ -693,7 +753,7 @@
                     <xsl:variable name="foProp" as="attribute()?" select="()"/>
                     <xsl:choose>
                         <xsl:when test="$isInserted">
-                            <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertPi)) => ahf:addInsertDecorationToFoProp()"/>
+                            <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp()"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:copy-of select="$foProp"/>
@@ -704,10 +764,10 @@
                     <xsl:copy-of select="$insertFoProp"/>
                     <xsl:if test="$currentText is $insertInlineStartAndEnd[1]">
                         <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsert, 
-                                                                 $insertPi => ahf:getAuthorFromPi(), 
-                                                                 $insertPi => ahf:getFormattedTimeStampStrFromPi(), 
-                                                                 $insertPi => ahf:getCommentFromPi(),
-                                                                 ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
+                                                                 $insertStartPi => ahf:getAuthorFromPi(), 
+                                                                 $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
+                                                                 $insertStartPi => ahf:getCommentFromPi(),
+                                                                 ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
                     </xsl:if>
                     <xsl:copy select="$currentText"/>
                 </ph>
@@ -721,7 +781,7 @@
                                                      '', 
                                                      '', 
                                                      '', 
-                                                     ahf:getHistoryStrWithPiTextFixed($insertPi,$prmTopicAndUpperHistoryStr))"/>
+                                                     ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
         </xsl:if>
     </xsl:template>
 

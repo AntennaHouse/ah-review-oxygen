@@ -64,5 +64,43 @@
         <xsl:variable name="isNodeInBetween" as="xs:boolean" select="$prmNode[. => ahf:isAfterOrSelfNode($prmStartNode)][. => ahf:isBeforeOrSelfNode($prmEndNode)] => exists()"/>
         <xsl:sequence select="$isNodeInBetween"/>
     </xsl:function>
-    
+
+    <!-- 
+     function:  Get insert PI valance number
+     param:     prmInsertEndPi, prmInsertStartPi, prmRoot
+     return:    xs:integer
+     note:      oxy_insert_start is counted as 1. oxy_insert_end is counted as -1.
+     -->
+    <!--xsl:function name="ahf:getInsertValanceCount" as="xs:integer">
+        <xsl:param name="prmInsertStartPi" as="processing-instruction()"/>
+        <xsl:param name="prmInsertEndPi" as="processing-instruction()"/>
+        <xsl:param name="prmRoot" as="element()"/>
+        <xsl:variable name="InsertPiBetween" as="processing-instruction()+" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.) or ahf:isInsertEndPi(.)][. &gt;&gt; $prmInsertStartPi][. &lt;&lt; $prmInsertEndPi]|$prmInsertStartPi|$prmInsertEndPi"/>
+        <xsl:sequence select="$InsertPiBetween ! ahf:getInsertPiValanceValue(.) => sum()"/>
+    </xsl:function>
+
+    <xsl:function name="ahf:getInsertPiValanceValue" as="xs:integer">
+        <xsl:param name="prmInsertPi" as="processing-instruction()"/>
+        <xsl:choose>
+            <xsl:when test="ahf:isInsertStartPi($prmInsertPi)">
+                <xsl:sequence select="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="-1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function-->
+
+    <!-- 
+     function:  Get insert PI from text node
+     param:     prmText, prmRoot
+     return:    processing-instruction
+     note:      
+     -->
+    <xsl:function name="ahf:getInsertStartPiFromText" as="processing-instruction()?">
+        <xsl:param name="prmText" as="text()"/>
+        <xsl:param name="prmRoot" as="element()"/>
+        <xsl:sequence select="$prmRoot/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. &lt;&lt; $prmText][last()]"/>
+    </xsl:function>
+        
 </xsl:stylesheet>

@@ -27,6 +27,10 @@
     <xsl:variable name="cCustomEndPiName"        as="xs:string" static="yes"  select="'oxy_custom_end'"/>
     <xsl:variable name="cCustomTypeHighlight"    as="xs:string" static="yes"  select="'oxy_content_highlight'"/>
     
+    <!-- PI Names Automatically Generated -->
+    <xsl:variable name="cInsertStartPiSurroundName"          as="xs:string" static="yes"  select="'oxy_insert_start_surround'"/>
+    <xsl:variable name="cInsertEndPiSurroundName"            as="xs:string" static="yes"  select="'oxy_insert_end_surround'"/>
+    
     <!-- Auto Generated draft-comment/@disposition -->
     <xsl:variable name="cDraftCommentDispositionInsert"      as="xs:string" static="yes"  select="'__insert'"/>
     <xsl:variable name="cDraftCommentDispositionInsertSplit" as="xs:string" static="yes"  select="'__insert_split'"/>
