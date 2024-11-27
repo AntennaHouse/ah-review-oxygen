@@ -289,7 +289,7 @@
     </xsl:template>
 
     <!-- 
-     function:  Templates for processing-instructions <?oxy_insert_start?> 
+     function:  Templates for processing-instructions <?oxy_insert_start type="surround"?> 
      param:     
      return:    Dummy PI
      note:      
@@ -312,7 +312,7 @@
         <xsl:variable name="pi" as="processing-instruction()" select="."/>
         <xsl:choose>
             <xsl:when test="$prmInsertEndPi[. is $pi] => exists()">
-                <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
+                <xsl:sequence select="()"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy/>
