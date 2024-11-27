@@ -92,9 +92,14 @@
     <xsl:template match="*[@class => contains-token('topic/topic')][ancestor::*[@class => contains-token('topic/topic')] => empty()]">
         <xsl:variable name="topic" as="element()" select="."/>
         <xsl:variable name="topicAndUpperHistoryStr" as="xs:string" select="ahf:getHistoryStr($topic)"/>
+        <xsl:variable name="step1Source" as="document-node()">
+            <xsl:document>
+                <xsl:copy-of select="$topic"/>
+            </xsl:document>
+        </xsl:variable>
         <xsl:variable name="step1Result" as="document-node()">
             <xsl:document>
-                <xsl:variable name="root" as="element()" select="$topic"/>
+                <xsl:variable name="root" as="element()" select="$step1Source/*[1]"/>
                 <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSurroundPi(.)]"/>
                 <xsl:choose>
                     <xsl:when test="$insertSurroundPi => exists()">
