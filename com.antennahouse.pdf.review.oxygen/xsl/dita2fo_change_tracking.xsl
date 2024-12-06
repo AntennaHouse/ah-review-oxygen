@@ -113,7 +113,7 @@
                                         <xsl:sequence select="$targetElement"/>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:assert test="false()" select="'[Insert surround PI] Target element or end processing-instruction() not found. Invalid dosument'"/>
+                                        <xsl:assert test="false()" select="'[Insert surround PI] Target element is not found. Invalid document'"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:for-each>
@@ -128,7 +128,7 @@
                                         <xsl:sequence select="$insertEndPi"/>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:assert test="false()" select="'[Insert surround PI] Target element or end processing-instruction() not found. Invalid dosument'"/>
+                                        <xsl:assert test="false()" select="'[Insert surround PI] Target end processing-instruction() is not found. Invalid document'"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:for-each>
@@ -282,7 +282,6 @@
                                         '',
                         ahf:getHistoryStrWithPiTextFixed($insertStartSurroundPi,$prmTopicAndUpperHistoryStr))"/>
                 </xsl:copy>
-                <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
@@ -317,7 +316,7 @@
         <xsl:variable name="pi" as="processing-instruction()" select="."/>
         <xsl:choose>
             <xsl:when test="$prmInsertEndPi[. is $pi] => exists()">
-                <xsl:sequence select="()"/>
+                <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy/>
