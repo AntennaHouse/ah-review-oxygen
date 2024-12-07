@@ -46,6 +46,6 @@
     <param name="PRM_STEP2_DEBUG" expression="${step2.debug}" if:set="step2.debug" xmlns:if="ant:if"/>
     <param name="PRM_STEP3_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>
     <param name="PRM_STEP4_DEBUG" expression="${step4.debug}" if:set="step4.debug" xmlns:if="ant:if"/>
-    <param name="PRM_STEP5_DEBUG" expression="${step5.debug}" if:set="step4.debug" xmlns:if="ant:if"/>
+    <param name="PRM_STEP5_DEBUG" expression="${step5.debug}" if:set="step5.debug" xmlns:if="ant:if"/>
 </extension>
 
