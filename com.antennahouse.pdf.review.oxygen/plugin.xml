@@ -217,6 +217,10 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
+    <param name="step5.debug" type="enum" desc="Output debug step 5 processing message.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
   </transtype>
 
   <template file="xsl/dita2fo_change_tracking_gen_annotation_shell_template.xsl"/>
