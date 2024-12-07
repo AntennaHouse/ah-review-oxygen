@@ -12,7 +12,8 @@
             <isset property="output.changes"/>
         </not>
     </condition>
-    
+
+    <!-- insert -->
     <condition property="output.oxy.inserts.check.output.changes" value="yes" else="no">
         <and>
             <not>
@@ -39,6 +40,7 @@
         </or>
     </condition>
     
+    <!-- delete -->
     <condition property="output.oxy.deletes.check.output.changes" value="yes" else="no">
         <and>
             <not>
@@ -115,6 +117,30 @@
         </or>
     </condition>
     
+    <!-- change bars -->
+    <condition property="output.changebars.check" value="yes" else="no">
+        <or>
+            <not>
+                <isset property="output.changebars"/>
+            </not>
+            <istrue value="${output.changebars}"/>
+        </or>
+    </condition>
+    
+    <condition property="output.insert.changebars.check" value="yes" else="no">
+        <or>
+            <istrue value="${output.changebars.check}"/>
+            <istrue value="${output.insert.changebars}"/>
+        </or>
+    </condition>
+
+    <condition property="output.delete.changebars.check" value="yes" else="no">
+        <or>
+            <istrue value="${output.changebars.check}"/>
+            <istrue value="${output.delete.changebars}"/>
+        </or>
+    </condition>
+    
     <target name="transform.convmerged.pre.processing">
 
         <echo message="[com.antennahouse.pdf.review.oxygen] target: transform.convmerged.pre.processing has been invoked." if:true="${output.changes.or.commnets.or.highlights}"/>
@@ -123,6 +149,8 @@
         <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.attributes.check=${output.oxy.attributes.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
         <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.comment.check=${output.oxy.comments.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
         <echo message="[com.antennahouse.pdf.review.oxygen] $output.oxy.hightlights.check=${output.oxy.highlights.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.insert.changebars.check=${output.insert.changebars.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
+        <echo message="[com.antennahouse.pdf.review.oxygen] $output.delete.changebars.check=${output.delete.changebars.check}" if:true="${output.changes.or.commnets.or.highlights}"/>
         
         <property name="tempMergedFile1" value="${build.temp.dir}${file.separator}${dita.map.filename.root}_MERGED_PRE_1.xml" if:true="${output.changes.or.commnets.or.highlights}"/>
         
@@ -159,7 +187,8 @@
             <param name="PRM_OUTPUT_OXY_ATTRIBUTES" expression="${output.oxy.attributes.check}" if:set="output.oxy.attributes.check" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_COMMENTS" expression="${output.oxy.comments.check}" if:set="output.oxy.comments.check" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_OXY_HIGHLIGHTS" expression="${output.oxy.highlights.check}" if:set="output.oxy.highlights.check" xmlns:if="ant:if"/>
-            <param name="PRM_OUTPUT_CHANGEBARS" expression="${output.changebars}" if:set="output.changebars" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_INSERT_CHANGEBARS" expression="${output.insert.changebars.check}" if:set="output.insert.changebars.check" xmlns:if="ant:if"/>
+            <param name="PRM_OUTPUT_DELETE_CHANGEBARS" expression="${output.delete.changebars.check}" if:set="output.delete.changebars.check" xmlns:if="ant:if"/>
             <param name="PRM_OUTPUT_CHANGE_ICONS" expression="${output.change.icons}" if:set="output.change.icons" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_USER_INSERT_FG_COLOR" expression="${change.tracking.user.insert.fg.color}" if:set="change.tracking.user.insert.fg.color" xmlns:if="ant:if"/>
             <param name="PRM_CHANGE_TRACKING_USER_DELETE_FG_COLOR" expression="${change.tracking.user.delete.fg.color}" if:set="change.tracking.user.delete.fg.color" xmlns:if="ant:if"/>

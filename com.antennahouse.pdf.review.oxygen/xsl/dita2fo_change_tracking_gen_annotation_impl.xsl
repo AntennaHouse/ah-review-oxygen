@@ -31,7 +31,7 @@
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
         
-        <xsl:if test="$gpOutputChangeBars">
+        <xsl:if test="$gpOutputInsertChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$prmId)"/>
         </xsl:if>
         <xsl:choose>
@@ -64,7 +64,7 @@
         <xsl:param name="prmComment" required="yes" as="xs:string"/>
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
-        <xsl:if test="$gpOutputChangeBars">
+        <xsl:if test="$gpOutputInsertChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$prmId)"/>
         </xsl:if>
         <xsl:choose>
@@ -98,7 +98,7 @@
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
 
-        <xsl:if test="$gpOutputChangeBars">
+        <xsl:if test="$gpOutputInsertChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barInsertEnd,$prmId)"/>
         </xsl:if>
     </xsl:template>
@@ -115,7 +115,7 @@
         <xsl:param name="prmComment" required="yes" as="xs:string"/>
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
-        <xsl:if test="$gpOutputChangeBars">
+        <xsl:if test="$gpOutputDeleteChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barDeleteBegin,$prmId)"/>
         </xsl:if>
         <xsl:choose>
@@ -149,7 +149,7 @@
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
 
-        <xsl:if test="$gpOutputChangeBars">
+        <xsl:if test="$gpOutputDeleteChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barDeleteEnd,$prmId)"/>
         </xsl:if>
     </xsl:template>

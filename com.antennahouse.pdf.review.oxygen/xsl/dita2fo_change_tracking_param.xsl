@@ -31,8 +31,11 @@
     <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
     
     <!-- Output Change Bars -->
-    <xsl:param name="PRM_OUTPUT_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
-    <xsl:variable name="gpOutputChangeBars" as="xs:boolean" select="$PRM_OUTPUT_CHANGEBARS eq $cYes"/>
+    <xsl:param name="PRM_OUTPUT_INSERT_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpOutputInsertChangeBars" as="xs:boolean" select="$PRM_OUTPUT_INSERT_CHANGEBARS eq $cYes"/>
+
+    <xsl:param name="PRM_OUTPUT_DELETE_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
+    <xsl:variable name="gpOutputDeleteChangeBars" as="xs:boolean" select="$PRM_OUTPUT_DELETE_CHANGEBARS eq $cYes"/>
     
     <!-- Output Change Icons -->
     <xsl:param name="PRM_OUTPUT_CHANGE_ICONS" as="xs:string" required="no" select="$cYes"/>
