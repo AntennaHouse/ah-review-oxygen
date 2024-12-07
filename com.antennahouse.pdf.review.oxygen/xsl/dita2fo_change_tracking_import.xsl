@@ -24,6 +24,11 @@
     <xsl:include href="dita2fo_dita_class.xsl"/>
     <xsl:include href="dita2fo_util_string.xsl"/>
     <xsl:include href="dita2fo_change_tracking.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_step1_impl.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_step2_impl.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_step3_impl.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_step4_impl.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_step5_impl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_pi.xsl"/>

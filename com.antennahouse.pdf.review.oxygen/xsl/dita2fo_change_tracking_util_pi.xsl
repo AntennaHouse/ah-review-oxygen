@@ -36,6 +36,11 @@
         <xsl:param name="prmNode" as="node()"/>
         <xsl:sequence select="$prmNode/self::processing-instruction()[name() eq $cInsertStartPiName][. => ahf:getTypeFromPi() => string() eq 'surround'] => exists()"/>
     </xsl:function>
+
+    <xsl:function name="ahf:isInsertStartSplitPi" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="$prmNode/self::processing-instruction()[name() eq $cInsertStartPiName][. => ahf:getTypeFromPi() => string() eq 'split'] => exists()"/>
+    </xsl:function>
     
     <xsl:function name="ahf:isInsertEndPi" as="xs:boolean">
         <xsl:param name="prmNode" as="node()"/>

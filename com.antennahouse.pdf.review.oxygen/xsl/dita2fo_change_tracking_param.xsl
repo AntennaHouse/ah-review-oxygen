@@ -191,5 +191,7 @@
     <xsl:variable name="gpStep3Debug" as="xs:boolean" select="$PRM_STEP3_DEBUG eq $cYes"/>
     <xsl:param name="PRM_STEP4_DEBUG" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpStep4Debug" as="xs:boolean" select="$PRM_STEP4_DEBUG eq $cYes"/>
+    <xsl:param name="PRM_STEP5_DEBUG" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep5Debug" as="xs:boolean" select="$PRM_STEP5_DEBUG eq $cYes"/>
     
 </xsl:stylesheet>
