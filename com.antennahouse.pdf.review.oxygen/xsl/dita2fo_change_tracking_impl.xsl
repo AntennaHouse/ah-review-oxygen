@@ -104,7 +104,7 @@
                 <xsl:variable name="root" as="element()" select="$step1Source/*[1]"/>
                 <xsl:variable name="insertSurroundPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSurroundPi(.)]"/>
                 <xsl:choose>
-                    <xsl:when test="$insertSurroundPi => exists()">
+                    <xsl:when test="$insertSurroundPi => exists() and $gpOutputOxyInserts">
                         <xsl:variable name="insertElement" as="element()*">
                             <xsl:for-each select="$insertSurroundPi">
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
@@ -158,7 +158,7 @@
                 <xsl:variable name="root" as="element()" select="$step1Result/*[1]"/>
                 <xsl:variable name="insertSplitPi" as="processing-instruction()*" select="$root/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSplitPi(.)]"/>
                 <xsl:choose>
-                    <xsl:when test="$insertSplitPi => exists()">
+                    <xsl:when test="$insertSplitPi => exists() and $gpOutputOxyInserts">
                         <xsl:variable name="insertElement" as="element()*">
                             <xsl:for-each select="$insertSplitPi">
                                 <xsl:variable name="pi" as="processing-instruction()" select="."/>
