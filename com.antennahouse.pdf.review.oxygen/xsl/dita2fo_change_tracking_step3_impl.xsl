@@ -211,7 +211,7 @@
             <!--xsl:message select="'$startPiXpath='||$startPiXpath"/-->
         </xsl:if>
         <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="map:get($prmInsertRangeMap,$insertStartPiXpath)"/>
-        <xsl:if test="$insertPiStartOrEndNode => exists()">
+        <xsl:if test="$insertPiStartOrEndNode => exists() and $insertPiStartOrEndNode[1] is $insertStartPi">
             <xsl:if test="$gpStep3Debug">
                 <!--xsl:message select="'[processing-instruction] pi=',accumulator-after('glInsertPi')"/-->
             </xsl:if>
@@ -266,7 +266,7 @@
         <xsl:copy/>
         <xsl:variable name="insertStartPiXpath" as="xs:string?" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
         <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="map:get($prmInsertRangeMap,$insertStartPiXpath)"/>
-        <xsl:if test="$insertPiStartOrEndNode => exists()">
+        <xsl:if test="$insertPiStartOrEndNode => exists() and $insertEndPi is $insertPiStartOrEndNode[2]">
             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertEnd,
                 '', 
                 '', 
