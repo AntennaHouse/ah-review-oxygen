@@ -33,8 +33,11 @@
     
     <!-- Auto Generated draft-comment/@disposition -->
     <xsl:variable name="cDraftCommentDispositionInsert"      as="xs:string" static="yes"  select="'__insert'"/>
+    <xsl:variable name="cDraftCommentDispositionInsertSurround"    as="xs:string" static="yes"  select="'__insert_surround'"/>
     <xsl:variable name="cDraftCommentDispositionInsertSplit" as="xs:string" static="yes"  select="'__insert_split'"/>
     <xsl:variable name="cDraftCommentDispositionInsertEnd"   as="xs:string" static="yes"  select="'__insert_end'"/>
+    <xsl:variable name="cDraftCommentDispositionInsertSurroundEnd" as="xs:string" static="yes"  select="'__insert_surround_end'"/>
+    <xsl:variable name="cDraftCommentDispositionInsertSplitEnd"    as="xs:string" static="yes"  select="'__insert_split_end'"/>
     <xsl:variable name="cDraftCommentDispositionDelete"      as="xs:string" static="yes"  select="'__delete'"/>
     <xsl:variable name="cDraftCommentDispositionDeleteEnd"   as="xs:string" static="yes"  select="'__delete_end'"/>
     <xsl:variable name="cDraftCommentDispositionComment"     as="xs:string" static="yes"  select="'__comment'"/>

@@ -21,6 +21,8 @@
         Step5: Highlight processing instruction
      -->
     
+    <xsl:mode name="MODE_STEP5" on-no-match="shallow-copy"/>
+    
     <xsl:template match="*[ancestor::*[@class => contains-token('topic/topic')] => exists()]
         [. => ahf:nonTextChildElement()]
         [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"

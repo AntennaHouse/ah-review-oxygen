@@ -62,7 +62,7 @@
      return:    Itself and child nodes.    
      note:		
      -->
-    <xsl:template match="/" mode="#all" priority="5">
+    <!--xsl:template match="/" mode="#all" priority="5">
         <xsl:copy xmlns:fo="http://www.w3.org/1999/XSL/Format">
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
@@ -77,8 +77,10 @@
 
     <xsl:template match="@*" mode="#all">
         <xsl:copy/>
-    </xsl:template>
-    
+    </xsl:template-->
+
+    <xsl:mode on-no-match="shallow-copy"/>
+
     <!-- 
      function:  Topic Template
      param:     None

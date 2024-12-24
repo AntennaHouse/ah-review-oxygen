@@ -26,8 +26,11 @@
      -->
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]
                           [string(@disposition) = ($cDraftCommentDispositionInsert, 
+                           $cDraftCommentDispositionInsertSurround, 
                            $cDraftCommentDispositionInsertSplit, 
                            $cDraftCommentDispositionInsertEnd, 
+                           $cDraftCommentDispositionInsertSurroundEnd, 
+                           $cDraftCommentDispositionInsertSplitEnd, 
                            $cDraftCommentDispositionDelete, 
                            $cDraftCommentDispositionDeleteEnd, 
                            $cDraftCommentDispositionComment,
@@ -52,6 +55,15 @@
                         <xsl:with-param name="prmOutputClass" select="$outputclass"/>
                     </xsl:call-template>
                 </xsl:when>
+                <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSurround">
+                    <xsl:call-template name="draftCommentInsertSurround">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
+                </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSplit">
                     <xsl:call-template name="draftCommentInsertSplit">
                         <xsl:with-param name="prmAuthor" select="$author"/>
@@ -63,6 +75,24 @@
                 </xsl:when>
                 <xsl:when test="$disposition eq $cDraftCommentDispositionInsertEnd">
                     <xsl:call-template name="draftCommentInsertEnd">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSurroundEnd">
+                    <xsl:call-template name="draftCommentInsertSurroundEnd">
+                        <xsl:with-param name="prmAuthor" select="$author"/>
+                        <xsl:with-param name="prmTime" select="$time"/>
+                        <xsl:with-param name="prmComment" select="$comment"/>
+                        <xsl:with-param name="prmId" select="$id"/>
+                        <xsl:with-param name="prmOutputClass" select="$outputclass"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$disposition eq $cDraftCommentDispositionInsertSplitEnd">
+                    <xsl:call-template name="draftCommentInsertSplitEnd">
                         <xsl:with-param name="prmAuthor" select="$author"/>
                         <xsl:with-param name="prmTime" select="$time"/>
                         <xsl:with-param name="prmComment" select="$comment"/>

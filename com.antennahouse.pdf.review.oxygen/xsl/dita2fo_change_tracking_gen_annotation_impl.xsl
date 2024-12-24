@@ -51,9 +51,42 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+
+    <!-- 
+     function:  Draft-comment Insert Surround Template For Change-Tracking
+     param:     See probe
+     return:    element()*
+     note:	  
+     -->
+    <xsl:template name="draftCommentInsertSurround" as="element()*">
+        <xsl:param name="prmAuthor" required="yes" as="xs:string"/>
+        <xsl:param name="prmTime" required="yes" as="xs:string"/>
+        <xsl:param name="prmComment" required="yes" as="xs:string"/>
+        <xsl:param name="prmId" required="yes" as="xs:string"/>
+        <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
+        <xsl:if test="$gpOutputInsertChangeBars">
+            <xsl:copy-of select="ahf:addChangeBar($barInsertBegin,$prmId)"/>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$gpOutputChangeIcons and $gpChangeTrackingOutputInsertAnnotation">
+                <fo:inline>
+                    <xsl:copy-of select="$atsAnnotationInsert"/>
+                    <xsl:attribute name="axf:annotation-author" select="$prmAuthor"/>
+                    <xsl:attribute name="axf:annotation-contents" select="if (string($prmComment)) then $prmTime || ' Inserted (Surround): ' || $prmComment else $prmTime || ' Inserted (Surround)'"/>
+                </fo:inline>
+            </xsl:when>
+            <xsl:when test="$gpOutputOxyComments and string($prmComment)">
+                <fo:inline>
+                    <xsl:copy-of select="$atsAnnotationComment"/>
+                    <xsl:attribute name="axf:annotation-author" select="$prmAuthor"/>
+                    <xsl:attribute name="axf:annotation-contents" select="$prmComment => ahf:unEscapeXmlChar()"/>
+                </fo:inline>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
     
     <!-- 
-     function:  Draft-comment Insert Template For Change-Tracking
+     function:  Draft-comment Insert Split Template For Change-Tracking
      param:     See probe
      return:    element()*
      note:	  
@@ -97,12 +130,48 @@
         <xsl:param name="prmComment" required="yes" as="xs:string"/>
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
-
+        
+        <xsl:if test="$gpOutputInsertChangeBars">
+            <xsl:copy-of select="ahf:addChangeBar($barInsertEnd,$prmId)"/>
+        </xsl:if>
+    </xsl:template>
+    
+    <!-- 
+     function:  Draft-comment Insert Surround End Template For Change-Tracking
+     param:     See probe
+     return:    element()*
+     note:	  
+     -->
+    <xsl:template name="draftCommentInsertSurroundEnd" as="element()*">
+        <xsl:param name="prmAuthor" required="yes" as="xs:string"/>
+        <xsl:param name="prmTime" required="yes" as="xs:string"/>
+        <xsl:param name="prmComment" required="yes" as="xs:string"/>
+        <xsl:param name="prmId" required="yes" as="xs:string"/>
+        <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
+        
         <xsl:if test="$gpOutputInsertChangeBars">
             <xsl:copy-of select="ahf:addChangeBar($barInsertEnd,$prmId)"/>
         </xsl:if>
     </xsl:template>
 
+    <!-- 
+     function:  Draft-comment Insert Split End Template For Change-Tracking
+     param:     See probe
+     return:    element()*
+     note:	  
+     -->
+    <xsl:template name="draftCommentInsertSplitEnd" as="element()*">
+        <xsl:param name="prmAuthor" required="yes" as="xs:string"/>
+        <xsl:param name="prmTime" required="yes" as="xs:string"/>
+        <xsl:param name="prmComment" required="yes" as="xs:string"/>
+        <xsl:param name="prmId" required="yes" as="xs:string"/>
+        <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
+        
+        <xsl:if test="$gpOutputInsertChangeBars">
+            <xsl:copy-of select="ahf:addChangeBar($barInsertEnd,$prmId)"/>
+        </xsl:if>
+    </xsl:template>
+    
     <!-- 
      function:  Draft-comment Delete Template For Change-Tracking
      param:     See probe

@@ -22,6 +22,8 @@
        Step4: Comment processing instruction
      -->
     
+    <xsl:mode name="MODE_STEP4" on-no-match="shallow-copy"/>
+    
     <xsl:template match="*[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
         [. => ahf:nonTextChildElement()]
         [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"

@@ -20,6 +20,8 @@
     <!--
         Step1: Insert surround processing instruction
      -->
+
+    <xsl:mode name="MODE_STEP1" on-no-match="shallow-copy"/>
     
     <!-- 
      function:  Templates for elements that have preceding <?oxy_insert_start type="surround"?> 
@@ -63,7 +65,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     <xsl:apply-templates mode="#current"/>
-                    <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertEnd,
+                    <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertSurroundEnd,
                         '', 
                         '', 
                         '',

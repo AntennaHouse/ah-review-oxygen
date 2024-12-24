@@ -25,8 +25,11 @@
      -->
     <xsl:template match="*[contains-token(@class,'topic/draft-comment')]
                           [string(@disposition) = ($cDraftCommentDispositionInsert,
+                                                    $cDraftCommentDispositionInsertSurround,
                                                     $cDraftCommentDispositionInsertSplit,
                                                     $cDraftCommentDispositionInsertEnd,
+                                                    $cDraftCommentDispositionInsertSurroundEnd,
+                                                    $cDraftCommentDispositionInsertSplitEnd,
                                                     $cDraftCommentDispositionDelete,
                                                     $cDraftCommentDispositionDeleteEnd,
                                                     $cDraftCommentDispositionAttributes)]"
