@@ -18,11 +18,14 @@
     version="3.0">
     
     <xsl:include href="dita2fo_constants.xsl"/>
-    <xsl:include href="dita2fo_error_util.xsl"/>
+    <xsl:include href="dita2fo_util_error.xsl"/>
+    <xsl:include href="dita2fo_util_dita.xsl"/>
+    <xsl:include href="dita2fo_util_array.xsl"/>
+    <xsl:include href="dita2fo_util_string.xsl"/>
+    <xsl:include href="dita2fo_util_pi.xsl"/>
     
     <xsl:include href="dita2fo_global.xsl"/>
     <xsl:include href="dita2fo_dita_class.xsl"/>
-    <xsl:include href="dita2fo_util_string.xsl"/>
     <xsl:include href="dita2fo_change_tracking_impl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_step1_ctrl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_step2_ctrl.xsl"/>

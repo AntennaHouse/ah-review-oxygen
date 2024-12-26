@@ -84,14 +84,22 @@
     <!-- 
      function:  Templates for processing-instructions <?oxy_insert_start type="surround"?> 
      param:     
-     return:    Dummy PI
+     return:    Dummy PI or itself
      note:      
      -->
     <xsl:template match="processing-instruction()[ahf:isInsertStartSurroundPi(.)]" mode="MODE_STEP1" priority="5">
+        <xsl:param name="prmInsertSurroundStartPi" as="processing-instruction()*" tunnel="yes" required="yes"/>
         <xsl:variable name="pi" as="processing-instruction()" select="."/>
-        <xsl:processing-instruction name="{$cInsertStartPiSurroundName}">
-            <xsl:value-of select="string($pi)"/>
-        </xsl:processing-instruction>
+        <xsl:choose>
+            <xsl:when test="$prmInsertSurroundStartPi[. is $pi] => exists()">
+                <xsl:processing-instruction name="{$cInsertStartPiSurroundName}">
+                    <xsl:value-of select="string($pi)"/>
+                </xsl:processing-instruction>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!-- 
@@ -101,10 +109,10 @@
      note:      
      -->
     <xsl:template match="processing-instruction()[ahf:isInsertEndPi(.)]" mode="MODE_STEP1" priority="5">
-        <xsl:param name="prmInsertEndPi" as="processing-instruction()*"  tunnel="yes" required="yes"/>
+        <xsl:param name="prmInsertSurroundEndPi" as="processing-instruction()*"  tunnel="yes" required="yes"/>
         <xsl:variable name="pi" as="processing-instruction()" select="."/>
         <xsl:choose>
-            <xsl:when test="$prmInsertEndPi[. is $pi] => exists()">
+            <xsl:when test="$prmInsertSurroundEndPi[. is $pi] => exists()">
                 <xsl:processing-instruction name="{$cInsertEndPiSurroundName}"/>
             </xsl:when>
             <xsl:otherwise>
@@ -112,6 +120,5 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
 
 </xsl:stylesheet>

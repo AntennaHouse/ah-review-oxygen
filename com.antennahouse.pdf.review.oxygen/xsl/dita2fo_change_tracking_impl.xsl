@@ -55,37 +55,12 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
-    <!-- 
-     function:  General Template
-     param:     
-     return:    Itself and child nodes.    
-     note:		
-     -->
-    <!--xsl:template match="/" mode="#all" priority="5">
-        <xsl:copy xmlns:fo="http://www.w3.org/1999/XSL/Format">
-            <xsl:apply-templates mode="#current"/>
-        </xsl:copy>
-    </xsl:template>
-
-    <xsl:template match="node()" mode="#all">
-        <xsl:copy>
-            <xsl:apply-templates select="@*" mode="#current"/>
-            <xsl:apply-templates mode="#current"/>
-        </xsl:copy>
-    </xsl:template>
-
-    <xsl:template match="@*" mode="#all">
-        <xsl:copy/>
-    </xsl:template-->
-
-    <!--xsl:mode on-no-match="shallow-copy"/-->
 
     <!-- 
      function:  Topic Template
      param:     None
      return:    Topic itself and add draft-comment for oxy_xxx processing instruction
-     note:      Topic has four steps:
+     note:      Topic has five steps:
                 - Step1: Insert surround processing instruction
                 - Step2: Insert split processing instruction
                 - Step3: Insert, delete, attribute-change processing-instruction

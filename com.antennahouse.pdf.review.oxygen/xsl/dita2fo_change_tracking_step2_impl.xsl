@@ -19,7 +19,7 @@
     <!--
        Step2: Insert split processing instruction
      -->
-  
+  <!-- No special implementations. Treat as insert. -->
   <xsl:mode name="MODE_STEP2" on-no-match="shallow-copy"/>
     
 </xsl:stylesheet>
