@@ -20,52 +20,46 @@
     <!--
         Step2: Insert split processing instruction
      -->
-
+    <xsl:variable name="mesInsertSplitPiTargetElementNotFound" as="xs:string" select="'[Insert split PI] Target element is not found. PI='"/>
+    <xsl:variable name="mesInsertSplitPiEndPiNotFound" as="xs:string" select="'[Insert split PI] Target insert end processing-instruction() is not found. PI='"/>
+    
     <xsl:template name="step2Ctrl">
         <xsl:param name="prmRoot" as="element()" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" required="yes"/>
-        <xsl:variable name="insertSplitPi" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSplitPi(.)]"/>
+        <xsl:variable name="insertStartSplitPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSplitPi(.)]"/>
         <xsl:choose>
-            <xsl:when test="$insertSplitPi => exists() and $gpOutputOxyInserts">
-                <xsl:variable name="insertElement" as="element()*">
-                    <xsl:for-each select="$insertSplitPi">
-                        <xsl:variable name="pi" as="processing-instruction()" select="."/>
-                        <xsl:variable name="targetElement" as="element()?" select="$pi/parent::*"/>
-                        <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/following-sibling::*[1]/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+            <xsl:when test="$insertStartSplitPis => exists() and $gpOutputOxyInserts">
+                <xsl:variable name="insertSplitPiInfo" as="array(item())*">
+                    <xsl:for-each select="$insertStartSplitPis">
+                        <xsl:variable name="insertStartSplitPi" as="processing-instruction()" select="."/>
+                        <xsl:variable name="targetElement" as="element()?" select="$insertStartSplitPi/parent::*"/>
+                        <xsl:variable name="insertSplitEndPi" as="processing-instruction()?" select="$targetElement/following-sibling::*[1]/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
                         <xsl:choose>
-                            <xsl:when test="$targetElement => exists() and $insertEndPi => exists()">
-                                <xsl:sequence select="$targetElement"/>
+                            <xsl:when test="$targetElement => exists() and $insertSplitEndPi => exists()">
+                                <xsl:sequence select="array{$insertStartSplitPi,$targetElement,$insertSplitEndPi}"/>
                             </xsl:when>
                             <xsl:when test="$targetElement => empty()">
-                                <xsl:assert test="false()" select="'[Insert split PI] Target element is not found. Invalid document'"/>
+                                <xsl:call-template name="errorContinueWithFileInfo">
+                                    <xsl:with-param name="prmMes" select="$mesInsertSplitPiTargetElementNotFound || ahf:PiToText($insertStartSplitPi)"/>
+                                    <xsl:with-param name="prmElem" select="$prmRoot"/>
+                                </xsl:call-template>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:assert test="false()" select="'[Insert split PI] Target insert end processing-instruction() is not found. Invalid document'"/>
+                                <xsl:call-template name="errorContinueWithFileInfo">
+                                    <xsl:with-param name="prmMes" select="$mesInsertSplitPiEndPiNotFound || ahf:PiToText($insertStartSplitPi)"/>
+                                    <xsl:with-param name="prmElem" select="$prmRoot"/>
+                                </xsl:call-template>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                 </xsl:variable>
-                <xsl:variable name="insertEndPi" as="processing-instruction()*">
-                    <xsl:for-each select="$insertSplitPi">
-                        <xsl:variable name="pi" as="processing-instruction()" select="."/>
-                        <xsl:variable name="targetElement" as="element()?" select="$pi/parent::*"/>
-                        <xsl:variable name="insertEndPi" as="processing-instruction()?" select="$targetElement/following-sibling::*[1]/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
-                        <xsl:choose>
-                            <xsl:when test="$targetElement => exists() and $insertEndPi => exists()">
-                                <xsl:sequence select="$insertEndPi"/>
-                            </xsl:when>
-                            <xsl:when test="$targetElement => empty()">
-                                <xsl:assert test="false()" select="'[Insert split PI] Target element is not found. Invalid document'"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:assert test="false()" select="'[Insert split PI] Target end processing-instruction() is not found. Invalid document'"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:variable>
+                <xsl:variable name="insertElement" as="element()*" select="ahf:arraySeqGet($insertSplitPiInfo,2)"/>
+                <xsl:variable name="insertSplitStartPi" as="processing-instruction()*" select="ahf:arraySeqGet($insertSplitPiInfo,1)"/>
+                <xsl:variable name="insertSplitEndPi" as="processing-instruction()*" select="ahf:arraySeqGet($insertSplitPiInfo,3)"/>
                 <xsl:apply-templates select="$prmRoot" mode="MODE_STEP2">
                     <xsl:with-param name="prmInsertElement" as="element()*"  tunnel="yes" select="$insertElement"/>
-                    <xsl:with-param name="prmInsertSplitEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertEndPi"/>
+                    <xsl:with-param name="prmInsertSplitStartPi"   as="processing-instruction()*" tunnel="yes" select="$insertSplitStartPi"/>
+                    <xsl:with-param name="prmInsertSplitEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertSplitEndPi"/>
                     <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$prmTopicAndUpperHistoryStr"/>
                 </xsl:apply-templates>
             </xsl:when>

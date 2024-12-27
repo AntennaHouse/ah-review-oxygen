@@ -55,10 +55,11 @@
                     </xsl:for-each>
                 </xsl:variable>
                 <xsl:variable name="insertElement" as="element()*" select="ahf:arraySeqGet($insertSurroundPiInfo,2)"/>
+                <xsl:variable name="insertSurroundStartPi" as="processing-instruction()*" select="ahf:arraySeqGet($insertSurroundPiInfo,1)"/>
                 <xsl:variable name="insertSurroundEndPi" as="processing-instruction()*" select="ahf:arraySeqGet($insertSurroundPiInfo,3)"/>
                 <xsl:apply-templates select="$prmRoot" mode="MODE_STEP1">
                     <xsl:with-param name="prmInsertElement" as="element()*"  tunnel="yes" select="$insertElement"/>
-                    <xsl:with-param name="prmInsertSurroundStartPi"   as="processing-instruction()*" tunnel="yes" select="$insertSurroundStartPis"/>
+                    <xsl:with-param name="prmInsertSurroundStartPi"   as="processing-instruction()*" tunnel="yes" select="$insertSurroundStartPi"/>
                     <xsl:with-param name="prmInsertSurroundEndPi"   as="processing-instruction()*" tunnel="yes" select="$insertSurroundEndPi"/>
                     <xsl:with-param name="prmTopicAndUpperHistoryStr" as="xs:string"       tunnel="yes" select="$prmTopicAndUpperHistoryStr"/>
                 </xsl:apply-templates>
