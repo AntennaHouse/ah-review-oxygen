@@ -25,6 +25,8 @@
      note:      Key: XPath of oxy_insert_start PI, value=inline start node, inline last before (or self of) the oxy_insert_end PI
                 Apply range refinement to eliminate space only redundant nodes.
      -->
+    <xsl:variable name="mesInsertEndPiNotFound" as="xs:string" select="'[Insert PI] Target insert end processing-instruction() is not found. PI='"/>
+    
     <xsl:template name="generateInsertRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
         <xsl:variable name="insertStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isInsertStartPi()]"/>
@@ -39,6 +41,10 @@
                     <xsl:variable name="rangeBetweenPis" as="node()*">
                         <xsl:choose>
                             <xsl:when test="$insertEndPi => empty()">
+                                <xsl:call-template name="errorContinueWithFileInfo">
+                                    <xsl:with-param name="prmMes" select="$mesInsertEndPiNotFound || ahf:PiToText($insertStartPi)"/>
+                                    <xsl:with-param name="prmElem" select="$prmRoot"/>
+                                </xsl:call-template>
                                 <xsl:sequence select="()"/>
                             </xsl:when>
                             <xsl:otherwise>
