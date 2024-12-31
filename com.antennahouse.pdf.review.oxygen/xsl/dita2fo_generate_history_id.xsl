@@ -11,7 +11,6 @@
 -->
 <xsl:stylesheet version="3.0" xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs ahf">
     
@@ -126,24 +125,28 @@
                     <xsl:sequence select="'.'"/>
                 </xsl:if>
                 <xsl:sequence select="local-name()"/>
-                <xsl:sequence select="if (exists($elem/parent::*) or exists($elem/preceding-sibling::*|$elem/following-sibling::*)) then string(count($elem/preceding-sibling::*[name() eq $name]) + 1) else ''"/>
+                <!--xsl:sequence select="if (exists($elem/parent::*) or exists($elem/preceding-sibling::*|$elem/following-sibling::*)) then string(count($elem/preceding-sibling::*[name() eq $name]) + 1) else ''"/-->
+                <xsl:sequence select="if (exists($elem/parent::*)) then string(count($elem/preceding-sibling::*[name() eq $name]) + 1) else ''"/>
             </xsl:for-each>
             <xsl:choose>
                 <xsl:when test="$prmNode/self::element()"/>
                 <xsl:when test="$prmNode/self::comment()">
                     <xsl:sequence select="'.'"/>
                     <xsl:sequence select="'comment'"/>
-                    <xsl:sequence select="if (exists($prmNode/preceding-sibling::comment())) then string(count($prmNode/preceding-sibling::comment()) + 1) else ''"/>
+                    <!--xsl:sequence select="if (exists($prmNode/preceding-sibling::comment())) then string(count($prmNode/preceding-sibling::comment()) + 1) else ''"/-->
+                    <xsl:sequence select="string(count($prmNode/preceding-sibling::comment()) + 1)"/>
                 </xsl:when>
                 <xsl:when test="$prmNode/self::text()">
                     <xsl:sequence select="'.'"/>
                     <xsl:sequence select="'text'"/>
-                    <xsl:sequence select="if (exists($prmNode/preceding-sibling::text())) then string(count($prmNode/preceding-sibling::text()) + 1) else ''"/>
+                    <!--xsl:sequence select="if (exists($prmNode/preceding-sibling::text())) then string(count($prmNode/preceding-sibling::text()) + 1) else ''"/-->
+                    <xsl:sequence select="string(count($prmNode/preceding-sibling::text()) + 1)"/>
                 </xsl:when>
                 <xsl:when test="$prmNode/self::processing-instruction()">
                     <xsl:sequence select="'.'"/>
                     <xsl:sequence select="$prmNode => name()"/>
-                    <xsl:sequence select="if (exists($prmNode/preceding-sibling::processing-instruction()[name() eq name($prmNode)])) then string(count($prmNode/preceding-sibling::processing-instruction()[name() eq name($prmNode)]) + 1) else ''"/>
+                    <!--xsl:sequence select="if (exists($prmNode/preceding-sibling::processing-instruction()[name() eq name($prmNode)])) then string(count($prmNode/preceding-sibling::processing-instruction()[name() eq name($prmNode)]) + 1) else ''"/-->
+                    <xsl:sequence select="string(count($prmNode/preceding-sibling::processing-instruction()[name() eq name($prmNode)]) + 1)"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
