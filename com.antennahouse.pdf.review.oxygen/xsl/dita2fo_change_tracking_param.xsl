@@ -196,5 +196,17 @@
     <xsl:variable name="gpStep4Debug" as="xs:boolean" select="$PRM_STEP4_DEBUG eq $cYes"/>
     <xsl:param name="PRM_STEP5_DEBUG" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpStep5Debug" as="xs:boolean" select="$PRM_STEP5_DEBUG eq $cYes"/>
+
+    <xsl:param name="PRM_STEP1_SKIP" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep1Skip" as="xs:boolean" select="$PRM_STEP1_SKIP eq $cYes"/>
+    <xsl:param name="PRM_STEP2_SKIP" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep2Skip" as="xs:boolean" select="$PRM_STEP2_SKIP eq $cYes"/>
+    <xsl:param name="PRM_STEP3_SKIP" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep3Skip" as="xs:boolean" select="$PRM_STEP3_SKIP eq $cYes"/>
+    <xsl:param name="PRM_STEP4_SKIP" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep4Skip" as="xs:boolean" select="$PRM_STEP4_SKIP eq $cYes"/>
+    <xsl:param name="PRM_STEP5_SKIP" as="xs:string" required="no" select="$cNo"/>
+    <xsl:variable name="gpStep5Skip" as="xs:boolean" select="$PRM_STEP5_SKIP eq $cYes"/>
     
+
 </xsl:stylesheet>

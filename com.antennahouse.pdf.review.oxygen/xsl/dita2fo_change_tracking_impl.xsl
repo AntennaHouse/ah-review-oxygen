@@ -75,10 +75,17 @@
         <xsl:variable name="step1Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$step1Source/*[1]"/>
-                <xsl:call-template name="step1Ctrl">
-                    <xsl:with-param name="prmRoot" select="$root"/>
-                    <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$gpStep1Skip">
+                        <xsl:copy-of select="$root"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="step1Ctrl">
+                            <xsl:with-param name="prmRoot" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep1Debug">
@@ -89,10 +96,17 @@
         <xsl:variable name="step2Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$step1Result/*[1]"/>
-                <xsl:call-template name="step2Ctrl">
-                    <xsl:with-param name="prmRoot" select="$root"/>
-                    <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$gpStep2Skip">
+                        <xsl:copy-of select="$root"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="step2Ctrl">
+                            <xsl:with-param name="prmRoot" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep2Debug">
@@ -103,10 +117,17 @@
         <xsl:variable name="step3Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$step2Result/*[1]"/>
-                <xsl:call-template name="step3Ctrl">
-                    <xsl:with-param name="prmRoot" select="$root"/>
-                    <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$gpStep3Skip">
+                        <xsl:copy-of select="$root"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="step3Ctrl">
+                            <xsl:with-param name="prmRoot" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep3Debug or $gpStep4Debug">
@@ -117,10 +138,17 @@
         <xsl:variable name="step4Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$step3Result/*[1]"/>
-                <xsl:call-template name="step4Ctrl">
-                    <xsl:with-param name="prmRoot" select="$root"/>
-                    <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$gpStep4Skip">
+                        <xsl:copy-of select="$root"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="step4Ctrl">
+                            <xsl:with-param name="prmRoot" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep4Debug or $gpStep5Debug">
@@ -131,10 +159,17 @@
         <xsl:variable name="step5Result" as="document-node()">
             <xsl:document>
                 <xsl:variable name="root" as="element()" select="$step4Result/*[1]"/>
-                <xsl:call-template name="step5Ctrl">
-                    <xsl:with-param name="prmRoot" select="$root"/>
-                    <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$gpStep5Skip">
+                        <xsl:copy-of select="$root"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="step5Ctrl">
+                            <xsl:with-param name="prmRoot" select="$root"/>
+                            <xsl:with-param name="prmTopicAndUpperHistoryStr" select="$topicAndUpperHistoryStr"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:document>
         </xsl:variable>
         <xsl:if test="$gpStep5Debug">
