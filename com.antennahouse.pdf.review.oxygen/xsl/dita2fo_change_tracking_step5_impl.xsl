@@ -21,7 +21,7 @@
         Step5: Highlight processing instruction
      -->
     
-    <xsl:mode name="MODE_STEP5" on-no-match="shallow-copy"/>
+    <xsl:mode name="MODE_STEP5" on-no-match="shallow-copy" use-accumulators="glHighlightPi"/>
     
     <xsl:template match="*[ancestor::*[@class => contains-token('topic/topic')] => exists()]
         [. => ahf:nonTextChildElement()]

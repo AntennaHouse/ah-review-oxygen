@@ -19,7 +19,7 @@
     <!-- Global Assignable Variable
          Comment processing instructions.
      -->
-    <xsl:mode use-accumulators="glInsertPi glCommentPi glHighlightPi" on-no-match="shallow-copy"/>
+    <xsl:mode on-no-match="shallow-copy"/>
     
     <!-- Accumulator acts as stack variable for insert, comment and highlight start/end processing instruction.
      -->

@@ -20,7 +20,7 @@
         Step3: Insert, delete, attribute-change processing-instruction
      -->
 
-    <xsl:mode name="MODE_STEP3" on-no-match="shallow-copy"/>
+    <xsl:mode name="MODE_STEP3" on-no-match="shallow-copy" use-accumulators="glInsertPi"/>
     
     <!-- 
      function:  Templates for elements that have no text() 

@@ -22,7 +22,7 @@
        Step4: Comment processing instruction
      -->
     
-    <xsl:mode name="MODE_STEP4" on-no-match="shallow-copy"/>
+    <xsl:mode name="MODE_STEP4" on-no-match="shallow-copy" use-accumulators="glCommentPi"/>
     
     <xsl:template match="*[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
         [. => ahf:nonTextChildElement()]
