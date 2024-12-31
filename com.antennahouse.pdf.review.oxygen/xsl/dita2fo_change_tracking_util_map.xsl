@@ -105,8 +105,10 @@
      function:  Generate Comment PI Range Map 
      param:     prmTopic
      return:    xsl:map
-     note:      Key: XPath of oxy_comment_start PI, value=start text node, end text node.
+     note:      Key: XPath of oxy_comment_start PI, value=start text node or start PI (if text() does not exist), end text node or PI (if text() does not exist).
      -->
+    <xsl:variable name="mesCommentEndPiNotFound" as="xs:string" select="'[Comment PI] Target insert end processing-instruction() is not found. PI='"/>
+    
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
         <xsl:variable name="commentStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isCommentStartPi()]"/>
@@ -122,19 +124,29 @@
                                 <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isCommentEndPi()][. => ahf:isAfterNode($commentStartPi)][$mid eq ahf:getMidFromPiContent(.)])[1]"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isCommentEndPi()][. => ahf:isAfterNode($commentStartPi)])[1]"/>                                                
+                                <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isCommentEndPi()][. => ahf:isAfterNode($commentStartPi)]['' eq ahf:getMidFromPiContent(.)])[1]"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:variable name="rangeInline" as="node()*">
-                        <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()[self::text()][parent::*[. => ahf:isMixedContentElement()] => exists()][. => ahf:isAfterOrSelfNode($commentStartPi)][. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
-                        <xsl:variable name="rangeRevised" as="node()*" select="if ($range => empty()) then ($commentStartPi,$commentEndPi) else $range" />
-                        <xsl:sequence select="$rangeRevised"/>
-                    </xsl:variable>
-                    <xsl:if test="$gpStep2Debug">
-                        <xsl:message select="'[Comment Range Map] Key: ' || $commentStartPi => ahf:getHistoryXpathStr() || ' Start Node=' || (if (exists($rangeInline[1])) then $rangeInline[1] => ahf:getHistoryXpathStr() else 'NULL') || ' End Node=' || (if (exists($rangeInline[last()])) then $rangeInline[last()] => ahf:getHistoryXpathStr() else 'NULL')"/>
-                    </xsl:if>
-                    <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="$rangeInline[1],$rangeInline[last()]"/>
+                    <xsl:choose>
+                        <xsl:when test="$commentEndPi => exists()">
+                            <xsl:variable name="rangeInline" as="node()*">
+                                <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()[self::text()][parent::*[. => ahf:isMixedContentElement()] => exists()][. => ahf:isAfterOrSelfNode($commentStartPi)][. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
+                                <xsl:variable name="rangeRevised" as="node()*" select="if ($range => empty()) then ($commentStartPi,$commentEndPi) else $range" />
+                                <xsl:sequence select="$rangeRevised"/>
+                            </xsl:variable>
+                            <xsl:if test="$gpStep2Debug">
+                                <xsl:message select="'[Comment Range Map] Key: ' || $commentStartPi => ahf:getHistoryXpathStr() || ' Start Node=' || (if (exists($rangeInline[1])) then $rangeInline[1] => ahf:getHistoryXpathStr() else 'NULL') || ' End Node=' || (if (exists($rangeInline[last()])) then $rangeInline[last()] => ahf:getHistoryXpathStr() else 'NULL')"/>
+                            </xsl:if>
+                            <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="$rangeInline[1],$rangeInline[last()]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="errorContinueWithFileInfo">
+                                <xsl:with-param name="prmMes" select="$mesCommentEndPiNotFound || ahf:PiToText($commentStartPi)"/>
+                                <xsl:with-param name="prmElem" select="$prmRoot"/>
+                            </xsl:call-template>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:map>
         </xsl:variable>
