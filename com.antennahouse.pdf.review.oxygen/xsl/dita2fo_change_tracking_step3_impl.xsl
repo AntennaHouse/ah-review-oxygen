@@ -11,12 +11,9 @@
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-    xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
-    xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
-    exclude-result-prefixes="xs map math ahf"
+    exclude-result-prefixes="xs map ahf"
     version="3.0">
     
     <!--
@@ -103,7 +100,7 @@
                         <xsl:apply-templates select="$firstElementAfterAttributesPi" mode="#current">
                             <xsl:with-param name="prmAttributesAnnotationProps" as="attribute()*">
                                 <xsl:copy-of select="$atsAnnotationAttributesForNoTextChildElement"/>
-                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)"/>
+                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)" xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"/>
                             </xsl:with-param>
                         </xsl:apply-templates>
                     </xsl:when>
@@ -173,7 +170,7 @@
                         <xsl:apply-templates select="$firstElementAfterAttributesPi" mode="#current">
                             <xsl:with-param name="prmAttributesAnnotationProps" as="attribute()*">
                                 <xsl:copy-of select="$atsAnnotationAttributes"/>
-                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)"/>
+                                <xsl:attribute name="axf:annotation-contents" select="ahf:genCommentsFromAttributesPi($attributesPi,$firstElementAfterAttributesPi)" xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"/>
                             </xsl:with-param>
                         </xsl:apply-templates>
                     </xsl:when>

@@ -10,12 +10,9 @@
   ****************************************************************
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
-    xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
-    exclude-result-prefixes="xs math"
+    exclude-result-prefixes="xs"
     version="3.0">
 
     <!-- Insert annotation -->
