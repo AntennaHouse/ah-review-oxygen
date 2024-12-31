@@ -105,7 +105,7 @@
      function:  Generate Comment PI Range Map 
      param:     prmTopic
      return:    xsl:map
-     note:      Key: XPath of oxy_comment_start PI, value=inline start node, inline last before (or self of) the oxy_comment_end PI
+     note:      Key: XPath of oxy_comment_start PI, value=start text node, end text node.
      -->
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
