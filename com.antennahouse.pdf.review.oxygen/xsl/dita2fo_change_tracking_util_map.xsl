@@ -22,7 +22,7 @@
      function:  Generate Insert PI Range Map 
      param:     prmTopic
      return:    xsl:map
-     note:      Key: XPath of oxy_insert_start PI, value=inline start node, inline last before (or self of) the oxy_insert_end PI
+     note:      Key: XPath of oxy_insert_start PI, value=inline start node(start Pi or text()), inline last node(end PI or text()).
                 Apply range refinement to eliminate space only redundant nodes.
      -->
     <xsl:variable name="mesInsertEndPiNotFound" as="xs:string" select="'[Insert PI] Target insert end processing-instruction() is not found. PI='"/>
@@ -64,25 +64,25 @@
                                 <xsl:when test="$range => empty()">
                                     <xsl:sequence select="($insertStartPi,$insertEndPi)"/>
                                 </xsl:when>
-                                <xsl:when test="$range => count() eq 1 and $range[1] instance of text() and normalize-space($range[1]) eq ''">
+                                <xsl:when test="$range => count() eq 1 and normalize-space($range[1]) eq ''">
                                     <xsl:sequence select="($insertStartPi,$insertEndPi)"/>
                                 </xsl:when>
-                                <xsl:when test="$range => count() eq 2 and $range[1] instance of text() and normalize-space($range[1]) eq '' and $range[2] instance of text() and normalize-space($range[2]) eq ''">
+                                <xsl:when test="$range => count() eq 2 and normalize-space($range[1]) eq '' and normalize-space($range[2]) eq ''">
                                     <xsl:sequence select="($insertStartPi,$insertEndPi)"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:choose>
-                                        <xsl:when test="$range => count() gt 2 and $range[1] instance of text() and normalize-space($range[1]) eq '' and $range[last()] instance of text() and normalize-space($range[last()]) eq ''">
+                                        <xsl:when test="$range => count() gt 2 and normalize-space($range[1]) eq '' and normalize-space($range[last()]) eq ''">
                                             <xsl:sequence select="subsequence($range,2,$range => count() - 2)"/>
                                         </xsl:when>
-                                        <xsl:when test="$range => count() gt 2 and $range[1] instance of text() and normalize-space($range[1]) eq ''">
+                                        <xsl:when test="$range => count() gt 2 and normalize-space($range[1]) eq ''">
                                             <xsl:sequence select="subsequence($range, 2)"/>
                                         </xsl:when>
-                                        <xsl:when test="$range => count() gt 2 and $range[last()] instance of text() and normalize-space($range[last()]) eq ''">
+                                        <xsl:when test="$range => count() gt 2 and normalize-space($range[last()]) eq ''">
                                             <xsl:sequence select="subsequence($range, 1, $range => count() - 1)"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:sequence select="$range"/>
+                                            <xsl:sequence select="$range[1]|$range[last()]"/>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:otherwise>
