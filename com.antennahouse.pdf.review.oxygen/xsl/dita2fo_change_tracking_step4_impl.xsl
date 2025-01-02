@@ -44,6 +44,8 @@
               by the product and the product itself and ensure safe operation, observe the
               safety precautions described in this user’s manual. We assume no liability for
               safety if users fail to observe these instructions when operating the product. </li>
+              
+         Limitation: If no text() exists between comment start PI and comment end PI and start/end PI is nested, this template generates multiple draft-comment elements for each.
     -->
     
     <xsl:mode name="MODE_STEP4" on-no-match="shallow-copy" use-accumulators="glCommentPi"/>
