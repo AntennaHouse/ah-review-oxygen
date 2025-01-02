@@ -48,5 +48,10 @@
     <param name="PRM_STEP3_DEBUG" expression="${step3.debug}" if:set="step3.debug" xmlns:if="ant:if"/>
     <param name="PRM_STEP4_DEBUG" expression="${step4.debug}" if:set="step4.debug" xmlns:if="ant:if"/>
     <param name="PRM_STEP5_DEBUG" expression="${step5.debug}" if:set="step5.debug" xmlns:if="ant:if"/>
+    <param name="PRM_STEP1_SKIP" expression="${step1.skip}" if:set="step1.skip" xmlns:if="ant:if"/>
+    <param name="PRM_STEP2_SKIP" expression="${step2.skip}" if:set="step2.skip" xmlns:if="ant:if"/>
+    <param name="PRM_STEP3_SKIP" expression="${step3.skip}" if:set="step3.skip" xmlns:if="ant:if"/>
+    <param name="PRM_STEP4_SKIP" expression="${step4.skip}" if:set="step4.skip" xmlns:if="ant:if"/>
+    <param name="PRM_STEP5_SKIP" expression="${step5.skip}" if:set="step5.skip" xmlns:if="ant:if"/>
 </extension>
 

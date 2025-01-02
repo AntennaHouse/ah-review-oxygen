@@ -229,6 +229,26 @@
       <val desc="No" default="true">no</val>
       <val desc="Yes">yes</val>
     </param>
+    <param name="step1.skip" type="enum" desc="Skip step 1 processing.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step2.skip" type="enum" desc="Skip step 2 processing.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step3.skip" type="enum" desc="Skip step 3 processing.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step4.skip" type="enum" desc="Skip step 4 processing.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
+    <param name="step5.skip" type="enum" desc="Skip step 5 processing.">
+      <val desc="No" default="true">no</val>
+      <val desc="Yes">yes</val>
+    </param>
   </transtype>
 
   <template file="xsl/dita2fo_change_tracking_gen_annotation_shell_template.xsl"/>
