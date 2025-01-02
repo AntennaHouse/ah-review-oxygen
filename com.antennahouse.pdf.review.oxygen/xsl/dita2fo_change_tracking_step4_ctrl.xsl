@@ -14,11 +14,11 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
-    exclude-result-prefixes="xs math ahf"
+    exclude-result-prefixes="xs fo math ahf"
     version="3.0">
     
     <!--
-        Step4: Comment processing instruction processing-instruction
+        Step4: Comment processing instruction
      -->
 
     <xsl:template name="step4Ctrl">
