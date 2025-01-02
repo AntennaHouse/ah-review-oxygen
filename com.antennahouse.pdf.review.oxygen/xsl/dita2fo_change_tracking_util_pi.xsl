@@ -359,17 +359,17 @@
     <xsl:template name="ahf:genDraftCommentFromCommentPis" as="element()*">
         <xsl:param name="prmCommentPi" as="processing-instruction()*" required="yes"/>
         <xsl:param name="prmCurrent" as="node()" required="no" select="."/>
-        <xsl:if test="$gpStep3Debug">
+        <xsl:if test="$gpStep4Debug">
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $prmCommentPi=', $prmCommentPi"/>
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $prmCurrent=', $prmCurrent => ahf:getHistoryXpathStr()"/>
         </xsl:if>
         <xsl:variable name="commentInfo" as="xs:string*" select="ahf:getTargetCommentInfo($prmCommentPi)"/>
-        <xsl:if test="$gpStep3Debug">
+        <xsl:if test="$gpStep4Debug">
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $commentInfo=(' || count($commentInfo) ||')', $commentInfo"></xsl:message>
         </xsl:if>
         <xsl:if test="$commentInfo => exists()">
             <xsl:for-each-group select="$commentInfo" group-adjacent="((position() - 1) div 3) => xs:integer()" >
-                <xsl:if test="$gpStep3Debug">
+                <xsl:if test="$gpStep4Debug">
                     <xsl:message select="'[ahf:genDraftCommentFromCommentPis] current-grouping-key()=',current-grouping-key(),' current-group()=('||count(current-group()) || ')', current-group()"/>
                 </xsl:if>
                 <xsl:variable name="position" as="xs:integer" select="position()"/>
