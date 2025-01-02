@@ -20,11 +20,11 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2fo_change_tracking_step4_ctrl.xsl</String>
+                                    <String>xsl/dita2fo_change_tracking_step5_ctrl.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>XSLT - dita2fo_change_tracking_convmerged shell.xsl</String>
+                                        <String>dita2fo_change_tracking shell</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -60,7 +60,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2fo_change_tracking_step5_impl.xsl</String>
+                                    <String>xsl/dita2fo_change_tracking_util_map.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -100,7 +100,27 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2fo_change_tracking_step3_impl.xsl</String>
+                                    <String>xsl/dita2fo_change_tracking_step4_ctrl.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSLT - dita2fo_change_tracking_convmerged shell.xsl</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioStorageLocations">
+                                    <list>
+                                        <Byte>2</Byte>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2fo_change_tracking_step5_impl.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -120,7 +140,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2fo_change_tracking_util_map.xsl</String>
+                                    <String>xsl/dita2fo_change_tracking_step3_impl.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
