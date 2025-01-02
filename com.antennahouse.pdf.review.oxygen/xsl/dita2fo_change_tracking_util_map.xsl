@@ -132,13 +132,22 @@
                         <xsl:when test="$commentEndPi => exists()">
                             <xsl:variable name="rangeInline" as="node()*">
                                 <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()[self::text()][parent::*[. => ahf:isMixedContentElement()] => exists()][. => ahf:isAfterOrSelfNode($commentStartPi)][. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
-                                <xsl:variable name="rangeRevised" as="node()*" select="if ($range => empty()) then ($commentStartPi,$commentEndPi) else $range" />
+                                <xsl:variable name="rangeRevised" as="node()*">
+                                    <xsl:choose>
+                                        <xsl:when test="$range => exists()">
+                                            <xsl:sequence select="$range"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:sequence select=" ($commentStartPi,$commentEndPi)"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
                                 <xsl:sequence select="$rangeRevised"/>
                             </xsl:variable>
-                            <xsl:if test="$gpStep2Debug">
+                            <xsl:if test="$gpStep4Debug">
                                 <xsl:message select="'[Comment Range Map] Key: ' || $commentStartPi => ahf:getHistoryXpathStr() || ' Start Node=' || (if (exists($rangeInline[1])) then $rangeInline[1] => ahf:getHistoryXpathStr() else 'NULL') || ' End Node=' || (if (exists($rangeInline[last()])) then $rangeInline[last()] => ahf:getHistoryXpathStr() else 'NULL')"/>
                             </xsl:if>
-                            <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="$rangeInline[1],$rangeInline[last()]"/>
+                            <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="($rangeInline[1],$rangeInline[last()])"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="errorContinueWithFileInfo">
