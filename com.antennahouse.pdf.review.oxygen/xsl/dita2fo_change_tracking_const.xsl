@@ -30,6 +30,8 @@
     <!-- PI Names Automatically Generated -->
     <xsl:variable name="cInsertStartPiSurroundName"          as="xs:string" static="yes"  select="'oxy_insert_start_surround'"/>
     <xsl:variable name="cInsertEndPiSurroundName"            as="xs:string" static="yes"  select="'oxy_insert_end_surround'"/>
+    <xsl:variable name="cInsertStartPiSplitName"             as="xs:string" static="yes"  select="'oxy_insert_start_split'"/>
+    <xsl:variable name="cInsertEndPiSplitName"               as="xs:string" static="yes"  select="'oxy_insert_end_split'"/>
     
     <!-- Auto Generated draft-comment/@disposition -->
     <xsl:variable name="cDraftCommentDispositionInsert"      as="xs:string" static="yes"  select="'__insert'"/>
