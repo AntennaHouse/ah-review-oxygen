@@ -535,6 +535,7 @@
      param:     prmDisposition, prmAuthor, prmTimeStamp, prmComment, $prmId
      return:    draft-comment element
      note:      Auto generated draft-comment is treated specially by overridden template (dita2fo_change_tracking_gen_annotation.xsl).
+                Adopt special property "comment". (Not in DITA spec)
      -->
     <xsl:function name="ahf:addDraftComment" as="element()">
         <xsl:param name="prmDisposition" as="xs:string"/>
@@ -549,7 +550,7 @@
             <xsl:if test="$prmId ne ''">
                 <xsl:attribute name="id" select="$prmId"/>
             </xsl:if>
-            <xsl:value-of select="$prmComment"/>
+            <xsl:attribute name="comment" select="$prmComment"/>
         </draft-comment>
     </xsl:function>
 
@@ -570,7 +571,7 @@
             <xsl:if test="$prmOffset ne ''">
                 <xsl:attribute name="outputclass" select="$prmOffset"/>
             </xsl:if>
-            <xsl:value-of select="$prmComment"/>
+            <xsl:attribute name="comment" select="$prmComment"/>
         </draft-comment>
     </xsl:function>
     

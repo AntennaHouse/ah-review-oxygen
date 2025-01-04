@@ -39,7 +39,7 @@
             <xsl:variable name="author" as="xs:string" select="string(@author)"/>
             <xsl:variable name="time" as="xs:string" select="string(@time)"/>
             <xsl:variable name="disposition" as="xs:string" select="string(@disposition)"/>
-            <xsl:variable name="comment" as="xs:string" select="string($draftComment)"/>
+            <xsl:variable name="comment" as="xs:string" select="string(@comment)"/>
             <xsl:variable name="id" as="xs:string" select="string(@id)"/>
             <xsl:variable name="outputclass" as="xs:string" select="string(@outputclass)"/>
             <xsl:choose>
