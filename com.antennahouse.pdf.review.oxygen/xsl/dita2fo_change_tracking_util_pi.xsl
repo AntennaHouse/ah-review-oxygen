@@ -363,23 +363,23 @@
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $prmCommentPi=', $prmCommentPi"/>
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $prmCurrent=', $prmCurrent => ahf:getHistoryXpathStr()"/>
         </xsl:if>
-        <xsl:variable name="commentInfo" as="xs:string*" select="ahf:getTargetCommentInfo($prmCommentPi)"/>
+        <xsl:variable name="commentInfo" as="array(xs:string)*" select="ahf:getTargetCommentInfo($prmCommentPi)"/>
         <xsl:if test="$gpStep4Debug">
             <xsl:message select="'[ahf:genDraftCommentFromCommentPis] $commentInfo=(' || count($commentInfo) ||')', $commentInfo"></xsl:message>
         </xsl:if>
         <xsl:if test="$commentInfo => exists()">
-            <xsl:for-each-group select="$commentInfo" group-adjacent="((position() - 1) div 3) => xs:integer()" >
-                <xsl:if test="$gpStep4Debug">
-                    <xsl:message select="'[ahf:genDraftCommentFromCommentPis] current-grouping-key()=',current-grouping-key(),' current-group()=('||count(current-group()) || ')', current-group()"/>
-                </xsl:if>
-                <xsl:variable name="position" as="xs:integer" select="position()"/>
+            <xsl:variable name="author" as="xs:string*" select="ahf:arraySeqGet($commentInfo,1)"/>
+            <xsl:variable name="timeStump" as="xs:string*" select="ahf:arraySeqGet($commentInfo,2)"/>
+            <xsl:variable name="message" as="xs:string*" select="ahf:arraySeqGet($commentInfo,3)"/>
+            <xsl:for-each select="1 to $commentInfo=>count()">
+                <xsl:variable name="position" as="xs:integer" select="."/>
                 <xsl:copy-of select="ahf:addDraftCommentWithOffset($cDraftCommentDispositionComment,
-                                                         current-group()[1], 
-                                                         current-group()[2], 
-                                                         current-group()[3],
+                                                         $author[$position], 
+                                                         $timeStump[$position], 
+                                                         $message[$position],
                                                          '',
                                                          if ($position eq 1) then '' else $cDraftCommentOffset || ($position - 1))"/>
-            </xsl:for-each-group>
+            </xsl:for-each>
         </xsl:if>
     </xsl:template>
 
@@ -399,14 +399,14 @@
     <!-- 
      function:  Get Target Comment Info (author, time-stamp, comment 
      param:     prmCommentPis
-     return:    xs:string*
+     return:    array(xs:string)*
      note:      Return sequence of author, time-stamp, comment.
                 The comments can be:
                 - Nested
                 - Replied
                 It is better to reverse stack for getting normal comment order.
      -->
-    <xsl:function name="ahf:getTargetCommentInfo" as="xs:string*">
+    <xsl:function name="ahf:getTargetCommentInfo" as="array(xs:string)*">
         <xsl:param name="prmCommentPi" as="processing-instruction()*"/>
         <xsl:variable name="commentPiOrg" as="processing-instruction()*" select="$prmCommentPi => reverse()"/>
         <xsl:variable name="ids" as="xs:string*" select="$commentPiOrg ! ahf:getIdFromPiContent(.) => distinct-values()"/>
@@ -420,9 +420,7 @@
                     <xsl:variable name="author" as="xs:string" select="$commentPi => ahf:getAuthorFromPi()"/>
                     <xsl:variable name="timeStamp" as="xs:string" select="$commentPi => ahf:getFormattedTimeStampStrFromPi()"/>
                     <xsl:variable name="comment" as="xs:string" select="$commentPi => ahf:getCommentFromPi()"/>
-                    <xsl:sequence select="$author"/>
-                    <xsl:sequence select="$timeStamp"/>
-                    <xsl:sequence select="$timeStamp || ' ' || $author || ': ' || $comment"/>
+                    <xsl:sequence select="array{$author,$timeStamp,$timeStamp || ' ' || $author || ': ' || $comment}"/>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
@@ -442,9 +440,7 @@
                             <xsl:sequence select="$timeStamp || ' ' || $author || ': ' || $comment || (if (position() ne last()) then '&#x0A;' else '')"/>
                         </xsl:for-each>
                     </xsl:variable>
-                    <xsl:sequence select="$author"/>
-                    <xsl:sequence select="$timeStamp"/>
-                    <xsl:sequence select="$commentSeq => string-join('')"/>
+                    <xsl:sequence select="array{$author,$timeStamp,$commentSeq => string-join('')}"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
