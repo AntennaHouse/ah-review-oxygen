@@ -21,7 +21,7 @@
 
     <xsl:include href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
-    <xsl:include href="dita2fo_change_tracking_gen_annotation.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_gen_annotation_ctrl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation_impl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_annotation_style.xsl"/>
     <xsl:include href="dita2fo_change_tracking_gen_li_processing.xsl"/>
