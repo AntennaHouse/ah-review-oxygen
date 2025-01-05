@@ -277,7 +277,7 @@
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
 
         <fo:inline>
-            <xsl:copy-of select="$atsAnnotationComment"/>
+            <xsl:copy-of select="$atsAnnotationAttributes"/>
             <xsl:attribute name="axf:annotation-contents" select="$prmComment"/>
         </fo:inline>
     </xsl:template>
