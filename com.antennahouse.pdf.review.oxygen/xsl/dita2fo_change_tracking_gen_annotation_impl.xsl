@@ -261,6 +261,7 @@
         <xsl:param name="prmComment" required="yes" as="xs:string"/>
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
+        <xsl:sequence select="()"/>
     </xsl:template>
 
     <!-- 
@@ -275,13 +276,18 @@
         <xsl:param name="prmComment" required="yes" as="xs:string"/>
         <xsl:param name="prmId" required="yes" as="xs:string"/>
         <xsl:param name="prmOutputClass" required="yes" as="xs:string"/>
-
-        <fo:inline>
-            <xsl:copy-of select="$atsAnnotationAttributes"/>
-            <xsl:attribute name="axf:annotation-contents" select="$prmComment"/>
-        </fo:inline>
+        <xsl:choose>
+            <xsl:when test="$gpOutputChangeIcons and $gpOutputOxyAttributes">
+                <fo:inline>
+                    <xsl:copy-of select="$atsAnnotationAttributes"/>
+                    <xsl:attribute name="axf:annotation-contents" select="$prmComment"/>
+                </fo:inline>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
-    
     
     <!-- 
      function:  Genrate Change Bar
