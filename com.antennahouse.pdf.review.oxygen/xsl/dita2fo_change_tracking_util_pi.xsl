@@ -397,10 +397,10 @@
     </xsl:template>
     
     <!-- 
-     function:  Get Target Comment Info (author, time-stamp, comment 
+     function:  Get Target Comment Info (author, time-stamp, comment )
      param:     prmCommentPis
      return:    array(xs:string)*
-     note:      Return sequence of author, time-stamp, comment.
+     note:      Return sequence of array (author, time-stamp, comment).
                 The comments can be:
                 - Nested
                 - Replied
@@ -410,7 +410,7 @@
         <xsl:param name="prmCommentPi" as="processing-instruction()*"/>
         <xsl:variable name="commentPiOrg" as="processing-instruction()*" select="$prmCommentPi => reverse()"/>
         <xsl:variable name="ids" as="xs:string*" select="$commentPiOrg ! ahf:getIdFromPiContent(.) => distinct-values()"/>
-        <xsl:if test="$gpStep2Debug">
+        <xsl:if test="$gpStep4Debug">
             <xsl:message select="'$ids=('||count($ids) || ') ', $ids"></xsl:message>
         </xsl:if>
         <xsl:choose>
