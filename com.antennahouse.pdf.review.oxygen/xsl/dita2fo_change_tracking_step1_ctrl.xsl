@@ -20,6 +20,23 @@
     
     <!--
         Step1: Insert surround processing instruction
+        通常は以下のパターン
+        <?oxy_insert_start author="toshi" timestamp="20250109T061817+0900" type="surround"?>
+        <spl id="spl_egz_n41_zdc">
+        <?oxy_insert_end?>
+          <spt>ターム</spt>
+          <spd>説明</spd>
+        </spl>
+        テストにより次のようなパターンがあることが判明、「まさしく」要素を挟んでsurroundが指定される．
+        <spl id="spl_egz_n41_zdd">
+            <?oxy_insert_start author="toshi" timestamp="20250109T062045+0900" type="surround"?>
+            <spt><ph>ターム2</ph></spt>
+            <?oxy_insert_end?>
+            <?oxy_insert_start author="toshi" timestamp="20250109T062045+0900" type="surround"?>
+            <spd><ph>説明2</ph></spd>
+            <?oxy_insert_end?>
+        </spl>
+        両パターンに対応させる．
      -->
     <xsl:variable name="mesInsertSurroundPiTargetElementNotFound" as="xs:string" select="'[Insert surround PI] Target element is not found. PI='"/>
     <xsl:variable name="mesInsertSurroundPiEndPiNotFound" as="xs:string" select="'[Insert surround PI] Target insert end processing-instruction() is not found. PI='"/>
@@ -34,7 +51,22 @@
                     <xsl:for-each select="$insertSurroundStartPis">
                         <xsl:variable name="insertSurroundStartPi" as="processing-instruction()" select="."/>
                         <xsl:variable name="targetElement" as="element()?" select="$insertSurroundStartPi/following-sibling::*[1]"/>
-                        <xsl:variable name="insertSurroundEndPi" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                        <xsl:variable name="insertSurroundEndPi" as="processing-instruction()?">
+                            <xsl:variable name="endCandidate1" as="processing-instruction()?" select="$targetElement/child::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                            <xsl:variable name="endCandidate2" as="processing-instruction()?" select="$targetElement/following-sibling::processing-instruction()[. => ahf:isInsertEndPi()][1]"/>
+                            <xsl:choose>
+                                <xsl:when test="exists($endCandidate1)">
+                                    <xsl:sequence select="$endCandidate1"/>
+                                </xsl:when>
+                                <xsl:when test="exists($endCandidate2)">
+                                    <xsl:sequence select="$endCandidate2"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <!-- Not found! -->
+                                    <xsl:sequence select="()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>                            
+                        </xsl:variable>
                         <xsl:choose>
                             <xsl:when test="$targetElement => exists() and $insertSurroundEndPi => exists()">
                                 <xsl:sequence select="array{$insertSurroundStartPi,$targetElement,$insertSurroundEndPi}"/>
