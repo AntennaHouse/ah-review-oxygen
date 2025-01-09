@@ -16,6 +16,28 @@
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs math"
     version="3.0">
+
+    <!-- 
+     function:  Add style to fo:prop 
+     param:     prmFoProp prmStyleVal prmStyleName
+     return:    fo:prop
+     note:      
+     -->
+    <xsl:function name="ahf:addStyleToFoProp" as="attribute()?">
+        <xsl:param name="prmFoProp" as="attribute()?"/>
+        <xsl:param name="prmStyleName" as="xs:string"/>
+        <xsl:param name="prmStyleVal" as="xs:string"/>
+        <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
+        <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
+        <xsl:choose>
+            <xsl:when test="string($prmStyleVal)">
+                <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || $prmStyleName || ':' || $prmStyleVal || ';'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$prmFoProp"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
     
     <!-- 
      function:  Add color property to fo:prop (foreground/background) 
@@ -26,31 +48,13 @@
     <xsl:function name="ahf:addColorToFoProp" as="attribute()?">
         <xsl:param name="prmFoProp" as="attribute()?"/>
         <xsl:param name="prmColor" as="xs:string"/>
-        <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
-        <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
-        <xsl:choose>
-            <xsl:when test="string($prmColor)">
-                <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || 'color:' || $prmColor || ';'"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$prmFoProp"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:sequence select="ahf:addStyleToFoProp($prmFoProp, 'color', $prmColor)"/>
     </xsl:function>
     
     <xsl:function name="ahf:addBgColorToFoProp" as="attribute()?">
         <xsl:param name="prmFoProp" as="attribute()?"/>
         <xsl:param name="prmColor" as="xs:string"/>
-        <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
-        <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
-        <xsl:choose>
-            <xsl:when test="string($prmColor)">
-                <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || 'background-color:' || $prmColor || ';'"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$prmFoProp"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:sequence select="ahf:addStyleToFoProp($prmFoProp, 'background-color', $prmColor)"/>
     </xsl:function>
     
     <!-- 
