@@ -15,6 +15,7 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
+    xmlns:err="http://www.w3.org/2005/xqt-errors"
     exclude-result-prefixes="xs math"
     version="3.0">
     
@@ -40,6 +41,7 @@
         <xsl:variable name="parseStr" as="xs:string" select="'&lt;root&gt;' || $prmStr || '&lt;/root&gt;'"/>
         <xsl:try select="parse-xml-fragment($parseStr)">
             <xsl:catch errors="*">
+                <xsl:message select="'[ahf:parseXmlFragmentEx] Failed to parse string. code=' || $err:code || ' description=' || $err:description || ' value=' || $err:value"/>
                 <xsl:sequence select="()"/>
             </xsl:catch>
         </xsl:try>
