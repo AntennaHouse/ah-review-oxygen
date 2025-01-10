@@ -38,7 +38,7 @@
      -->
     <xsl:function name="ahf:parseXmlFragmentEx" as="document-node()?">
         <xsl:param name="prmStr" as="xs:string"/>
-        <xsl:variable name="parseStr" as="xs:string" select="'&lt;root&gt;' || $prmStr || '&lt;/root&gt;'"/>
+        <xsl:variable name="parseStr" as="xs:string" select="'&lt;root xmlns:m=&quot;http://www.w3.org/2005/xpath-functions/math&quot; &gt;' || $prmStr || '&lt;/root&gt;'"/>
         <xsl:try select="parse-xml-fragment($parseStr)">
             <xsl:catch errors="*">
                 <xsl:message select="'[ahf:parseXmlFragmentEx] Failed to parse string. code=' || $err:code || ' description=' || $err:description || ' value=' || $err:value"/>
