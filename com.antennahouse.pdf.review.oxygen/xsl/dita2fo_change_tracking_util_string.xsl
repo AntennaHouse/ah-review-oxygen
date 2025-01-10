@@ -27,7 +27,7 @@
      -->
     <xsl:function name="ahf:unEscapeXmlChar" as="xs:string">
         <xsl:param name="prmStr" as="xs:string"/>
-        <xsl:sequence select="ahf:replace($prmStr,('&amp;amp;','&amp;lt;','&amp;gt;','&amp;quot;','&amp;apos;'),('&amp;','&lt;','&gt;','&quot;',&quot;&apos;&quot;))"/>
+        <xsl:sequence select="ahf:replace($prmStr,('&amp;lt;','&amp;gt;','&amp;amp;','&amp;quot;','&amp;apos;'),('&lt;','&gt;','&amp;','&quot;',&quot;&apos;&quot;))"/>
     </xsl:function>
 
     <!-- 
