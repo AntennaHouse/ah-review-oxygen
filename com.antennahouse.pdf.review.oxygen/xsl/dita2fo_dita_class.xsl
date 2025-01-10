@@ -121,7 +121,8 @@
         'topic/linktext',
         'topic/linkinfo',
         'topic/data',
-        'topic/itemgroup'
+        'topic/itemgroup',
+        'topic/xref'
         )"/>
     
     <!-- 
