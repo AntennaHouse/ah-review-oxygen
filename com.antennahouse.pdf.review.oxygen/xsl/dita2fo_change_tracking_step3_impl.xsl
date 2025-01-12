@@ -57,7 +57,7 @@
                         <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
                         <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
                         <xsl:choose>
-                            <xsl:when test="parent::*[@class => contains-token('topic/body')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/body')]">
                                 <bodydiv class="- topic/bodydiv ">
                                     <xsl:call-template name="genDeletePiContents">
                                         <xsl:with-param name="prmDeletePi" select="$deletePi"/>
@@ -65,7 +65,7 @@
                                     </xsl:call-template>
                                 </bodydiv>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => contains-token('task/steps')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('task/steps')]">
                                 <step class="- topic/li task/step " outputclass="{$cOutputClassDeleteAttributesLi}">
                                     <cmd class="- topic/ph task/cmd ">
                                         <xsl:call-template name="genDeletePiContents">
@@ -75,7 +75,7 @@
                                     </cmd>
                                 </step>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => ahf:seqContainsToken(('topic/ol','topic/ul'))]">
+                            <xsl:when test="$deletePi/parent::*[@class => ahf:seqContainsToken(('topic/ol','topic/ul'))]">
                                 <li class="- topic/li " outputclass="{$cOutputClassDeleteAttributesLi}">
                                     <xsl:call-template name="genDeletePiContents">
                                         <xsl:with-param name="prmDeletePi" select="$deletePi"/>
@@ -83,7 +83,7 @@
                                     </xsl:call-template>
                                 </li>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => contains-token('topic/sl')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/sl')]">
                                 <sli class="- topic/sli ">
                                     <xsl:call-template name="genDeletePiContents">
                                         <xsl:with-param name="prmDeletePi" select="$deletePi"/>
@@ -91,7 +91,7 @@
                                     </xsl:call-template>
                                 </sli>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => contains-token('topic/table')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/table')]">
                                 <tgroup class="- topic/tgroup " cols="1">
                                     <colspec class="- topic/colspec " colnum="1" colname="1"/>
                                     <tbody class="- topic/tbody ">
@@ -106,7 +106,7 @@
                                     </tbody>
                                 </tgroup>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => contains-token('topic/fig')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/fig')]">
                                 <figgroup class="- topic/figgroup ">
                                     <ph class="- topic/ph ">
                                         <xsl:call-template name="genDeletePiContents">
@@ -116,7 +116,7 @@
                                     </ph>
                                 </figgroup>
                             </xsl:when>
-                            <xsl:when test="parent::*[@class => contains-token('topic/figgroup')]">
+                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/figgroup')]">
                                 <ph class="- topic/ph ">
                                     <xsl:call-template name="genDeletePiContents">
                                         <xsl:with-param name="prmDeletePi" select="$deletePi"/>
