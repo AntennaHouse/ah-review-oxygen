@@ -147,12 +147,23 @@
                 <xsl:variable name="firstAuthorIndex" as="xs:integer?" select="($gUsers => index-of($firstAuthor))[1]"/>
                 <xsl:assert test="$firstAuthorIndex => exists()" select="'[ahf:getCommentColor] Missing author=' || $firstAuthor"/>
                 <xsl:variable name="colorIndex" as="xs:integer" select="if ($firstAuthorIndex le $gpChangeTrackingCommentBgColorCount) then $firstAuthorIndex else $firstAuthorIndex mod $gpChangeTrackingCommentBgColorCount + 1"/>
+                <!-- $bgColor must be color-name or rgb() format -->
                 <xsl:variable name="bgColor" as="xs:string" select="$gpChangeTrackingCommentBgColor[$colorIndex]"/>
+                <xsl:variable name="bgColorFixed" as="xs:string">
+                    <xsl:choose>
+                        <xsl:when test="starts-with($bgColor,'rgb(') and ends-with($bgColor,')')">
+                            <xsl:sequence select="substring-after($bgColor,'rgb(') => substring-before(')')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="$bgColor"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <xsl:variable name="commentPiNestLevel" as="xs:integer" select="$prmCommentPis => ahf:getCommentPiNestingLevel() - 1"/>
                 <xsl:variable name="bgColorOpacity" as="xs:double" select="$gpChangeTrackingCommentBgColorOpacityBase + $gpChangeTrackingCommentBgColorOpacityRatio * $commentPiNestLevel"/>
                 <xsl:variable name="bgColorOpacityRevised" as="xs:double" select="if ($bgColorOpacity gt 1.0) then 1.0 else $bgColorOpacity"/>
                 <xsl:variable name="bgColorOpacityRevisedStr" as="xs:string" select="format-number($bgColorOpacityRevised,'0.000')"/>
-                <xsl:variable name="bgColorRgbASpec" as="xs:string" select="'rgba(' || $bgColor || ',' || $bgColorOpacityRevisedStr || ')'"/>
+                <xsl:variable name="bgColorRgbASpec" as="xs:string" select="'rgba(' || $bgColorFixed || ',' || $bgColorOpacityRevisedStr || ')'"/>
                 <xsl:sequence select="$bgColorRgbASpec"/>
             </xsl:when>
             <xsl:otherwise>
