@@ -59,7 +59,11 @@
     <xsl:param name="PRM_CHANGE_TRACKING_DELETE_DECORATION" as="xs:string" required="no" select="'text-decoration:line-through no-underline;'"/>
     <xsl:variable name="gpChangeTrackingDeleteDecoration" as="xs:string" select="$PRM_CHANGE_TRACKING_DELETE_DECORATION"/>
     
-    <!-- Comment Background Color : Applied for each author -->
+    <!-- Comment Background Color : Applied for each author
+         Supported notation:
+         blue orange ... : The sixteen basic color names and 131 extended color names (https://www.w3.org/TR/css-color-3/#svg-color)
+         rgb(<r>,<g>,<b>) : <r>, <g>, <b> is % values, or values from 0 to 255. 
+     -->
     <xsl:param name="PRM_CHANGE_TRACKING_COMMENT_BG_COLOR" as="xs:string" required="no" select="'royalblue orange orchid teal violet'"/>
     <xsl:variable name="gpChangeTrackingCommentBgColor" as="xs:string+" select="$PRM_CHANGE_TRACKING_COMMENT_BG_COLOR => tokenize('[\s]+')"/>
     <xsl:variable name="gpChangeTrackingCommentBgColorCount" as="xs:integer" select="$gpChangeTrackingCommentBgColor => count()"/>
