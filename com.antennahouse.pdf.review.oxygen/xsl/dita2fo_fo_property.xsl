@@ -29,7 +29,16 @@
             <xsl:when test="exists($prmElem/@*[name() = ($gpFoPropName,$gpChangeTrackingFoPropName)])">
                 <xsl:variable name="foAttr" as="xs:string">
                     <xsl:variable name="foProp" as="xs:string" select="normalize-space(string($prmElem/@*[name() eq $gpFoPropName]))"/>
-                    <xsl:variable name="changeTrackingFoProp" as="xs:string" select="normalize-space(string($prmElem/@*[name() eq $gpChangeTrackingFoPropName]))"/>
+                    <xsl:variable name="changeTrackingFoProp" as="xs:string">
+                        <xsl:choose>
+                            <xsl:when test="$gpOutputChangesOrCommentsOrHighlights">
+                                <xsl:sequence select="normalize-space(string($prmElem/@*[name() eq $gpChangeTrackingFoPropName]))"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="''"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
                     <xsl:sequence select="if (ends-with($foProp,';')) then $foProp || $changeTrackingFoProp else $foProp || ';' || $changeTrackingFoProp"/>
                 </xsl:variable>
                 <xsl:for-each select="tokenize($foAttr, ';')">

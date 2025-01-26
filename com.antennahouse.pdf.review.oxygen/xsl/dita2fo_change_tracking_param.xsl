@@ -14,13 +14,13 @@
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     exclude-result-prefixes="xs math"
     version="3.0">
+    <!-- Output changes (Insert, delete, attribute, comment, highlight) -->
     <xsl:param name="PRM_OUTPUT_OXY_INSERTS" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpOutputOxyInserts" as="xs:boolean" select="$PRM_OUTPUT_OXY_INSERTS eq $cYes"/>
     
     <xsl:param name="PRM_OUTPUT_OXY_DELETES" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpOutputOxyDeletes" as="xs:boolean" select="$PRM_OUTPUT_OXY_DELETES eq $cYes"/>
     
-    <!-- Output Attributes changes (Insert, delete, change) -->
     <xsl:param name="PRM_OUTPUT_OXY_ATTRIBUTES" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpOutputOxyAttributes" as="xs:boolean" select="$PRM_OUTPUT_OXY_ATTRIBUTES eq $cYes"/>
 
@@ -29,6 +29,8 @@
 
     <xsl:param name="PRM_OUTPUT_OXY_HIGHLIGHTS" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
+    
+    <xsl:variable name="gpOutputChangesOrCommentsOrHighlights" as="xs:boolean" select="$gpOutputOxyInserts or $gpOutputOxyDeletes or $gpOutputOxyAttributes or $gpOutputOxyComments or $gpOutputOxyHilights"/>
     
     <!-- Output Change Bars -->
     <xsl:param name="PRM_OUTPUT_INSERT_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
