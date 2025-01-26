@@ -184,10 +184,15 @@
     <xsl:variable name="gpChangeTrackingOutputDeleteAnnotation" as="xs:boolean" select="$PRM_CHANGE_TRACKING_OUTPUT_DELETE_ANNOTATION eq $cYes"/>
     
     <!-- FO property name now defined as parameter!
+         The value of PRM_FO_PROP_NAME must be the same as PDF5-ML's one.
+         PRM_CHNAGE_TRACKING_FO_PROP_NAME is specific to chage-tracking processing.
      -->
     <xsl:param name="PRM_FO_PROP_NAME" as="xs:string" required="no" select="'fo:prop'"/>
     <xsl:variable name="gpFoPropName" as="xs:string" select="$PRM_FO_PROP_NAME"/>
-
+    
+    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME" as="xs:string" required="no" select="'fo:prop-change-tracking'"/>
+    <xsl:variable name="gpChangeTrackingFoPropName" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME"/>
+    
     <!-- Degug Parameter
      -->
     <xsl:param name="PRM_STEP1_DEBUG" as="xs:string" required="no" select="$cNo"/>

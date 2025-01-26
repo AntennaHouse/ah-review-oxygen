@@ -31,7 +31,7 @@
         <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
         <xsl:choose>
             <xsl:when test="string($prmStyleVal)">
-                <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || $prmStyleName || ':' || $prmStyleVal || ';'"/>
+                <xsl:attribute name="{$gpChangeTrackingFoPropName}" select="$foPropRevised || $prmStyleName || ':' || $prmStyleVal || ';'"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$prmFoProp"/>

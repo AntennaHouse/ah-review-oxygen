@@ -334,7 +334,7 @@
         <xsl:param name="prmFoProp" as="attribute()?"/>
         <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
         <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
-        <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || $gpChangeTrackingInsertDecoration"/>
+        <xsl:attribute name="{$gpChangeTrackingFoPropName}" select="$foPropRevised || $gpChangeTrackingInsertDecoration"/>
     </xsl:function>
     
     <!-- 
@@ -347,7 +347,7 @@
         <xsl:param name="prmFoProp" as="attribute()?"/>
         <xsl:variable name="foProp" as="xs:string" select="$prmFoProp => string() => normalize-space()"/>
         <xsl:variable name="foPropRevised" as="xs:string" select="if (ends-with($foProp,';') or string($foProp) => not()) then $foProp else $foProp || ';'"/>
-        <xsl:attribute name="{$gpFoPropName}" select="$foPropRevised || $gpChangeTrackingDeleteDecoration"/>
+        <xsl:attribute name="{$gpChangeTrackingFoPropName}" select="$foPropRevised || $gpChangeTrackingDeleteDecoration"/>
     </xsl:function>
 
     <!-- 
