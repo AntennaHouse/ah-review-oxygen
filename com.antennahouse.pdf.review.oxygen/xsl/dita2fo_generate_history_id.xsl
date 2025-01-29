@@ -207,4 +207,18 @@
         <xsl:sequence select="string-join($historyStr,'')"/>
     </xsl:function>
     
+    <!-- 
+     function:    Implement index-of() for node()
+     param:       prmNodeSeq, prmNodeSearch
+     return:      xs:string
+     note:        
+     -->
+    <xsl:function name="ahf:nodeIndexOf" as="xs:integer*">
+        <xsl:param name="prmNodeSeq" as="node()*"/>
+        <xsl:param name="prmNodeSearch" as="node()"/>
+        <xsl:variable name="nodeSeqHistoryStr" as="xs:string*" select="$prmNodeSeq ! ahf:getHistoryStrWithPiTextTest(.)"/>
+        <xsl:variable name="nodeSearchHistoryStr" as="xs:string" select="$prmNodeSearch => ahf:getHistoryStrWithPiTextTest()"/>
+        <xsl:sequence select="index-of($nodeSeqHistoryStr,$nodeSearchHistoryStr)"/>
+    </xsl:function>
+    
 </xsl:stylesheet>
