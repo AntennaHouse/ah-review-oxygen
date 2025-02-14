@@ -121,21 +121,22 @@
         'topic/linktext',
         'topic/linkinfo',
         'topic/data',
-        'topic/itemgroup',
-        'topic/xref'
+        'topic/itemgroup'
         )"/>
     
     <!-- 
      function:  Return $prmElem/@class has value in $mixedContentElementClasses
      param:     $prmElem
      return:    xs:boolean
-     note:		
+     note:	  Take into consideration for xref. If xref/@href is empty, xref is treated as mixed-content element. 
+                Otherwise, it is not mixed-content because xref will be outputted using target title instead of xref content.
      -->
     <xsl:function name="ahf:isMixedContentElement" as="xs:boolean">
         <xsl:param name="prmNode" as="node()"/>
         <xsl:variable name="class" as="xs:string*" select="string($prmNode/@class) => tokenize('[\s]+')"/>
         <xsl:variable name="isOneOfMixedContentElement" as="xs:boolean" select="$class = $mixedContentElementClasses"/>
-        <xsl:sequence select="$isOneOfMixedContentElement"/>
+        <xsl:variable name="isMixedContentXref" as="xs:boolean" select="($class = 'topic/xref') and ($prmNode/@href => empty())"/>
+        <xsl:sequence select="$isOneOfMixedContentElement or $isMixedContentXref"/>
     </xsl:function>
 
 </xsl:stylesheet>
