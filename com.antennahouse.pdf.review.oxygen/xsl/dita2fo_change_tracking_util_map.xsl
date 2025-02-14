@@ -82,7 +82,7 @@
                                             <xsl:sequence select="subsequence($range, 1, $range => count() - 1)"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:sequence select="$range[1]|$range[last()]"/>
+                                            <xsl:sequence select="($range[1],$range[last()])"/>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:otherwise>
