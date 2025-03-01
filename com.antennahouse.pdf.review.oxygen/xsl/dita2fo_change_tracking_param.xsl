@@ -28,9 +28,9 @@
     <xsl:variable name="gpOutputOxyComments" as="xs:boolean" select="$PRM_OUTPUT_OXY_COMMENTS eq $cYes"/>
 
     <xsl:param name="PRM_OUTPUT_OXY_HIGHLIGHTS" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="gpOutputOxyHilights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
+    <xsl:variable name="gpOutputOxyHighlights" as="xs:boolean" select="$PRM_OUTPUT_OXY_HIGHLIGHTS eq $cYes"/>
     
-    <xsl:variable name="gpOutputChangesOrCommentsOrHighlights" as="xs:boolean" select="$gpOutputOxyInserts or $gpOutputOxyDeletes or $gpOutputOxyAttributes or $gpOutputOxyComments or $gpOutputOxyHilights"/>
+    <xsl:variable name="gpOutputChangesOrCommentsOrHighlights" as="xs:boolean" select="$gpOutputOxyInserts or $gpOutputOxyDeletes or $gpOutputOxyAttributes or $gpOutputOxyComments or $gpOutputOxyHighlights"/>
     
     <!-- Output Change Bars -->
     <xsl:param name="PRM_OUTPUT_INSERT_CHANGEBARS" as="xs:string" required="no" select="$cYes"/>
@@ -191,9 +191,18 @@
      -->
     <xsl:param name="PRM_FO_PROP_NAME" as="xs:string" required="no" select="'fo:prop'"/>
     <xsl:variable name="gpFoPropName" as="xs:string" select="$PRM_FO_PROP_NAME"/>
-    
-    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME" as="xs:string" required="no" select="'fo:prop-change-tracking'"/>
-    <xsl:variable name="gpChangeTrackingFoPropName" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME"/>
+
+    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME_INSERT" as="xs:string" required="no" select="'fo:prop-change-tracking-insert'"/>
+    <xsl:variable name="gpChangeTrackingFoPropNameInsert" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME_INSERT"/>
+
+    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME_DELETE" as="xs:string" required="no" select="'fo:prop-change-tracking-delete'"/>
+    <xsl:variable name="gpChangeTrackingFoPropNameDelete" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME_DELETE"/>
+
+    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME_COMMENT" as="xs:string" required="no" select="'fo:prop-change-tracking-comment'"/>
+    <xsl:variable name="gpChangeTrackingFoPropNameComment" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME_COMMENT"/>
+
+    <xsl:param name="PRM_CHANGE_TRACKING_FO_PROP_NAME_HIGHLIGHT" as="xs:string" required="no" select="'fo:prop-change-tracking-highlight'"/>
+    <xsl:variable name="gpChangeTrackingFoPropNameHighlight" as="xs:string" select="$PRM_CHANGE_TRACKING_FO_PROP_NAME_HIGHLIGHT"/>
     
     <!-- Degug Parameter
      -->

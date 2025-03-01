@@ -55,7 +55,8 @@
                 <xsl:choose>
                     <xsl:when test="$isDeletePi and $gpOutputOxyDeletes">
                         <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
-                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
+                        <xsl:variable name="deleteFoPropOrg" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyDelete()"/>
+                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp($deleteFoPropOrg,ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp() => ahf:filterEmptyAttr()"/>
                         <xsl:choose>
                             <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/body')]">
                                 <bodydiv class="- topic/bodydiv ">
@@ -180,7 +181,8 @@
                         <xsl:if test="$gpStep2Debug">
                             <xsl:message select="'$deletePi=',$deletePi"/>
                         </xsl:if>
-                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp((),ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp()"/>
+                        <xsl:variable name="deleteFoPropOrg" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyDelete()"/>
+                        <xsl:variable name="deleteFoProp" as="attribute()?" select="ahf:addColorToFoProp($deleteFoPropOrg,ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp() => ahf:filterEmptyAttr()"/>
                         <ph class="- topic/ph ">
                             <xsl:copy-of select="$deleteFoProp"/>
                             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDelete, 
@@ -248,8 +250,8 @@
                 <!--xsl:message select="'[processing-instruction] pi=',accumulator-after('glInsertPi')"/-->
             </xsl:if>
             <xsl:variable name="insertFoProp" as="attribute()?">
-                <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp()"/>
+                <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyInsert()"/>
+                <xsl:sequence select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp() => ahf:filterEmptyAttr()"/>
             </xsl:variable>
             <xsl:variable name="type" as="xs:string" select="ahf:getTypeFromPi($insertStartPi) => string()"/>
             <xsl:choose>
@@ -339,15 +341,8 @@
         <xsl:choose>
             <xsl:when test="$isInserted and $currentText/parent::*[. => ahf:isMixedContentElement()]">
                 <xsl:variable name="insertFoProp" as="attribute()?">
-                    <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                    <xsl:choose>
-                        <xsl:when test="$isInserted">
-                            <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp()"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="$foProp"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyInsert()"/>
+                    <xsl:sequence select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp() => ahf:filterEmptyAttr()"/>
                 </xsl:variable>
                 <ph class="- topic/ph ">
                     <xsl:copy-of select="$insertFoProp"/>

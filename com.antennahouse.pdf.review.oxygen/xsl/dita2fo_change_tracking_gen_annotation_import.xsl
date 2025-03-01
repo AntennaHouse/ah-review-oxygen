@@ -27,6 +27,7 @@
     <xsl:include href="dita2fo_change_tracking_gen_li_processing.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_string.xsl"/>
     <xsl:include href="dita2fo_fo_property.xsl"/>
+    <xsl:include href="dita2fo_fo_property_util.xsl"/>
     
     <xsl:include href="dita2fo_util_dita_outputclass.xsl"/>
     <xsl:include href="dita2fo_util_string.xsl"/>

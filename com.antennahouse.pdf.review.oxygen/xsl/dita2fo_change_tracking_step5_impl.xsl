@@ -70,15 +70,8 @@
         <xsl:choose>
             <xsl:when test="$isHighlighted">
                 <xsl:variable name="highlightFoProp" as="attribute()?">
-                    <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                    <xsl:choose>
-                        <xsl:when test="$isHighlighted">
-                            <xsl:copy-of select="$foProp => ahf:addBgColorToFoProp(ahf:getColorFromPi($highlightStartPi))"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="$foProp"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyHighlight()"/>
+                    <xsl:sequence select="$foProp => ahf:addBgColorToFoProp(ahf:getColorFromPi($highlightStartPi)) => ahf:filterEmptyAttr()"/>
                 </xsl:variable>
                 <ph class="- topic/ph ">
                     <xsl:copy select="$highlightFoProp"/>

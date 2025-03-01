@@ -37,8 +37,8 @@
             <xsl:when test="$prmInsertElement[. is $elem] => exists()">
                 <xsl:variable name="insertStartSurroundPi" as="processing-instruction()" select="$elem/preceding-sibling::processing-instruction()[ahf:isInsertStartSurroundPi(.)][1]"/>
                 <xsl:variable name="insertFoProp" as="attribute()?">
-                    <xsl:variable name="foProp" as="attribute()?" select="$elem/@*[name(.) eq $gpChangeTrackingFoPropName]"/>
-                    <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartSurroundPi)) => ahf:addInsertDecorationToFoProp()"/>
+                    <xsl:variable name="foProp" as="attribute()" select="ahf:getChangeTrackingFoPropertyInsert($elem)"/>
+                    <xsl:copy-of select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartSurroundPi)) => ahf:addInsertDecorationToFoProp() => ahf:filterEmptyAttr()"/>
                 </xsl:variable>
                 <xsl:copy>
                     <xsl:apply-templates select="@*" mode="#current"/>

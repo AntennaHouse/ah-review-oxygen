@@ -23,6 +23,7 @@
     <xsl:include href="dita2fo_util_array.xsl"/>
     <xsl:include href="dita2fo_util_string.xsl"/>
     <xsl:include href="dita2fo_util_pi.xsl"/>
+    <xsl:include href="dita2fo_fo_property_util.xsl"/>
     
     <xsl:include href="dita2fo_global.xsl"/>
     <xsl:include href="dita2fo_dita_class.xsl"/>

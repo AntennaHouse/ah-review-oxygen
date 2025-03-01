@@ -110,20 +110,13 @@
         <xsl:variable name="isCommented" as="xs:boolean" select="$commentStartPi => exists()"/>
         <xsl:choose>
             <xsl:when test="$isCommented">
+                <xsl:if test="$gpStep4Debug">
+                    <xsl:message select="'[text(): ' || ahf:getHistoryXpathStr(.)"/>
+                    <xsl:message select="'$startPI=',$commentStartPi ! ahf:getHistoryXpathStr(.)"/>
+                </xsl:if>
                 <xsl:variable name="commentFoProp" as="attribute()?">
-                    <xsl:variable name="foProp" as="attribute()?" select="()"/>
-                    <xsl:choose>
-                        <xsl:when test="$isCommented">
-                            <xsl:if test="$gpStep4Debug">
-                                <xsl:message select="'[text(): ' || ahf:getHistoryXpathStr(.)"/>
-                                <xsl:message select="'$startPI=',$commentStartPi ! ahf:getHistoryXpathStr(.)"/>
-                            </xsl:if>
-                            <xsl:copy-of select="$foProp => ahf:addBgColorToFoProp(ahf:getCommentBgColorSpecFromPi($commentStartPi))"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="$foProp"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyComment()"/>
+                    <xsl:sequence select="$foProp => ahf:addBgColorToFoProp(ahf:getCommentBgColorSpecFromPi($commentStartPi)) => ahf:filterEmptyAttr()"/>
                 </xsl:variable>
                 <ph class="- topic/ph ">
                     <xsl:copy-of select="$commentFoProp"/>

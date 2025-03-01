@@ -25,7 +25,7 @@
         <xsl:param name="prmRoot" as="element()" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" required="yes"/>
         <xsl:choose>
-            <xsl:when test="($prmRoot => ahf:hasHighlightPi()) and $gpOutputOxyHilights">
+            <xsl:when test="($prmRoot => ahf:hasHighlightPi()) and $gpOutputOxyHighlights">
                 <xsl:variable name="highlightRangeInlineMap" as="map(xs:string, node()*)">
                     <xsl:call-template name="generateHighlightRangeInlineMap">
                         <xsl:with-param name="prmRoot" select="$prmRoot"/>

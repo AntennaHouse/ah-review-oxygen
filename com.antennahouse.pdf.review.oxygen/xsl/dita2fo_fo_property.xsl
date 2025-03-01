@@ -26,27 +26,23 @@
                     because dita2fo_change_tracking_gen_annotation_shell.xsl is imported in PDF5-ML stylesheet.
                     Add $gpChangeTrackingFoPropName for change tracking specific FO processing.
                     2025-01-26 t.makita
+                    Adopt $gpChangeTrackingFoPropNameInsert, $gpChangeTrackingFoPropNameDelete, $gpChangeTrackingFoPropNameComment,
+                    $gpChangeTrackingFoPropNameHighlight for change tracking specific FO processing.
+                    2025-03-01 t.makita
     -->
     <xsl:function name="ahf:getFoProperty" as="attribute()*">
         <xsl:param name="prmElem" as="element()"/>
         
         <xsl:choose>
-            <xsl:when test="exists($prmElem/@*[name() = ($gpFoPropName,$gpChangeTrackingFoPropName)])">
-                <xsl:variable name="foAttr" as="xs:string">
-                    <xsl:variable name="foProp" as="xs:string" select="normalize-space(string($prmElem/@*[name() eq $gpFoPropName]))"/>
-                    <xsl:variable name="changeTrackingFoProp" as="xs:string">
-                        <xsl:choose>
-                            <xsl:when test="$gpOutputChangesOrCommentsOrHighlights">
-                                <xsl:sequence select="normalize-space(string($prmElem/@*[name() eq $gpChangeTrackingFoPropName]))"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="''"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:sequence select="if (ends-with($foProp,';')) then $foProp || $changeTrackingFoProp else $foProp || ';' || $changeTrackingFoProp"/>
-                </xsl:variable>
-                <xsl:for-each select="tokenize($foAttr, ';')">
+            <xsl:when test="exists($prmElem/@*[name() = ($gpFoPropName,$gpChangeTrackingFoPropNameInsert, $gpChangeTrackingFoPropNameDelete, $gpChangeTrackingFoPropNameComment, $gpChangeTrackingFoPropNameHighlight)])">
+
+                <xsl:variable name="foAttr" as="xs:string" select="$prmElem/@*[name() eq $gpFoPropName] => string() => ahf:normalizeCssNotation() "/>
+                <xsl:variable name="foAttrInsert" as="xs:string" select="$prmElem/@*[name() eq $gpChangeTrackingFoPropNameInsert] => string() => ahf:normalizeCssNotation() => ahf:nz($gpOutputOxyInserts,'')"/>
+                <xsl:variable name="foAttrDelete" as="xs:string" select="$prmElem/@*[name() eq $gpChangeTrackingFoPropNameDelete] => string() => ahf:normalizeCssNotation() => ahf:nz($gpOutputOxyDeletes,'')"/>
+                <xsl:variable name="foAttrComment" as="xs:string" select="$prmElem/@*[name() eq $gpChangeTrackingFoPropNameComment] => string() => ahf:normalizeCssNotation() => ahf:nz($gpOutputOxyComments,'')"/>
+                <xsl:variable name="foAttrHighlight" as="xs:string" select="$prmElem/@*[name() eq $gpChangeTrackingFoPropNameHighlight] => string() => ahf:normalizeCssNotation() => ahf:nz($gpOutputOxyHighlights,'')"/>
+                <xsl:variable name="foAttrBinded" as="xs:string" select="$foAttr || $foAttrInsert || $foAttrDelete || $foAttrComment || $foAttrHighlight"/>
+                <xsl:for-each select="tokenize($foAttrBinded, ';')">
                     <xsl:variable name="propDesc" select="normalize-space(string(.))"/>
                     <xsl:choose>
                         <xsl:when test="not(string($propDesc))"/>
