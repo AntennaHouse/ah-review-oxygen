@@ -8,6 +8,11 @@
     xmlns:ahs="http://www.antennahouse.com/names/XSLT/Document/Layout"
     exclude-result-prefixes="xs ahf"
     >
+    <!-- IMPORTANT NOTICE
+         The import side template (ex. dita2fo_shell.xsl in com.antennahouse.pdf5.ml) must:
+         · Define variable $stMes800, $stMes800
+         · Define template warningContinue
+     -->
 
     <!-- 
          function:  Expand FO property into attribute()*
