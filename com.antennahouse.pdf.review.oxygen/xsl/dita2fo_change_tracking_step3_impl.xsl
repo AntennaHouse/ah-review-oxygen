@@ -377,7 +377,7 @@
      -->
     <xsl:template name="genDeletePiContents" as="element()">
         <xsl:param name="prmDeletePi" as="processing-instruction()"/>
-        <xsl:param name="prmDeleteFoProp" as="attribute()"/>
+        <xsl:param name="prmDeleteFoProp" as="attribute()?"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <ph class="- topic/ph ">
