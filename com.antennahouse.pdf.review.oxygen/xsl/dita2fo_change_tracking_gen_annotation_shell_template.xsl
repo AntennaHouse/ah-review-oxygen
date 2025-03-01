@@ -17,10 +17,12 @@
     exclude-result-prefixes="xs math"
     version="3.0">
 
-    <!-- dita2fo_change_tracking_gen_annotation_import.xsl uses following common modules that may be also implemented by import-side.
+    <!-- dita2fo_change_tracking_gen_annotation_import.xsl uses following common modules that should be implemented by import-side.
          dita2fo_constants.xsl
          dita2fo_util_dita_outputclass.xsl
          dita2fo_string_util.xsl
+         dita2fo_message.xsl ($stMes800, $stMes802)
+         dita2xml_error_util.xsl (warningContinue template)
          Keep in mind!
      -->
     <xsl:import  href="dita2fo_change_tracking_gen_annotation_import.xsl"/>
