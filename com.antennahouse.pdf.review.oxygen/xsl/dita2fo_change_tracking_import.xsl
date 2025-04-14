@@ -40,6 +40,7 @@
     <xsl:include href="dita2fo_change_tracking_step5_impl.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_param.xsl"/>
+    <xsl:include href="dita2fo_change_tracking_fo_style_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_pi.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_color.xsl"/>
     <xsl:include href="dita2fo_change_tracking_util_string.xsl"/>
