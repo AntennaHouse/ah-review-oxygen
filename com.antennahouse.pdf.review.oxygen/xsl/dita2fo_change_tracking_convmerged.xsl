@@ -23,32 +23,12 @@
      return:      Copy if it is for tracking-change annotation
      note:        
      -->
-    <xsl:template match="*[contains-token(@class,'topic/draft-comment')]
-                          [string(@disposition) = ($cDraftCommentDispositionInsert,
-                                                    $cDraftCommentDispositionInsertSurround,
-                                                    $cDraftCommentDispositionInsertSplit,
-                                                    $cDraftCommentDispositionInsertEnd,
-                                                    $cDraftCommentDispositionInsertSurroundEnd,
-                                                    $cDraftCommentDispositionInsertSplitEnd,
-                                                    $cDraftCommentDispositionDelete,
-                                                    $cDraftCommentDispositionDeleteEnd,
-                                                    $cDraftCommentDispositionAttributes)]"
+    <xsl:template match="*[ahf:isChangeTrackingDraftComment(.)]"
                   priority="40">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
-
-    <xsl:template match="*[contains-token(@class,'topic/draft-comment')]
-                          [string(@disposition) = ($cDraftCommentDispositionComment, 
-                                                    $cDraftCommentDispositionCommentEnd)]" 
-                  priority="40">
-        <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates/>
-        </xsl:copy>
-    </xsl:template>
-    
 
 </xsl:stylesheet>

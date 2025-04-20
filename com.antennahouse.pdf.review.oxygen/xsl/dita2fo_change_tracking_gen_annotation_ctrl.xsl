@@ -21,17 +21,7 @@
      return:    
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/draft-comment ')]
-                          [string(@disposition) = ($cDraftCommentDispositionInsert, 
-                           $cDraftCommentDispositionInsertSurround, 
-                           $cDraftCommentDispositionInsertSplit, 
-                           $cDraftCommentDispositionInsertEnd, 
-                           $cDraftCommentDispositionInsertSurroundEnd, 
-                           $cDraftCommentDispositionInsertSplitEnd, 
-                           $cDraftCommentDispositionDelete, 
-                           $cDraftCommentDispositionDeleteEnd, 
-                           $cDraftCommentDispositionComment,
-                           $cDraftCommentDispositionAttributes)]" 
+    <xsl:template match="*[ahf:isChangeTrackingDraftComment(.)]" 
         priority="5">
         <xsl:param name="prmGetContent" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
         <xsl:if test="$prmGetContent eq false()">

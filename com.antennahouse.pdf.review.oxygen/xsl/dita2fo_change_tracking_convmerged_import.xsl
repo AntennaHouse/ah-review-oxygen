@@ -21,5 +21,6 @@
     <xsl:include href="dita2fo_change_tracking_param.xsl"/>
     <xsl:include href="dita2fo_change_tracking_const.xsl"/>
     <xsl:include href="dita2fo_change_tracking_convmerged.xsl"/>
-
+    <xsl:include href="dita2fo_change_tracking_util_draft_comment.xsl"/>
+    
 </xsl:stylesheet>
