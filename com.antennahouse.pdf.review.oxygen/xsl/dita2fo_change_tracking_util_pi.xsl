@@ -169,7 +169,7 @@
      function:  Get Comment from PI content
      param:     prmPi
      return:    xs:string
-     note:      Extract comment portion from PI unescaping XML character
+     note:      Extract comment portion from PI
      -->
     <xsl:function name="ahf:getCommentFromPi" as="xs:string">
         <xsl:param name="prmPi" as="processing-instruction()"/>
