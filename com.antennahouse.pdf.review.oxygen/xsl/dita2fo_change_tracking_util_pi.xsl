@@ -169,7 +169,7 @@
      function:  Get Comment from PI content
      param:     prmPi
      return:    xs:string
-     note:      Extract comment portion from PI
+     note:      Extract comment portion from PI unescaping XML character
      -->
     <xsl:function name="ahf:getCommentFromPi" as="xs:string">
         <xsl:param name="prmPi" as="processing-instruction()"/>
@@ -370,7 +370,7 @@
         <xsl:if test="$commentInfo => exists()">
             <xsl:variable name="author" as="xs:string*" select="ahf:arraySeqGet($commentInfo,1)"/>
             <xsl:variable name="timeStump" as="xs:string*" select="ahf:arraySeqGet($commentInfo,2)"/>
-            <xsl:variable name="message" as="xs:string*" select="ahf:arraySeqGet($commentInfo,3)"/>
+            <xsl:variable name="message" as="xs:string*" select="ahf:arraySeqGet($commentInfo,3) ! ahf:unEscapeXmlChar(.)"/>
             <xsl:for-each select="1 to $commentInfo=>count()">
                 <xsl:variable name="position" as="xs:integer" select="."/>
                 <xsl:copy-of select="ahf:addDraftCommentWithOffset($cDraftCommentDispositionComment,
