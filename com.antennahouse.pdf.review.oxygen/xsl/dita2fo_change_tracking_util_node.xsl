@@ -102,5 +102,66 @@
         <xsl:param name="prmRoot" as="element()"/>
         <xsl:sequence select="$prmRoot/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. &lt;&lt; $prmText][last()]"/>
     </xsl:function>
-        
+
+    <!-- 
+     function:  Judge whether $prmNode is the child of elements that have namespace-URI (SVG, MathML, ...)
+     param:     prmNode
+     return:    xs:boolean
+     note:      
+     -->
+    <xsl:function name="ahf:hasSvgOrMathMlNameSpace" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="$prmNode => namespace-uri() = ('http://www.w3.org/2000/svg', 'http://www.w3.org/1998/Math/MathML')"/>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isSvgOrMathMlElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="$prmNode/self::element() and ahf:hasSvgOrMathMlNameSpace($prmNode)"/>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isChildOfSvgOrMathMlElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:variable name="parentElem" as="element()?" select="$prmNode/parent::*"/>
+        <xsl:choose>
+            <xsl:when test="$parentElem => empty()">
+                <xsl:sequence select="false()"/>
+            </xsl:when>
+            <xsl:when test="$parentElem/self::element() and ahf:isSvgOrMathMlElem($parentElem)">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="ahf:isNotChildOfSvgOrMathMlElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="ahf:isChildOfSvgOrMathMlElem($prmNode) => not()"/>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isChildOfAnyNameSpaceElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:variable name="parentElem" as="element()?" select="$prmNode/parent::*"/>
+        <xsl:choose>
+            <xsl:when test="$parentElem => empty()">
+                <xsl:sequence select="false()"/>
+            </xsl:when>
+            <xsl:when test="ahf:isChildOfSvgOrMathMlElem($prmNode)">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$parentElem => namespace-uri() eq ''">
+                <xsl:sequence select="false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="true()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isNotChildOfAnyNameSpaceElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="ahf:isChildOfAnyNameSpaceElem($prmNode) => not()"/>
+    </xsl:function>
+
 </xsl:stylesheet>
