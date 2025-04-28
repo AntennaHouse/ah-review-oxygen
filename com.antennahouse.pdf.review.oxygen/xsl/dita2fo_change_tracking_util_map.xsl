@@ -29,7 +29,8 @@
     
     <xsl:template name="generateInsertRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
-        <xsl:variable name="insertStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isInsertStartPi()]"/>
+        <!-- Exclude PI that is the child of SVG or MathML elements -->
+        <xsl:variable name="insertStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isInsertStartPi()][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
             <!-- Make Inline to Pi Map-->
             <xsl:map>
@@ -111,7 +112,8 @@
     
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
-        <xsl:variable name="commentStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isCommentStartPi()]"/>
+        <!-- PI that is the child of SVG or MathML elements are excluded in this map-->
+        <xsl:variable name="commentStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isCommentStartPi()][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
             <!-- Make Inline to Pi Map-->
             <xsl:map>
@@ -170,7 +172,8 @@
      -->
     <xsl:template name="generateHighlightRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
-        <xsl:variable name="highlightStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isHighlightStartPi()]"/>
+        <!-- Exclude PI that is child of SVG or MathML elements -->
+        <xsl:variable name="highlightStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isHighlightStartPi()][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:variable name="highlightRangeInlineMap" as="map(xs:string, node()*)">
             <!-- Make Inline to Pi Map-->
             <xsl:map>

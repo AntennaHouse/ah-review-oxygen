@@ -23,6 +23,19 @@
     <xsl:mode name="MODE_STEP3" on-no-match="shallow-copy" use-accumulators="glInsertPi"/>
     
     <!-- 
+     function:  Templates for general elements 
+     param:     
+     return:    Itself
+     note:      
+     -->
+    <xsl:template match="*" mode="MODE_STEP3">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates mode="#current"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- 
      function:  Templates for elements that have no text() 
      param:     
      return:    Itself
@@ -157,7 +170,7 @@
     <xsl:template match="*[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
         [. => ahf:isMixedContentElement()]
         [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
-        mode="MODE_STEP3">
+        mode="MODE_STEP3" priority="5">
         <xsl:param name="prmTopic"                     as="element()"                  tunnel="yes" required="yes"/>
         <xsl:param name="prmInsertRangeMap"            as="map(xs:string, node()*)"  tunnel="yes" required="yes"/>
         <xsl:param name="prmAttributesAnnotationProps" as="attribute()*" required="no" select="()"/>
@@ -290,7 +303,6 @@
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
         <xsl:variable name="insertEndPi" as="processing-instruction()" select="."/>
-        <!--xsl:variable name="insertStartPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:getInsertValanceCount($insertEndPi,$prmTopic) eq 0]"/-->
         <xsl:variable name="insertStartPi" as="processing-instruction()" select="$prmTopic/descendant::processing-instruction()[. => ahf:isInsertStartPi()][. => ahf:isBeforeOrSelfNode($insertEndPi)][last()]"/>
         <xsl:variable name="insertPiXpath" as="xs:string" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
         <!--xsl:message select="'[DEBUG] $insertPiXpath='||$insertPiXpath || ' preceding-sibling=' || name(preceding-sibling::*[1])"></xsl:message-->
@@ -299,6 +311,7 @@
         </xsl:if>
         <xsl:copy/>
         <xsl:variable name="insertStartPiXpath" as="xs:string?" select="$insertStartPi => ahf:getHistoryXpathStr()"/>
+        <!-- Exclude PI that is the child of SVG or MathML elements are excluded in $prmInsertRangeMap -->
         <xsl:variable name="insertPiStartOrEndNode" as="node()*" select="map:get($prmInsertRangeMap,$insertStartPiXpath)"/>
         <xsl:if test="$insertPiStartOrEndNode => exists() and $insertEndPi is $insertPiStartOrEndNode[2]">
             <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsertEnd,
@@ -328,7 +341,8 @@
         <xsl:variable name="currentText" as="text()" select="."/>
         <!--xsl:variable name="insertStartPi" as="processing-instruction()?" select="$currentText => ahf:getInsertStartPiFromText($prmTopic)"/-->
         <xsl:variable name="insertStartPi" as="processing-instruction()?" select="accumulator-before('glInsertPi') => head()"/>
-        <xsl:variable name="isInserted" as="xs:boolean" select="$insertStartPi => exists() and $gpOutputOxyInserts"/>
+        <!-- Ignore text that is child of SVG or MathML elements -->
+        <xsl:variable name="isInserted" as="xs:boolean" select="$insertStartPi => exists() and $gpOutputOxyInserts and ahf:isNotChildOfSvgOrMathMlElem($insertStartPi)"/>
         <xsl:variable name="insertInlineStartAndEnd" as="node()*" select="if ($isInserted) then map:get($prmInsertRangeMap,$insertStartPi => ahf:getHistoryXpathStr()) else ()"/>
         
         <xsl:if test="$gpStep3Debug">

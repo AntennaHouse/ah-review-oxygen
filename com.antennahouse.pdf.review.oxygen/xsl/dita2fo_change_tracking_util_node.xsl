@@ -164,4 +164,15 @@
         <xsl:sequence select="ahf:isChildOfAnyNameSpaceElem($prmNode) => not()"/>
     </xsl:function>
 
+    <xsl:function name="ahf:isDescendantOfSvgOrMathMlElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:variable name="hasAncestorSvgOrMathMlElem" as="xs:boolean" select="$prmNode/ancestor-or-self::*[ahf:isSvgOrMathMlElem(.)] => exists()"/>
+        <xsl:sequence select="$hasAncestorSvgOrMathMlElem"/>
+    </xsl:function>
+
+    <xsl:function name="ahf:isNotDescendantOfSvgOrMathMlElem" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:sequence select="ahf:isDescendantOfSvgOrMathMlElem($prmNode) => not()"/>
+    </xsl:function>
+
 </xsl:stylesheet>

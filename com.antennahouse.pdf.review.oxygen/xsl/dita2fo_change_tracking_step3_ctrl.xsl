@@ -26,6 +26,7 @@
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" required="yes"/>
         <xsl:choose>
             <xsl:when test="($prmRoot => ahf:hasInsertPi() and $gpOutputOxyInserts) or ($prmRoot => ahf:hasDeletePi() and $gpOutputOxyDeletes) or ($prmRoot => ahf:hasAttributeChangePi() and $gpOutputOxyAttributes)">
+                <!-- PI that is the child of SVG or MathML elements are excluded in this map-->
                 <xsl:variable name="insertRangeInlineMap" as="map(xs:string, node()*)">
                     <xsl:call-template name="generateInsertRangeInlineMap">
                         <xsl:with-param name="prmRoot" select="$prmRoot"/>

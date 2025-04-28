@@ -50,15 +50,9 @@
     
     <xsl:mode name="MODE_STEP4" on-no-match="shallow-copy" use-accumulators="glCommentPi"/>
     
-    <xsl:template match="*[ancestor-or-self::*[@class => contains-token('topic/topic')] => exists()]
-        [. => ahf:nonTextChildElement()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
-        mode="MODE_STEP4" priority="5">
-        <xsl:param name="prmTopic"           as="element()"                  tunnel="yes" required="yes"/>
-        <xsl:param name="prmCommentRangeMap" as="map(xs:string,node()*)"     tunnel="yes" required="yes"/>
-        
+    <xsl:template match="*" mode="MODE_STEP4">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates select="@*"/>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
     </xsl:template>
@@ -101,6 +95,7 @@
         
         <xsl:variable name="currentText" as="text()" select="."/>
         <xsl:variable name="commentStartPi" as="processing-instruction()*" select="accumulator-before('glCommentPi')"/>
+        <!-- Comment PI that is the child of SVG or MathML element are excluded -->
         <xsl:variable name="targetCommentStartPi" as="processing-instruction()*">
             <xsl:call-template name="ahf:getTargetCommentPi">
                 <xsl:with-param name="prmCommentPi" as="processing-instruction()*" select="$commentStartPi"/>

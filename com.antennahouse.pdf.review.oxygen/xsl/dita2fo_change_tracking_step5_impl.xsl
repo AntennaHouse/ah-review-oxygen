@@ -23,47 +23,20 @@
     
     <xsl:mode name="MODE_STEP5" on-no-match="shallow-copy" use-accumulators="glHighlightPi"/>
     
-    <xsl:template match="*[ancestor::*[@class => contains-token('topic/topic')] => exists()]
-        [. => ahf:nonTextChildElement()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
-        mode="MODE_STEP5">
-        <xsl:param name="prmTopic"             as="element()"                  tunnel="yes" required="yes"/>
-        <xsl:param name="prmHighlightRangeMap" as="map(xs:string,node()*)"     tunnel="yes" required="yes"/>
-        
-        <xsl:variable name="currentElem" as="element()" select="."/>
+    <xsl:template match="*" mode="MODE_STEP5">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates mode="#current"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="*[ancestor::*[@class => contains-token('topic/topic')] => exists()]
-        [. => ahf:isMixedContentElement()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
-        mode="MODE_STEP5">
-        <xsl:param name="prmTopic"                 as="element()"                  tunnel="yes" required="yes"/>
-        <xsl:param name="prmHighlightRangeMap"     as="map(xs:string,node()*)"     tunnel="yes" required="yes"/>
-        
-        <xsl:variable name="currentElem" as="element()" select="."/>
-        <xsl:if test="$gpStep5Debug">
-            <xsl:message select="'[ahf:isMixedContentElement()] ' || ahf:getHistoryXpathStr(.)"/>
-        </xsl:if>
-        <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <!-- Don't handle processing instruction on element level.
-                 It should be handles in text() level.
-             -->
+            <xsl:apply-templates select="@*"/>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
     </xsl:template>
     
     <xsl:template match="text()
         [ancestor::*[@class => contains-token('topic/topic')] => exists()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
+        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]
+        [ahf:isNotDescendantOfSvgOrMathMlElem(.)]"
         mode="MODE_STEP5"
         >
-        <xsl:param name="prmHighlightRangeMap"  as="map(xs:string,node()*)"     tunnel="yes" required="yes"/>
-        
+        <!--xsl:param name="prmHighlightRangeMap"  as="map(xs:string,node()*)"     tunnel="yes" required="yes"/-->
         <xsl:variable name="currentText" as="text()" select="."/>
         <xsl:variable name="highlightStartPi" as="processing-instruction()?" select="accumulator-before('glHighlightPi') => head()"/>
         <xsl:variable name="isHighlighted" as="xs:boolean" select="$highlightStartPi => exists()"/>

@@ -26,7 +26,8 @@
     <xsl:template name="step2Ctrl">
         <xsl:param name="prmRoot" as="element()" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" required="yes"/>
-        <xsl:variable name="insertStartSplitPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSplitPi(.)]"/>
+        <!-- Exclude PI that is the child of SVG or MathML elements -->
+        <xsl:variable name="insertStartSplitPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSplitPi(.)][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:choose>
             <xsl:when test="$insertStartSplitPis => exists() and $gpOutputOxyInserts">
                 <xsl:variable name="insertSplitPiInfo" as="array(item())*">

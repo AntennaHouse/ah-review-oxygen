@@ -37,6 +37,9 @@
             <?oxy_insert_end?>
         </spl>
         両パターンに対応させる．
+        
+        Exclude PI that is the child of SVG or MathML elements.
+        2025-04-28
      -->
     <xsl:variable name="mesInsertSurroundPiTargetElementNotFound" as="xs:string" select="'[Insert surround PI] Target element is not found. PI='"/>
     <xsl:variable name="mesInsertSurroundPiEndPiNotFound" as="xs:string" select="'[Insert surround PI] Target insert end processing-instruction() is not found. PI='"/>
@@ -44,7 +47,7 @@
     <xsl:template name="step1Ctrl">
         <xsl:param name="prmRoot" as="element()" required="yes"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" required="yes"/>
-        <xsl:variable name="insertSurroundStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSurroundPi(.)]"/>
+        <xsl:variable name="insertSurroundStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[ahf:isInsertStartPi(.)][ahf:isInsertStartSurroundPi(.)][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:choose>
             <xsl:when test="$insertSurroundStartPis => exists() and $gpOutputOxyInserts">
                 <xsl:variable name="insertSurroundPiInfo" as="array(item())*">
