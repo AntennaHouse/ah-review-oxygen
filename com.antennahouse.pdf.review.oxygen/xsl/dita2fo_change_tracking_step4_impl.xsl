@@ -88,7 +88,8 @@
     
     <xsl:template match="text()
         [ancestor::*[@class => contains-token('topic/topic')] => exists()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]"
+        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]
+        [ahf:isNotDescendantOfSvgOrMathMlElem(.)]"
         mode="MODE_STEP4"
         >
         <xsl:param name="prmCommentRangeMap"  as="map(xs:string,node()*)"  tunnel="yes" required="yes"/>
