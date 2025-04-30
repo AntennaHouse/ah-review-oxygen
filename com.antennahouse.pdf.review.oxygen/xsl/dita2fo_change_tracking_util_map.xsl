@@ -114,24 +114,19 @@
     
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
+        <xsl:variable name="commentPiMap" as="map(xs:string,node())">
+            <xsl:call-template name="generateCommentPiMap">
+                <xsl:with-param name="prmRoot" select="$prmRoot"/>
+            </xsl:call-template>
+        </xsl:variable>
         <!-- PI that is the child of SVG or MathML elements are excluded in this map-->
         <xsl:variable name="commentStartPis" as="processing-instruction()*" select="$prmRoot/descendant::processing-instruction()[. => ahf:isCommentStartPi()][ahf:isNotChildOfSvgOrMathMlElem(.)]"/>
         <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
-            <!-- Make Inline to Pi Map-->
+            <!-- Make PI to inline Map-->
             <xsl:map>
                 <xsl:for-each select="$commentStartPis">
                     <xsl:variable name="commentStartPi" as="processing-instruction()" select="."/>
-                    <xsl:variable name="mid" as="xs:string" select="ahf:getMidFromPiContent($commentStartPi)"/>
-                    <xsl:variable name="commentEndPi" as="processing-instruction()?">
-                        <xsl:choose>
-                            <xsl:when test="$mid ne ''">
-                                <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isCommentEndPi()][. => ahf:isAfterNode($commentStartPi)][$mid eq ahf:getMidFromPiContent(.)])[1]"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="($prmRoot/descendant::processing-instruction()[. => ahf:isCommentEndPi()][. => ahf:isAfterNode($commentStartPi)]['' eq ahf:getMidFromPiContent(.)])[1]"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
+                    <xsl:variable name="commentEndPi" as="processing-instruction()?" select="map:get($commentPiMap,$commentStartPi => ahf:getHistoryXpathStr())"/>
                     <xsl:choose>
                         <xsl:when test="$commentEndPi => exists()">
                             <xsl:variable name="rangeInline" as="node()*">
@@ -171,13 +166,75 @@
         </xsl:variable>
         <xsl:sequence select="$commentRangeInlineMap"/>
     </xsl:template>
+
+    <!-- 
+     function:  Generate Comment PI start & end Map 
+     param:     prmRoot
+     return:    xsl:map(xs:string,node()?)
+     note:      Generate comment PI start & end map using 'glCommentPiForGenMap' accumulator
+     -->
+    <xsl:template name="generateCommentPiMap" as="map(xs:string, node())">
+        <xsl:param name="prmRoot" as="element()" required="yes"/>
+        <xsl:map>
+            <xsl:apply-templates select="$prmRoot" mode="MODE_GEN_COMMENT_PI_MAP"/>
+        </xsl:map>
+    </xsl:template>
+
+    <xsl:accumulator name="glCommentPiForGenMap" as="processing-instruction()*" initial-value="()">
+        <xsl:accumulator-rule match="processing-instruction()[ahf:isCommentStartPi(.)]" select="(., $value)" phase="start"/>
+        <xsl:accumulator-rule match="processing-instruction()[ahf:isCommentEndPi(.)]" select="ahf:removeStartPiFromAccumulator($value, .)" phase="end"/>
+    </xsl:accumulator>
+
+    <xsl:mode name="MODE_GEN_COMMENT_PI_MAP" use-accumulators="glCommentPiForGenMap"/>
     
+    <xsl:template match="processing-instruction()[ahf:isCommentEndPi(.)]" mode="MODE_GEN_COMMENT_PI_MAP" priority="5">
+        <xsl:variable name="commentEndPi" as="processing-instruction()" select="."/>
+        <xsl:variable name="commentStartPis" as="processing-instruction()*" select="accumulator-before('glCommentPiForGenMap')"/>
+        <xsl:variable name="commentStartPi" as="processing-instruction()?" select="$commentStartPis => ahf:getCorrespondingCommentStartPiFromEndPi($commentEndPi)"/>
+        <!--xsl:message select="'$commentStartPis=',$commentStartPis"/>
+        <xsl:message select="'$commentEndPi=' || ahf:getHistoryXpathStr($commentEndPi)"/>
+        <xsl:message select="'$commentStartPi=' || (if (exists($commentStartPi)) then ahf:getHistoryXpathStr($commentStartPi) else '''''')"/>
+        <xsl:message select="'$commentStartPi',$commentStartPi"/-->
+        <xsl:choose>
+            <xsl:when test="exists($commentStartPi)">
+                <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="$commentEndPi"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="node()" mode="MODE_GEN_COMMENT_PI_MAP">
+        <xsl:apply-templates mode="#current"/>
+    </xsl:template>
+    
+    <!-- 
+     function:  Get corresponding comment start PI from comment end PI 
+     param:     prmStartAndEndPi, prmEndPi 
+     return:    processing-instruction()?
+     note:      
+     -->
+    <xsl:function name="ahf:getCorrespondingCommentStartPiFromEndPi" as="processing-instruction()?">
+        <xsl:param name="prmCommentStartPis" as="processing-instruction()*"/>
+        <xsl:param name="prmCommentEndPi" as="processing-instruction()"/>
+        <xsl:choose>
+            <xsl:when test="$prmCommentEndPi => ahf:hasMidPartInPi()">
+                <xsl:variable name="mid" as="xs:string" select="$prmCommentEndPi => ahf:getMidFromPiContent()"/>
+                <xsl:sequence select="$prmCommentStartPis[. => ahf:getMidFromPiContent() eq $mid][1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="noMidPosStartPi" as="processing-instruction()?" select="$prmCommentStartPis[ahf:hasNoMidPartInPi(.)][1]"/>
+                <xsl:sequence select="$noMidPosStartPi"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
     <!-- 
      function:  Generate Highlight PI Range Map 
      param:     prmTopic
      return:    xsl:map
      note:      Key: XPath of oxy_comment_start PI, value=inline start node, inline last before (or self of) the oxy_comment_end PI
                 Highlight PIs are not overlapped for each other.
+                Hightlight PIs does not generate annotation. It generates only background coloring.
      -->
     <xsl:template name="generateHighlightRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
@@ -200,7 +257,7 @@
                         <xsl:message select="'[Map] Key: ' || $highlightStartPi => ahf:getHistoryXpathStr() || ' Start Node=' || (if (exists($rangeInline[1])) then $rangeInline[1] => ahf:getHistoryXpathStr() else 'NULL')(:|| ' End Node=' || $rangeInline[last()] => ahf:getHistoryXpathStr():)"/>
                     </xsl:if>
                     <!-- Key: XPath of oxy_comment_start PI, value=inline start node, inline last before (or self of) the oxy_comment_end PI -->
-                    <xsl:map-entry key="$highlightStartPi => ahf:getHistoryXpathStr()" select="$rangeInline[1],$rangeInline[last()]"/>
+                    <xsl:map-entry key="$highlightStartPi => ahf:getHistoryXpathStr()" select="$rangeInline"/>
                 </xsl:for-each>
             </xsl:map>
         </xsl:variable>
