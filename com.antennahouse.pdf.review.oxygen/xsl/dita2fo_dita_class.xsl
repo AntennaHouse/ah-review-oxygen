@@ -93,6 +93,7 @@
         'topic/cite',
         'topic/dd',
         'topic/ddhd',
+        'topic/desc',
         'topic/dt',
         'topic/dthd',
         'topic/div',
