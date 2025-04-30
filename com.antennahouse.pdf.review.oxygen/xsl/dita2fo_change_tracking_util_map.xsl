@@ -107,6 +107,8 @@
      param:     prmTopic
      return:    xsl:map
      note:      Key: XPath of oxy_comment_start PI, value=start text node or start PI (if text() does not exist), end text node or PI (if text() does not exist).
+                Start PI is needed to generate comment annotation when no text node exists.
+                Comment Pi sometimes overlapped by specifying $mid.
      -->
     <xsl:variable name="mesCommentEndPiNotFound" as="xs:string" select="'[Comment PI] Target insert end processing-instruction() is not found. PI='"/>
     
@@ -137,6 +139,7 @@
                                 <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()
                                     [self::text()]
                                     [parent::*[. => ahf:isMixedContentElement()] => exists()]
+                                    [ahf:isNotChildOfSvgOrMathMlElem(.)]
                                     [. => ahf:isAfterOrSelfNode($commentStartPi)]
                                     [. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
                                 <xsl:variable name="rangeRevised" as="node()*">
@@ -174,6 +177,7 @@
      param:     prmTopic
      return:    xsl:map
      note:      Key: XPath of oxy_comment_start PI, value=inline start node, inline last before (or self of) the oxy_comment_end PI
+                Highlight PIs are not overlapped for each other.
      -->
     <xsl:template name="generateHighlightRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>

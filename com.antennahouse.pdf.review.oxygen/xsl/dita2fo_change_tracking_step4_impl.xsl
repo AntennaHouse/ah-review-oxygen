@@ -86,9 +86,6 @@
         </xsl:if>
     </xsl:template>
     
-    <!-- Ignore text of equation-block child.
-         There is no meaning to honor text node when equation block contains mathml or svg-container.
-     -->
     <xsl:template match="text()
         [ancestor::*[@class => contains-token('topic/topic')] => exists()]
         [ancestor::*[@class => contains-token('topic/prolog')] => empty()]
