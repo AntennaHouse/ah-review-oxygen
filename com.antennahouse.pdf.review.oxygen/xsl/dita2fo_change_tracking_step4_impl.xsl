@@ -106,7 +106,7 @@
         <xsl:variable name="isCommented" as="xs:boolean" select="$commentStartPi => exists()"/>
         <xsl:choose>
             <xsl:when test="$isCommented">
-                <xsl:variable name="inlineTexts" as="node()*" select="map:get($prmCommentRangeMap, ahf:getHistoryXpathStr($commentStartPi))"/>
+                <xsl:variable name="inlineTexts" as="node()*" select="map:get($prmCommentRangeMap, ahf:getHistoryXpathStr($commentStartPi[1]))"/>
                 <xsl:choose>
                     <xsl:when test="$inlineTexts[. is $currentText]">
                         <xsl:if test="$gpStep4Debug">
