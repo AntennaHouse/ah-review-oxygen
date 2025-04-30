@@ -86,9 +86,12 @@
         </xsl:if>
     </xsl:template>
     
+    <!-- Ignore text of equation-block child.
+         There is no meaning to honor text node when equation block contains mathml or svg-container.
+     -->
     <xsl:template match="text()
         [ancestor::*[@class => contains-token('topic/topic')] => exists()]
-        [ancestor-or-self::*[@class => contains-token('topic/prolog')] => empty()]
+        [ancestor::*[@class => contains-token('topic/prolog')] => empty()]
         [ahf:isNotDescendantOfSvgOrMathMlElem(.)]"
         mode="MODE_STEP4"
         >
@@ -106,29 +109,36 @@
         <xsl:variable name="isCommented" as="xs:boolean" select="$commentStartPi => exists()"/>
         <xsl:choose>
             <xsl:when test="$isCommented">
-                <xsl:if test="$gpStep4Debug">
-                    <xsl:message select="'[text(): ' || ahf:getHistoryXpathStr(.)"/>
-                    <xsl:message select="'$startPI=',$commentStartPi ! ahf:getHistoryXpathStr(.)"/>
-                </xsl:if>
-                <xsl:variable name="commentFoProp" as="attribute()?">
-                    <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyComment()"/>
-                    <xsl:sequence select="$foProp => ahf:addBgColorToFoProp(ahf:getCommentBgColorSpecFromPi($commentStartPi)) => ahf:filterEmptyAttr()"/>
-                </xsl:variable>
-                <ph class="- topic/ph ">
-                    <xsl:copy-of select="$commentFoProp"/>
-                    <xsl:if test="$targetCommentStartPi => exists()">
-                        <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
-                            <xsl:with-param name="prmCommentPi" select="$targetCommentStartPi"/>
-                        </xsl:call-template>
-                    </xsl:if>
-                    <xsl:copy select="$currentText"/>
-                </ph>
+                <xsl:variable name="inlineTexts" as="node()*" select="map:get($prmCommentRangeMap, ahf:getHistoryXpathStr($commentStartPi))"/>
+                <xsl:choose>
+                    <xsl:when test="$inlineTexts[. is $currentText]">
+                        <xsl:if test="$gpStep4Debug">
+                            <xsl:message select="'[text(): ' || ahf:getHistoryXpathStr(.)"/>
+                            <xsl:message select="'$startPI=',$commentStartPi ! ahf:getHistoryXpathStr(.)"/>
+                        </xsl:if>
+                        <xsl:variable name="commentFoProp" as="attribute()?">
+                            <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyComment()"/>
+                            <xsl:sequence select="$foProp => ahf:addBgColorToFoProp(ahf:getCommentBgColorSpecFromPi($commentStartPi)) => ahf:filterEmptyAttr()"/>
+                        </xsl:variable>
+                        <ph class="- topic/ph ">
+                            <xsl:copy-of select="$commentFoProp"/>
+                            <xsl:if test="$targetCommentStartPi => exists()">
+                                <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
+                                    <xsl:with-param name="prmCommentPi" select="$targetCommentStartPi"/>
+                                </xsl:call-template>
+                            </xsl:if>
+                            <xsl:copy select="$currentText"/>
+                        </ph>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy select="$currentText"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy select="$currentText"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
 
 </xsl:stylesheet>

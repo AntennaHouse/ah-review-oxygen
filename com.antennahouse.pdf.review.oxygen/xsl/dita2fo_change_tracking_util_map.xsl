@@ -133,7 +133,12 @@
                     <xsl:choose>
                         <xsl:when test="$commentEndPi => exists()">
                             <xsl:variable name="rangeInline" as="node()*">
-                                <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()[self::text()][parent::*[. => ahf:isMixedContentElement()] => exists()][. => ahf:isAfterOrSelfNode($commentStartPi)][. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
+                                <!-- Ignore text of equation-block which contains mathml or svg-container -->
+                                <xsl:variable name="range" as="node()*" select="$prmRoot/descendant::node()
+                                    [self::text()]
+                                    [parent::*[. => ahf:isMixedContentElement()] => exists()]
+                                    [. => ahf:isAfterOrSelfNode($commentStartPi)]
+                                    [. => ahf:isBeforeOrSelfNode($commentEndPi)]"/>
                                 <xsl:variable name="rangeRevised" as="node()*">
                                     <xsl:choose>
                                         <xsl:when test="$range => exists()">
@@ -149,7 +154,7 @@
                             <xsl:if test="$gpStep4Debug">
                                 <xsl:message select="'[Comment Range Map] Key: ' || $commentStartPi => ahf:getHistoryXpathStr() || ' Start Node=' || (if (exists($rangeInline[1])) then $rangeInline[1] => ahf:getHistoryXpathStr() else 'NULL') || ' End Node=' || (if (exists($rangeInline[last()])) then $rangeInline[last()] => ahf:getHistoryXpathStr() else 'NULL')"/>
                             </xsl:if>
-                            <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="($rangeInline[1],$rangeInline[last()])"/>
+                            <xsl:map-entry key="$commentStartPi => ahf:getHistoryXpathStr()" select="$rangeInline"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="errorContinueWithFileInfo">
