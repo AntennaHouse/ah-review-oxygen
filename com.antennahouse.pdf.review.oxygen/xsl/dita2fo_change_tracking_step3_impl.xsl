@@ -138,6 +138,13 @@
                                     </xsl:call-template>
                                 </ph>
                             </xsl:when>
+                            <xsl:otherwise>
+                                <!-- Others -->
+                                <xsl:call-template name="genDeletePiContents">
+                                    <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                    <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                </xsl:call-template>
+                            </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:when test="$isFirstElementAfterAttributesPi and $gpOutputOxyAttributes">
