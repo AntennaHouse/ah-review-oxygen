@@ -110,7 +110,7 @@
                 Start PI is needed to generate comment annotation when no text node exists.
                 Comment Pi sometimes overlapped by specifying $mid.
      -->
-    <xsl:variable name="mesCommentEndPiNotFound" as="xs:string" select="'[Comment PI] Target insert end processing-instruction() is not found. PI='"/>
+    <xsl:variable name="mesCommentEndPiNotFound" as="xs:string" select="'[Comment PI] Target comment end processing-instruction() is not found. PI='"/>
     
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
