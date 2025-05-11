@@ -52,8 +52,9 @@
         'topic/linkpool',
         'topic/required-cleanup',
         'ui-d/menucascade',
-        'hazard-d/hazardstatement'
-     )"/>
+        'hazard-d/hazardstatement',
+        'glossentry/glossAlt'
+        )"/>
 
     <!-- 
      function:  Return $prmElem/@class has value in $blockElementClasses
@@ -124,7 +125,11 @@
         'topic/data',
         'topic/itemgroup'
         )"/>
-    
+
+    <xsl:variable name="mixedContentElementClassException" as="xs:string+" select="
+        ('glossentry/glossAlt'
+        )"/>
+
     <!-- 
      function:  Return $prmElem/@class has value in $mixedContentElementClasses
      param:     $prmElem
@@ -136,8 +141,9 @@
         <xsl:param name="prmNode" as="node()"/>
         <xsl:variable name="class" as="xs:string*" select="string($prmNode/@class) => tokenize('[\s]+')"/>
         <xsl:variable name="isOneOfMixedContentElement" as="xs:boolean" select="$class = $mixedContentElementClasses"/>
+        <xsl:variable name="isOneOfMixedContentElementException" as="xs:boolean" select="$class = $mixedContentElementClassException"/>
         <xsl:variable name="isMixedContentXref" as="xs:boolean" select="($class = 'topic/xref') and ($prmNode/@href => empty() or $prmNode/@scope eq 'external')"/>
-        <xsl:sequence select="$isOneOfMixedContentElement or $isMixedContentXref"/>
+        <xsl:sequence select="($isOneOfMixedContentElement and not($isOneOfMixedContentElementException)) or $isMixedContentXref"/>
     </xsl:function>
 
 </xsl:stylesheet>
