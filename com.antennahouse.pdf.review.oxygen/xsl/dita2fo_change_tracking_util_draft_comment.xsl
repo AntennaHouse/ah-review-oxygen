@@ -43,4 +43,81 @@
         />
     </xsl:function>
 
+    <xsl:function name="ahf:isChangeTrackingInsertDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsert] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingInsertSurroundDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsertSurround] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingInsertSplitDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsertSplit] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingInsertEndDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsertEnd] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingInsertSurroundEndDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsertSurroundEnd] =>exists()"
+        />
+    </xsl:function>
+    
+    <xsl:function name="ahf:isChangeTrackingInsertSplitEndDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionInsertSplitEnd] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingDeleteDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionDelete] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingDeleteEndDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionDeleteEnd] =>exists()"
+        />
+    </xsl:function>
+
+    <xsl:function name="ahf:isChangeTrackingCommentDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionComment] =>exists()"
+        />
+    </xsl:function>
+    
+    <xsl:function name="ahf:isChangeTrackingCommentEndDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionCommentEnd] =>exists()"
+        />
+    </xsl:function>
+    
+    <xsl:function name="ahf:isChangeTrackingAttributesDraftComment" as="xs:boolean">
+        <xsl:param name="prmElem" as="node()"/>
+        <xsl:sequence select="$prmElem/self::element()[@class => contains-token('topic/draft-comment')]
+            [string(@disposition) eq $cDraftCommentDispositionAttributes] =>exists()"
+        />
+    </xsl:function>
+    
 </xsl:stylesheet>
