@@ -27,6 +27,7 @@
         <xsl:choose>
             <xsl:when test="($prmRoot => ahf:hasCommentPi()) and $gpOutputOxyComments">
                 <xsl:variable name="commentRangeInlineMap" as="map(xs:string, node()*)">
+                    <!-- key: comment-start PI, data: text or comment-start, end PI -->
                     <xsl:call-template name="generateCommentRangeInlineMap">
                         <xsl:with-param name="prmRoot" select="$prmRoot"/>
                     </xsl:call-template>

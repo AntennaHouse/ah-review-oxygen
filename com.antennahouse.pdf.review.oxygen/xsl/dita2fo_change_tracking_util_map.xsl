@@ -114,6 +114,7 @@
     
     <xsl:template name="generateCommentRangeInlineMap" as="map(xs:string, node()*)">
         <xsl:param name="prmRoot" as="element()"/>
+        <!-- key: XPath of comment-start PI, data: comment-end PI --> 
         <xsl:variable name="commentPiMap" as="map(xs:string,node())">
             <xsl:call-template name="generateCommentPiMap">
                 <xsl:with-param name="prmRoot" select="$prmRoot"/>
