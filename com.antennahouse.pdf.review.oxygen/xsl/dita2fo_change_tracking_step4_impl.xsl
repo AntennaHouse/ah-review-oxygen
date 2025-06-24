@@ -87,7 +87,7 @@
             </xsl:variable>
             <xsl:if test="$precedingSiblingComment => exists()">
                 <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
-                    <xsl:with-param name="prmCommentPi" select="$precedingSiblingComment"/>
+                    <xsl:with-param name="prmCommentPi" select="$precedingSiblingComment => reverse()"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:if>
