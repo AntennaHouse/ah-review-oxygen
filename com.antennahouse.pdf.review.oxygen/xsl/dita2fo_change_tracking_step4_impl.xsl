@@ -70,6 +70,29 @@
             <xsl:message select="'[processing-instruction] pi=' || ahf:getHistoryXpathStr(.)"/>
         </xsl:if>
         <xsl:copy/>
+        <xsl:variable name="commentPiStartOrEndNode" as="node()*" select="map:get($prmCommentRangeMap,$currentPiXpath)"/>
+        <xsl:variable name="mappedRangeStart" as="node()?" select="$commentPiStartOrEndNode[1]"/>
+        <xsl:if test="$mappedRangeStart => exists() and $mappedRangeStart instance of element()">
+            <!-- pick up only preceding-sibling comment PI because comment pi must enclose element -->
+            <xsl:variable name="precedingSiblingComment" as="processing-instruction()*">
+                <xsl:variable name="precedingSiblingElem" as="element()?" select="$mappedRangeStart/preceding-sibling::*[1]"/>
+                <xsl:choose>
+                    <xsl:when test="$precedingSiblingElem => exists()">
+                        <xsl:sequence select="$mappedRangeStart/preceding-sibling::processing-instruction()[ahf:isCommentStartPi(.)][. &gt;&gt; $precedingSiblingElem]"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="$mappedRangeStart/preceding-sibling::processing-instruction()[ahf:isCommentStartPi(.)]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="$precedingSiblingComment => exists()">
+                <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
+                    <xsl:with-param name="prmCommentPi" select="$precedingSiblingComment"/>
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:if>
+        
+        <!-- deprecated!
         <xsl:variable name="startPiXpath" as="xs:string?" select="accumulator-after('glCommentPi') => head() => ahf:getHistoryXpathStr()"/>
         <xsl:if test="$gpStep4Debug">
             <xsl:message select="'$currentPiXpath='||$currentPiXpath"/>
@@ -84,6 +107,7 @@
                 <xsl:with-param name="prmCommentPi" select="accumulator-after('glCommentPi')"/>
             </xsl:call-template>
         </xsl:if>
+        -->
     </xsl:template>
     
     <xsl:template match="text()

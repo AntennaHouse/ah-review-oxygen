@@ -144,7 +144,32 @@
                                             <xsl:sequence select="$range"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:sequence select=" ($commentStartPi,$commentEndPi)"/>
+                                            <!-- text() does not exist -->
+                                            <xsl:variable name="followingSiblingElem" as="element()?" select="$commentStartPi/following-sibling::element()[1]"/>
+                                            <xsl:variable name="commentPiBetween" as="processing-instruction()*">
+                                                <xsl:choose>
+                                                    <xsl:when test="$followingSiblingElem => exists()">
+                                                        <xsl:sequence select="$commentStartPi/following-sibling::processing-instruction()[ahf:isCommentStartPi(.)][. &gt;&gt; $commentStartPi][. &lt;&lt; $followingSiblingElem]"/>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:sequence select="()"/>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </xsl:variable>
+                                            <xsl:choose>
+                                                <xsl:when test="$commentPiBetween => exists()">
+                                                    <!-- return comment-PI itself -->
+                                                    <xsl:sequence select=" ($commentStartPi,$commentEndPi)"/>
+                                                </xsl:when>
+                                                <xsl:when test="$followingSiblingElem =>exists()">
+                                                    <!-- return nearest element -->
+                                                    <xsl:sequence select=" ($followingSiblingElem,$followingSiblingElem)"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <!-- That's impossible! -->
+                                                    <xsl:sequence select=" ($commentStartPi,$commentEndPi)"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:variable>
