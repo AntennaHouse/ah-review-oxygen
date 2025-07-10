@@ -365,17 +365,32 @@
                     <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyInsert()"/>
                     <xsl:sequence select="ahf:addColorToFoProp($foProp,ahf:getInsertFgColorSpecFromPi($insertStartPi)) => ahf:addInsertDecorationToFoProp() => ahf:filterEmptyAttr()"/>
                 </xsl:variable>
-                <ph class="- topic/ph ">
-                    <xsl:copy-of select="$insertFoProp"/>
-                    <xsl:if test="$currentText is $insertInlineStartAndEnd[1]">
-                        <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsert, 
-                            $insertStartPi => ahf:getAuthorFromPi(), 
-                            $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
-                            $insertStartPi => ahf:getCommentFromPi(),
-                            ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
-                    </xsl:if>
-                    <xsl:copy select="$currentText"/>
-                </ph>
+                <xsl:choose>
+                    <xsl:when test="normalize-space($currentText) eq ''">
+                        <!-- Possibly redundant -->
+                        <xsl:if test="$currentText is $insertInlineStartAndEnd[1]">
+                            <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsert, 
+                                $insertStartPi => ahf:getAuthorFromPi(), 
+                                $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
+                                $insertStartPi => ahf:getCommentFromPi(),
+                                ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
+                        </xsl:if>
+                        <xsl:copy select="$currentText"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ph class="- topic/ph ">
+                            <xsl:copy-of select="$insertFoProp"/>
+                            <xsl:if test="$currentText is $insertInlineStartAndEnd[1]">
+                                <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionInsert, 
+                                    $insertStartPi => ahf:getAuthorFromPi(), 
+                                    $insertStartPi => ahf:getFormattedTimeStampStrFromPi(), 
+                                    $insertStartPi => ahf:getCommentFromPi(),
+                                    ahf:getHistoryStrWithPiTextFixed($insertStartPi,$prmTopicAndUpperHistoryStr))"/>
+                            </xsl:if>
+                            <xsl:copy select="$currentText"/>
+                        </ph>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy select="$currentText"/>

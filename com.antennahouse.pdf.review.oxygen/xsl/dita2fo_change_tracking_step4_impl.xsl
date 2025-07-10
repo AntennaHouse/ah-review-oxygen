@@ -141,15 +141,28 @@
                             <xsl:variable name="foProp" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyComment()"/>
                             <xsl:sequence select="$foProp => ahf:addBgColorToFoProp(ahf:getCommentBgColorSpecFromPi($commentStartPi)) => ahf:filterEmptyAttr()"/>
                         </xsl:variable>
-                        <ph class="- topic/ph ">
-                            <xsl:copy-of select="$commentFoProp"/>
-                            <xsl:if test="$targetCommentStartPi => exists()">
-                                <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
-                                    <xsl:with-param name="prmCommentPi" select="$targetCommentStartPi"/>
-                                </xsl:call-template>
-                            </xsl:if>
-                            <xsl:copy select="$currentText"/>
-                        </ph>
+                        <xsl:choose>
+                            <xsl:when test="normalize-space($currentText) eq ''">
+                                <!-- Possibly redundant -->
+                                <xsl:if test="$targetCommentStartPi => exists()">
+                                    <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
+                                        <xsl:with-param name="prmCommentPi" select="$targetCommentStartPi"/>
+                                    </xsl:call-template>
+                                </xsl:if>
+                                <xsl:copy select="$currentText"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ph class="- topic/ph ">
+                                    <xsl:copy-of select="$commentFoProp"/>
+                                    <xsl:if test="$targetCommentStartPi => exists()">
+                                        <xsl:call-template name="ahf:genDraftCommentFromCommentPis">
+                                            <xsl:with-param name="prmCommentPi" select="$targetCommentStartPi"/>
+                                        </xsl:call-template>
+                                    </xsl:if>
+                                    <xsl:copy select="$currentText"/>
+                                </ph>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:copy select="$currentText"/>
