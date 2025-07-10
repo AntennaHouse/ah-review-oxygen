@@ -15,18 +15,7 @@
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs ahf"
     version="3.0">
-
-    <!-- 
-     function:  Get li number
-     param:     prmLi
-     return:    x:integer
-     note:      Count li without task/stepsection, @outputclass=""
-     -->
-    <xsl:function name="ahf:countLi" as="xs:integer">
-        <xsl:param name="prmLi" as="element()"/>
-        <xsl:sequence select="count($prmLi | $prmLi/preceding-sibling::*[contains(@class,' topic/li ')][not(contains(@class,' task/stepsection ')) and not(ahf:hasOutputClassValue(.,$cOutputClassDeleteAttributesLi))])"/>
-    </xsl:function>
-
+    
     <!-- 
      function:  Delete/Attributes li
      param:     
