@@ -67,85 +67,87 @@
                 </xsl:if>
                 <xsl:choose>
                     <xsl:when test="$isDeletePi and $gpOutputOxyDeletes">
-                        <xsl:variable name="deletePi" as="processing-instruction()" select="$nodeGrouped[1]"/>
                         <xsl:variable name="deleteFoPropOrg" as="attribute()" select="ahf:getEmptyChangeTrackingFoPropertyDelete()"/>
-                        <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp($deleteFoPropOrg,ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp() => ahf:filterEmptyAttr()"/>
-                        <xsl:choose>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/body')]">
-                                <bodydiv class="- topic/bodydiv ">
-                                    <xsl:call-template name="genDeletePiContents">
-                                        <xsl:with-param name="prmDeletePi" select="$deletePi"/>
-                                        <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
-                                    </xsl:call-template>
-                                </bodydiv>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('task/steps')]">
-                                <step class="- topic/li task/step " outputclass="{$cOutputClassDeleteAttributesLi}">
-                                    <cmd class="- topic/ph task/cmd ">
+                        <xsl:for-each select="$nodeGrouped">
+                            <xsl:variable name="deletePi" as="processing-instruction()" select="."/>
+                            <xsl:variable name="deleteFoProp" as="attribute()" select="ahf:addColorToFoProp($deleteFoPropOrg,ahf:getDeleteFgColorSpecFromPi($deletePi)) => ahf:addDeleteDecorationToFoProp() => ahf:filterEmptyAttr()"/>
+                            <xsl:choose>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/body')]">
+                                    <bodydiv class="- topic/bodydiv ">
                                         <xsl:call-template name="genDeletePiContents">
                                             <xsl:with-param name="prmDeletePi" select="$deletePi"/>
                                             <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
                                         </xsl:call-template>
-                                    </cmd>
-                                </step>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => ahf:seqContainsToken(('topic/ol','topic/ul'))]">
-                                <li class="- topic/li " outputclass="{$cOutputClassDeleteAttributesLi}">
-                                    <xsl:call-template name="genDeletePiContents">
-                                        <xsl:with-param name="prmDeletePi" select="$deletePi"/>
-                                        <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
-                                    </xsl:call-template>
-                                </li>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/sl')]">
-                                <sli class="- topic/sli ">
-                                    <xsl:call-template name="genDeletePiContents">
-                                        <xsl:with-param name="prmDeletePi" select="$deletePi"/>
-                                        <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
-                                    </xsl:call-template>
-                                </sli>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/table')]">
-                                <tgroup class="- topic/tgroup " cols="1">
-                                    <colspec class="- topic/colspec " colnum="1" colname="1"/>
-                                    <tbody class="- topic/tbody ">
-                                        <row class="- topic/row">
-                                            <entry class="- topic/entry" colname="1">
-                                                <xsl:call-template name="genDeletePiContents">
-                                                    <xsl:with-param name="prmDeletePi" select="$deletePi"/>
-                                                    <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
-                                                </xsl:call-template>
-                                            </entry>
-                                        </row>
-                                    </tbody>
-                                </tgroup>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/fig')]">
-                                <figgroup class="- topic/figgroup ">
+                                    </bodydiv>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('task/steps')]">
+                                    <step class="- topic/li task/step " outputclass="{$cOutputClassDeleteAttributesLi}">
+                                        <cmd class="- topic/ph task/cmd ">
+                                            <xsl:call-template name="genDeletePiContents">
+                                                <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                                <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                            </xsl:call-template>
+                                        </cmd>
+                                    </step>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => ahf:seqContainsToken(('topic/ol','topic/ul'))]">
+                                    <li class="- topic/li " outputclass="{$cOutputClassDeleteAttributesLi}">
+                                        <xsl:call-template name="genDeletePiContents">
+                                            <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                            <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                        </xsl:call-template>
+                                    </li>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/sl')]">
+                                    <sli class="- topic/sli ">
+                                        <xsl:call-template name="genDeletePiContents">
+                                            <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                            <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                        </xsl:call-template>
+                                    </sli>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/table')]">
+                                    <tgroup class="- topic/tgroup " cols="1">
+                                        <colspec class="- topic/colspec " colnum="1" colname="1"/>
+                                        <tbody class="- topic/tbody ">
+                                            <row class="- topic/row">
+                                                <entry class="- topic/entry" colname="1">
+                                                    <xsl:call-template name="genDeletePiContents">
+                                                        <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                                        <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                                    </xsl:call-template>
+                                                </entry>
+                                            </row>
+                                        </tbody>
+                                    </tgroup>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/fig')]">
+                                    <figgroup class="- topic/figgroup ">
+                                        <ph class="- topic/ph ">
+                                            <xsl:call-template name="genDeletePiContents">
+                                                <xsl:with-param name="prmDeletePi" select="$deletePi"/>
+                                                <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
+                                            </xsl:call-template>
+                                        </ph>
+                                    </figgroup>
+                                </xsl:when>
+                                <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/figgroup')]">
                                     <ph class="- topic/ph ">
                                         <xsl:call-template name="genDeletePiContents">
                                             <xsl:with-param name="prmDeletePi" select="$deletePi"/>
                                             <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
                                         </xsl:call-template>
                                     </ph>
-                                </figgroup>
-                            </xsl:when>
-                            <xsl:when test="$deletePi/parent::*[@class => contains-token('topic/figgroup')]">
-                                <ph class="- topic/ph ">
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <!-- Others -->
                                     <xsl:call-template name="genDeletePiContents">
                                         <xsl:with-param name="prmDeletePi" select="$deletePi"/>
                                         <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
                                     </xsl:call-template>
-                                </ph>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- Others -->
-                                <xsl:call-template name="genDeletePiContents">
-                                    <xsl:with-param name="prmDeletePi" select="$deletePi"/>
-                                    <xsl:with-param name="prmDeleteFoProp" select="$deleteFoProp"/>
-                                </xsl:call-template>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:for-each>
                     </xsl:when>
                     <xsl:when test="$isFirstElementAfterAttributesPi and $gpOutputOxyAttributes">
                         <xsl:variable name="firstElementAfterAttributesPi" as="element()" select="$nodeGrouped[1]"/>
@@ -412,31 +414,34 @@
      note:      
      -->
     <xsl:template name="genDeletePiContents" as="element()">
-        <xsl:param name="prmDeletePi" as="processing-instruction()"/>
+        <xsl:param name="prmDeletePi" as="processing-instruction()*"/>
         <xsl:param name="prmDeleteFoProp" as="attribute()?"/>
         <xsl:param name="prmTopicAndUpperHistoryStr" as="xs:string" tunnel="yes" required="yes"/>
         
-        <ph class="- topic/ph ">
-            <xsl:copy-of select="$prmDeleteFoProp"/>
-            <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDelete, 
-                $prmDeletePi => ahf:getAuthorFromPi(), 
-                $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 
-                $prmDeletePi => ahf:getCommentFromPi(), 
-                ahf:getHistoryStrWithPiTextFixed($prmDeletePi, $prmTopicAndUpperHistoryStr))"/>
-            <xsl:choose>
-                <xsl:when test="$gpChangeTrackingIncludeTagInDeleteContent">
-                    <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$prmDeletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar() => ahf:parseXmlFragmentEx() => string()"/>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDeleteEnd, 
-                $prmDeletePi => ahf:getAuthorFromPi(), 
-                $prmDeletePi => ahf:getFormattedTimeStampStrFromPi(), 
-                '', 
-                ahf:getHistoryStrWithPiTextFixed($prmDeletePi, $prmTopicAndUpperHistoryStr))"/>
-        </ph>
+        <xsl:for-each select="$prmDeletePi">
+            <xsl:variable name="deletePi" as="processing-instruction()" select="."/>
+            <ph class="- topic/ph ">
+                <xsl:copy-of select="$prmDeleteFoProp"/>
+                <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDelete, 
+                    $deletePi => ahf:getAuthorFromPi(), 
+                    $deletePi => ahf:getFormattedTimeStampStrFromPi(), 
+                    $deletePi => ahf:getCommentFromPi(), 
+                    ahf:getHistoryStrWithPiTextFixed($deletePi, $prmTopicAndUpperHistoryStr))"/>
+                <xsl:choose>
+                    <xsl:when test="$gpChangeTrackingIncludeTagInDeleteContent">
+                        <xsl:value-of select="$deletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar()"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$deletePi => ahf:getContentFromPi() => ahf:unEscapeXmlChar() => ahf:parseXmlFragmentEx() => string()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:copy-of select="ahf:addDraftComment($cDraftCommentDispositionDeleteEnd, 
+                    $deletePi => ahf:getAuthorFromPi(), 
+                    $deletePi => ahf:getFormattedTimeStampStrFromPi(), 
+                    '', 
+                    ahf:getHistoryStrWithPiTextFixed($deletePi, $prmTopicAndUpperHistoryStr))"/>
+            </ph>
+        </xsl:for-each>
     </xsl:template>
 
     <!-- 
