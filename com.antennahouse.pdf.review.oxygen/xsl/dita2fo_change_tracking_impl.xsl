@@ -47,7 +47,7 @@
                 <xsl:sequence select="$prmAccumulaterStartPi[. => ahf:getMidFromPiContent() ne $mid]"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="noMidPosStartPi" as="processing-instruction()" select="$prmAccumulaterStartPi[ahf:hasNoMidPartInPi(.)][1]"/>
+                <xsl:variable name="noMidPosStartPi" as="processing-instruction()?" select="$prmAccumulaterStartPi[ahf:hasNoMidPartInPi(.)][1]"/>
                 <xsl:sequence select="$prmAccumulaterStartPi[not(. is $noMidPosStartPi)]"/>
             </xsl:otherwise>
         </xsl:choose>
